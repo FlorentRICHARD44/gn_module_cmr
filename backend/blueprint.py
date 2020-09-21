@@ -1,8 +1,7 @@
 from flask import Blueprint
-
 from geonature.utils.env import DB
 from geonature.utils.utilssqlalchemy import json_resp
-from .models import TPrograms
+from .repositories import ModulesRepositories
 
 blueprint = Blueprint('cmr', __name__)
 
@@ -10,8 +9,8 @@ blueprint = Blueprint('cmr', __name__)
 def test():
     return 'It works'
 
-@blueprint.route('/programs', methods=['GET'])
+@blueprint.route('/modules', methods=['GET'])
 @json_resp
-def get_programs():
-    pgs = DB.session.query(TPrograms).all()
-    return [pg.as_dict() for pg in pgs]
+def get_modules():
+    repo = ModulesRepositories()
+    return repo.get_all()

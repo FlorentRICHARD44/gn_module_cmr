@@ -1,6 +1,6 @@
 Module initié lors de l'atelier développement du workshop GeoNature (24 et 25 septembre 2018).
 Le module générique CMR doit permettre d'utiliser des sous-module dédiés à différent protocoles.
-Il s'inspire des travaux effectués sur le module [gn_module_monitoring](https://github.com/PnX-SI/gn_module_monitoring).
+Il s'inspire des travaux effectués sur le module `gn_module_monitoring<https://github.com/PnX-SI/gn_module_monitoring>`_.
 
 Installer le module 
 ------------------
