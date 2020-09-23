@@ -1,0 +1,41 @@
+{
+    "geometry_types": ["Point"],
+    "specific": {
+        "lieu": {
+            "type_widget": "text",
+            "attribut_label": "Lieu",
+            "required": true
+        },
+        "commune": {
+            "type_widget": "text",
+            "attribut_label": "Commune",
+            "required": true
+        },
+        "habitat": {
+            "type_widget": "text",
+            "attribut_label": "Habitat",
+            "required": false
+        },
+        "conductivité": {
+            "type_widget": "text",
+            "attribut_label": "Conductivité",
+            "required": false
+        },
+        "piege_type": {
+            "type_widget": "select",
+            "attribut_label": "Type de Piège",
+            "required": true,
+            "values": ["Verveux simple","Verveux double","Nasse","Cage-piège","Épuisette","Capture manuelle"]
+        },
+        "date_pose": {
+            "type_widget": "date",
+            "attribut_label": "Date de Pose",
+            "required": false
+        },
+        "date_retrait": {
+            "type_widget": "date",
+            "attribut_label": "Date de Retrait",
+            "required": false
+        }
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "geometry_types": ["Point","LineString","Polygon"],
+    "generic": {
+        "id_site": {
+            "type_widget": "text",
+            "attribut_label": "Id site",
+            "hidden": true
+        },
+        "name": {
+            "type_widget": "text",
+            "attribut_label": "Nom",
+            "required": true
+        },
+        "comments": {
+            "type_widget": "textarea",
+            "attribut_label": "Commentaires",
+            "required": false
+        }
+    }
+}

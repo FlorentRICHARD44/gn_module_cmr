@@ -1,3 +1,78 @@
 <div class="main">
-    <h3>{{ module.module_label }}</h3>
+    <div class="flex-container">
+        <div class="cadre" [style.min-height]="cardContentHeight + 'px'">
+            <pnx-map height="100%" class="map-card">
+                <!--<pnx-leaflet-draw 
+                    [bEnable]="false"
+                    [geojson]="geometry" 
+                    [options]="leafletDrawOptions" >
+                </pnx-leaflet-draw>-->
+            </pnx-map>
+        </div>
+        <div class="cadre scroll">
+            <gn-cmr-breadcrumb [currentPage]="'Module: ' + module.module_label"></gn-cmr-breadcrumb>
+            <h3>Module: {{ module.module_label }}</h3>
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" data-toggle="tab" role="tab" aria-selected="true" id="nav-module-tab" href="#module-tab">Module</a>
+                    <a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-sites-tab" href="#sites-tab">Sites<span class="badge badge-pill badge-primary ml-2">{{ sites.length }}</span></a>
+                    <a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-individuals-tab" href="#individuals-tab">Individus<span class="badge badge-pill badge-primary ml-2">{{ individuals.length }}</span></a>
+                </div>
+                <div class="tab-content" id="nav-tabContent">
+                    <div
+                        class="tab-pane fade active show"
+                        id="module-tab"
+                        role="tabpanel"
+                        attr.aria-labelledby="nav-module-tab">
+                            <div class="clearfix">
+                                <button class="btn btn-primary float-right"><i class="fa fa-pencil"></i>&nbsp;Editer</button><!-- TODO add cruved -->
+                            </div>
+                            <p *ngIf="module.config.welcome">{{ module.config.welcome }}</p>
+                    </div>
+                    <div
+                        class="tab-pane fade"
+                        id="sites-tab"
+                        role="tabpanel"
+                        attr.aria-labelledby="nav-sites-tab">
+                        <div class="toolbar clearfix"><!-- TODO add cruved -->
+                            <button class="btn btn-success float-left" [routerLink]="['site']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter site</button>
+                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Télécharger</button>
+                            <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
+                        </div>
+                        <ngx-datatable #table
+                            class="material striped margin-top-xs"
+                            [rows]="sites"
+                            [rowHeight]="40"
+                            [draggable]="false"
+                            [count]="sites.length"
+                            [limit]="25">
+
+                            <ngx-datatable-column width="15">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['site', row.id_site]"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column width="200" name="Nom" prop="name">
+                            </ngx-datatable-column>
+                            <ngx-datatable-column width="300" name="Lieu" prop="lieu">
+                            </ngx-datatable-column>
+                            <ngx-datatable-column width="300" name="Commune" prop="commune">
+                            </ngx-datatable-column>
+                        </ngx-datatable>
+                    </div>
+                    <div
+                        class="tab-pane fade"
+                        id="individuals-tab"
+                        role="tabpanel"
+                        attr.aria-labelledby="nav-individuals-tab">
+                        <div class="toolbar clearfix"><!-- TODO add cruved -->
+                            <button disabled class="btn btn-success float-left"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter individu</button>
+                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Télécharger</button>
+                            <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
 </div>

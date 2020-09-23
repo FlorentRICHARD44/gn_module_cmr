@@ -1,16 +1,51 @@
 .main {
-    padding: 5px 15px;
+    padding: 5px 10px;
     position: absolute;
     top: 0px;
     bottom: 0px;
     left: 0px;
     right: 0px;
-    background-color: white;
 }
 .text-in-area {
     white-space: pre-wrap;
 }
 
-.centered {
-    text-align:center;
+.cadre {
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px 0px;
 }
+
+.flex-container {
+    display: flex;
+}
+
+.flex-container > div {
+    width: 50%;
+    padding: 5px;
+    margin: 5px;
+}
+
+.tab-content {
+    border: 1px solid #dee2e6;
+    border-top: unset;
+    padding: 5px;
+}
+
+.toolbar {
+    padding: 5px 0px 10px 0px;
+}
+
+/** forms **/
+:host ::ng-deep .obj-form {
+    margin: 0;
+    margin-bottom: 10px;
+    padding: 0;
+    line-height: 0.5rem;
+}
+
+:host ::ng-deep .obj-form small {
+    position: relative;
+    top: -6px;
+  }

@@ -1,4 +1,5 @@
 {
     "disclaimer" : false,
-    "disclaimer_text": []
+    "disclaimer_text": [],
+    "welcome": ""
 }

@@ -10,6 +10,9 @@ SCHEMA_NAME = 'gn_cmr'
 
 @serializable
 class TSite(DB.Model):
+    """
+    A site is a place where an individual is captured or recaptured.
+    """
     __tablename__ = 't_site'
     __table_args__ = {'schema': SCHEMA_NAME}
     id_site = DB.Column(DB.Integer, primary_key=True)
@@ -19,10 +22,14 @@ class TSite(DB.Model):
     data = DB.Column(JSONB)
     geom = DB.Column(Geometry("GEOMETRY", 4326))
     uuid_site = DB.Column(UUID(as_uuid=True), default=uuid4)
+    id_module = DB.Column(DB.Integer)
 
 
 @serializable
 class TModuleComplement(TModules):
+    """
+    Add some complementary data for the TModules.
+    """
     __tablename__ = 't_module_complements'
     __table_args__ = {'schema':'gn_cmr'}
     __mapper_args__ = {'polymorphic_identity':'cmr_module'}

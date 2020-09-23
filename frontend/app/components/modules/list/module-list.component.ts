@@ -4,11 +4,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { ModuleDisclaimerComponent } from "./../disclaimer/module-disclaimer.component";
 
+/**
+ * This component is the Home page of the CMR module.
+ * It list all CMR sub-modules.
+ */
 @Component({
     selector : 'pnx-cmr-modules',
     templateUrl: './module-list.component.html',
-    styleUrls: ['./../../../../style.scss', './module-list.component.scss'],
-    providers: [CmrService]
+    styleUrls: ['./../../../../style.scss', './module-list.component.scss']
 })
 export class ModuleListComponent implements OnInit {
     public modules: Array<any> = [];
