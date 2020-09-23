@@ -94,7 +94,7 @@ export class SiteFormComponent implements OnInit {
         var formData = this.siteForm.value;
         formData['id_module'] = this.module.id_module;
         this._cmrService.saveSite(formData).subscribe(result => {
-            this._router.navigate(['..'],{relativeTo: this._route});
+            this._router.navigate(['..', 'site', result.id_site],{relativeTo: this._route});
           });
     }
 }

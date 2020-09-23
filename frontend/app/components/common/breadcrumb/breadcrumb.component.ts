@@ -22,6 +22,9 @@ export class BreadcrumbComponent implements OnInit{
     set path(value: Array<any>) {
         var values = value;
         this._paths = values;
+        if (this.homePath) {
+            this.updatePaths();
+        }
     }
 
     constructor(
@@ -34,6 +37,9 @@ export class BreadcrumbComponent implements OnInit{
     }
 
     ngAfterViewInit() {
+        this.updatePaths();
+    }
+    updatePaths() {
         if (this._paths.length > 0) {
             this._paths[0].link = ['/', this.homePath].concat(this._paths[0].link);
         }

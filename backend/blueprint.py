@@ -3,6 +3,7 @@ from geonature.utils.env import DB
 from geonature.utils.utilssqlalchemy import json_resp
 from .repositories import ModulesRepository, SitesRepository, ConfigRepository
 from .models import TModuleComplement, TSite
+from .utils.transform import data_to_json
 
 blueprint = Blueprint('cmr', __name__)
 
@@ -74,9 +75,12 @@ def save_site():
 def get_all_sites_by_module(id_module):
     site_repo = SitesRepository()
     data = site_repo.get_all_filter_by(TSite.id_module, id_module)
-    for d in data:  # TODO use generic function to transform data
-        if 'data' in d:
-            for (k,v) in d['data'].items():
-                d[k] = v
-            d.pop('data')
-    return data
+    return [data_to_json(d) for d in data]
+
+# Get one site
+@blueprint.route('/site/<int:id_site>', methods=['GET'])
+@json_resp
+def get_one_site(id_site):
+    site_repo = SitesRepository()
+    data = site_repo.get_one(TSite.id_site, id_site)
+    return data_to_json(data)

@@ -45,7 +45,11 @@ export class CmrService {
 
     /* SITE QUERIES */
     getAllSitesByModule(id_module) {
-        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sites`)
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sites`);
+    }
+
+    getOneSite(id_site) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/site/${id_site}`);
     }
 
     saveSite(data) {
