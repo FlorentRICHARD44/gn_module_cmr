@@ -12,7 +12,7 @@ import { DataService } from './../../../services/data.service';
 @Component({
     selector : 'pnx-cmr-site-details',
     templateUrl: './site-details.component.html',
-    styleUrls: ['./../../../../style.scss']
+    styleUrls: ['./../../../../style.scss', './site-details.component.scss']
 })
 export class SiteDetailsComponent implements OnInit {
     public path: Array<any> = [];

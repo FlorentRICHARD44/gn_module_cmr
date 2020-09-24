@@ -1,7 +1,7 @@
 <div class="main">
     <div class="flex-container">
         <div class="cadre" [style.min-height]="cardContentHeight + 'px'">
-            <div height="60vh">
+            <div id="details">
                 <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.site.label + ': ' + site.name"></gn-cmr-breadcrumb>
                 <div class="toolbar clearfix">
                     <h3 class="float-left">{{module.forms.site.label}}: {{ site.name }}</h3>
@@ -18,7 +18,7 @@
                                 id="site-tab"
                                 role="tabpanel"
                                 attr.aria-labelledby="nav-site-tab">
-                                <table class="table table-striped table-sm">
+                                <table class="table table-striped table-sm scrollable">
                                     <tr *ngFor="let fieldName of properties">
                                         <th>{{ fields[fieldName].attribut_label }}</th>
                                         <td class="text-in-area">{{ _dataService.formatProperty(site[fieldName], fields[fieldName])}}</td>
