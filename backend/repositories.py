@@ -1,7 +1,7 @@
 import os
 from flask import current_app
 from geonature.utils.env import DB
-from .models import TModuleComplement, TSite
+from .models import TModuleComplement, TSite, TVisit
 from .utils.config_utils import get_json_config_from_file, get_config_path
 
 
@@ -55,6 +55,13 @@ class SitesRepository(BaseRepository):
     def __init__(self):
         super().__init__(TSite)
 
+
+class VisitsRepository(BaseRepository):
+    """
+    Repository for the CMR Visits. Access to database.
+    """
+    def __init__(self):
+        super().__init__(TVisit)
 
 class ConfigRepository:
     """

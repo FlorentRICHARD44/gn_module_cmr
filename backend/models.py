@@ -26,6 +26,22 @@ class TSite(DB.Model):
 
 
 @serializable
+class TVisit(DB.Model):
+    """
+    A visit of a site with 0 or more observations of individuals
+    """
+    __tablename__ = 't_visit'
+    __table_args__ = {'schema': SCHEMA_NAME}
+    id_visit = DB.Column(DB.Integer, primary_key=True)
+    uuid_visite = DB.Column(UUID(as_uuid=True), default=uuid4)
+    id_site = DB.Column(DB.Integer)
+    data = DB.Column(JSONB)
+    comments = DB.Column(DB.Unicode)
+    date = DB.Column(DB.DateTime)
+    no_observation = DB.Column(DB.Boolean)
+
+
+@serializable
 class TModuleComplement(TModules):
     """
     Add some complementary data for the TModules.

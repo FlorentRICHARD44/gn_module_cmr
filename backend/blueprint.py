@@ -1,9 +1,9 @@
 from flask import Blueprint, current_app, request
 from geonature.utils.env import DB
 from geonature.utils.utilssqlalchemy import json_resp
-from .repositories import ModulesRepository, SitesRepository, ConfigRepository
-from .models import TModuleComplement, TSite
-from .utils.transform import data_to_json
+from .repositories import ModulesRepository, SitesRepository, VisitsRepository, ConfigRepository
+from .models import TModuleComplement, TSite, TVisit
+from .utils.transform import data_to_json, json_to_data
 
 blueprint = Blueprint('cmr', __name__)
 
@@ -44,6 +44,7 @@ def get_specific_module(module_name):
     module['forms'] = cfg_repo.get_module_forms_config(module['module_code'])
     return module
 
+
 #############################
 # SITES ROUTES
 #############################
@@ -57,17 +58,8 @@ def save_site():
     if data['id_site']:
         pass  # TODO use the merge
         return {}
-    else:  # TODO use generic function to transform data
-        json_data = {}
-        keys_to_pop = []
-        for k in data.keys():
-            if not hasattr(TSite, k):
-                json_data[k] = data[k]
-                keys_to_pop.append(k)
-        for k in keys_to_pop:
-            data.pop(k, None)
-        data['data'] = json_data
-        return site_repo.create_one(data)
+    else:
+        return site_repo.create_one(json_to_data(data))
 
 # Get the list of sites by module
 @blueprint.route('/module/<int:id_module>/sites', methods=['GET'])
@@ -84,3 +76,36 @@ def get_one_site(id_site):
     site_repo = SitesRepository()
     data = site_repo.get_one(TSite.id_site, id_site)
     return data_to_json(data)
+
+
+#############################
+# VISITS ROUTES
+#############################
+
+# Get list of visits by site
+@blueprint.route('/site/<int:id_site>/visits', methods=['GET'])
+@json_resp
+def get_all_visits_by_site(id_site):
+    visit_repo = VisitsRepository()
+    data = visit_repo.get_all_filter_by(TVisit.id_site, id_site)
+    return [data_to_json(d) for d in data]
+
+# Get one visit
+@blueprint.route('/visit/<int:id_visit>', methods=['GET'])
+@json_resp
+def get_one_visit(id_visit):
+    visit_repo = VisitsRepository()
+    data = visit_repo.get_one(TVisit.id_visit, id_visit)
+    return data_to_json(data)
+
+# Save a visit
+@blueprint.route('/visit', methods=['PUT'])
+@json_resp
+def save_visit():
+    data = request.json
+    visit_repo = VisitsRepository()
+    if data['id_visit']:
+        pass  # TODO use the merge
+        return {}
+    else:
+        return visit_repo.create_one(json_to_data(data))
