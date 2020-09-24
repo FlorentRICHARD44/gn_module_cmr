@@ -14,7 +14,7 @@ import { CmrMapService } from './../../../services/cmr-map.service';
 })
 export class SiteFormComponent implements OnInit {
     public path = [];
-    public module: any = {config:{}};
+    public module: any = {config:{},forms:{site:{}}};
     private moduleName = "";
     public cardContentHeight: any;
     public leafletDrawOptions: any = {};

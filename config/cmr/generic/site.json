@@ -1,4 +1,6 @@
 {
+    "label": "Site",
+    "label_plural": "Sites",
     "geometry_types": ["Point","LineString","Polygon"],
     "display_properties": ["name","comments"],
     "display_list": ["name"],

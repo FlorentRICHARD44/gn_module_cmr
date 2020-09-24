@@ -14,10 +14,12 @@ import { CmrService } from './../../../services/cmr.service';
     styleUrls: ['./../../../../style.scss']
 })
 export class ModuleHomeComponent implements OnInit {
-    public module: any = {config:{}};
+    public module: any = {config:{},forms:{site:{}}};
     public cardContentHeight: any;
     public sites: Array<any> = [];
     public individuals: Array<any> = [];
+    public siteListProperties: Array<any> = [];
+    public siteFieldsDef: any = {};
 
     constructor(
         private _cmrService: CmrService,
@@ -33,6 +35,10 @@ export class ModuleHomeComponent implements OnInit {
               }),
               mergeMap(() => {
                 this.module = this._cmrService.getModule(params.module);
+                if (this.module.config.use_dataset_filter) {
+                }
+                this.siteListProperties = this.module.forms.site.display_list;
+                this.siteFieldsDef = this.module.forms.site.fields;
                 this._cmrService.getAllSitesByModule(this.module.id_module).subscribe((data) => this.sites = data);
                 return of(true);
               })

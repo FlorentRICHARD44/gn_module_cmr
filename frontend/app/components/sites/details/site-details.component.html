@@ -2,15 +2,15 @@
     <div class="flex-container">
         <div class="cadre" [style.min-height]="cardContentHeight + 'px'">
             <div height="60vh">
-                <gn-cmr-breadcrumb [path]="path" [currentPage]="'Site: ' + site.name"></gn-cmr-breadcrumb>
+                <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.site.label + ': ' + site.name"></gn-cmr-breadcrumb>
                 <div class="toolbar clearfix">
-                    <h3 class="float-left">Site: {{ site.name }}</h3>
+                    <h3 class="float-left">{{module.forms.site.label}}: {{ site.name }}</h3>
                     <button disabled class="btn btn-primary float-right"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
                 </div>
                 <div class="">
                     <nav>
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                            <a class="nav-item nav-link active" data-toggle="tab" aria-selected="true" id="nav-site-tab" href="#site-tab">Site</a>
+                            <a class="nav-item nav-link active" data-toggle="tab" aria-selected="true" id="nav-site-tab" href="#site-tab">{{module.forms.site.label}}</a>
                             <a class="nav-item nav-link" data-toggle="tab" aria-selected="false" id="nav-media-tab" href="#media-tab">Medias<span class="badge badge-pill badge-primary ml-2">{{medias.length}}</span></a>
                         </div>
                         <div class="tab-content" id="nav-tabContent">

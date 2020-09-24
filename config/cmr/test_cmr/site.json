@@ -1,4 +1,6 @@
 {
+    "label": "Point de Capture",
+    "label_plural": "Points de Capture",
     "geometry_types": ["Point"],
     "display_properties": ["name", "lieu","habitat","conductivité","piege_type","date_pose","date_retrait","comments"],
     "display_list": ["name", "lieu","piege_type"],

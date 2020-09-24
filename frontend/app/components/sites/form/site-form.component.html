@@ -12,9 +12,9 @@
             </pnx-map>
         </div>
         <div class="cadre scroll">
-            <gn-cmr-breadcrumb [path]="path" currentPage="Nouveau site"></gn-cmr-breadcrumb>
+            <gn-cmr-breadcrumb [path]="path" [currentPage]="'Nouveau '+ module.forms.site.label"></gn-cmr-breadcrumb>
             <h3>Module: {{ module.module_label }}</h3>
-            <h4>Nouveau site</h4>
+            <h4>Nouveau {{module.forms.site.label}}</h4>
             <form [formGroup]="siteForm">
               <!--<p style="color:red" *ngIf="obj.config['geometry_type'] && !objForm.value.geometry">
                 Veuillez saisir une géométrie sur la carte

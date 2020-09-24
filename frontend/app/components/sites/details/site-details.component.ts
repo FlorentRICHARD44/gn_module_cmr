@@ -16,7 +16,7 @@ import { DataService } from './../../../services/data.service';
 })
 export class SiteDetailsComponent implements OnInit {
     public path: Array<any> = [];
-    public module: any = {config:{}};
+    public module: any = {config:{},forms:{site:{}}};
     public cardContentHeight: any;
     public site: any = {};
     public medias: Array<any> = [];
