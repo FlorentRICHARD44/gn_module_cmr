@@ -55,6 +55,9 @@ class SitesRepository(BaseRepository):
     def __init__(self):
         super().__init__(TSite)
 
+    def get_all_filter_by_module_and_dataset(self, id_module, id_dataset):
+        q = DB.session.query(self.model).filter(TSite.id_module == id_module).filter(TSite.id_dataset == id_dataset)
+        return [d.as_dict() for d in q.all()]
 
 class VisitsRepository(BaseRepository):
     """

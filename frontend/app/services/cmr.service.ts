@@ -21,6 +21,10 @@ export class CmrService {
         return AppConfig.URL_APPLICATION + '/external_assets/' + ModuleConfig.MODULE_CODE.toLowerCase();
     }
 
+    getDatasetInfo(id_dataset) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/meta/dataset/${id_dataset}`);
+    }
+
     /* MODULE QUERIES */
     getAllModules() {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/modules`);
@@ -44,8 +48,12 @@ export class CmrService {
     }
 
     /* SITE QUERIES */
-    getAllSitesByModule(id_module) {
-        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sites`);
+    getAllSitesByModule(id_module, id_dataset) {
+        if (id_dataset == 'none') {
+            return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sites`);
+        } else {
+            return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/dataset/${id_dataset}/sites`);
+        }
     }
 
     getOneSite(id_site) {

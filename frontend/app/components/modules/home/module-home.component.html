@@ -12,6 +12,13 @@
         <div class="cadre scroll">
             <gn-cmr-breadcrumb [currentPage]="'Module: ' + module.module_label"></gn-cmr-breadcrumb>
             <h3>Module: {{ module.module_label }}</h3>
+            <div *ngIf="dataset.dataset_name" class="toolbar mb-2">
+                <span>
+                    <strong>{{ 'Releve.Dataset' | translate }}: </strong>
+                    <a target="_blank" [routerLink]="'/metadata/dataset_detail/dataset.id_dataset'">{{dataset.dataset_name}}</a>
+                    <i class="fa fa-ellipsis-h fa-border clickable ml-2" (click)="onClickChangeDataset()" matTooltip="Sélectionner un autre jeu de données"></i>
+                </span>
+            </div>
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" data-toggle="tab" role="tab" aria-selected="true" id="nav-module-tab" href="#module-tab">Module</a>

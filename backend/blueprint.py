@@ -59,14 +59,18 @@ def save_site():
         pass  # TODO use the merge
         return {}
     else:
-        return site_repo.create_one(json_to_data(data))
+        return site_repo.create_one(json_to_data(data, TSite))
 
-# Get the list of sites by module
+# Get the list of sites by module and optionally dataset
 @blueprint.route('/module/<int:id_module>/sites', methods=['GET'])
+@blueprint.route('/module/<int:id_module>/dataset/<int:id_dataset>/sites', methods=['GET'])
 @json_resp
-def get_all_sites_by_module(id_module):
+def get_all_sites_by_module_and_dataset(id_module, id_dataset=None):
     site_repo = SitesRepository()
-    data = site_repo.get_all_filter_by(TSite.id_module, id_module)
+    if id_dataset:
+        data = site_repo.get_all_filter_by_module_and_dataset(id_module, id_dataset)
+    else:
+        data = site_repo.get_all_filter_by(TSite.id_module, id_module)
     return [data_to_json(d) for d in data]
 
 # Get one site
@@ -108,4 +112,4 @@ def save_visit():
         pass  # TODO use the merge
         return {}
     else:
-        return visit_repo.create_one(json_to_data(data))
+        return visit_repo.create_one(json_to_data(data, TVisit))

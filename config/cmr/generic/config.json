@@ -1,5 +1,6 @@
 {
     "disclaimer" : false,
     "disclaimer_text": [],
+    "use_dataset_filter": false,
     "welcome": ""
 }

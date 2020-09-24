@@ -4,6 +4,8 @@ import { Observable, of, forkJoin } from '@librairies/rxjs';
 import { mergeMap, concatMap } from '@librairies/rxjs/operators';
 import { MapService } from "@geonature_common/map/map.service";
 import { CmrService } from './../../../services/cmr.service';
+import { MatDialog, MatDialogConfig } from "@angular/material";
+import { ModuleDatasetChoiceComponent } from "./../datasetchoice/module-datasetchoice.component";
 
 /**
  * This component is the home page of a CMR Sub-module.
@@ -15,6 +17,7 @@ import { CmrService } from './../../../services/cmr.service';
 })
 export class ModuleHomeComponent implements OnInit {
     public module: any = {config:{},forms:{site:{}}};
+    public dataset: any = {};
     public cardContentHeight: any;
     public sites: Array<any> = [];
     public individuals: Array<any> = [];
@@ -24,11 +27,17 @@ export class ModuleHomeComponent implements OnInit {
     constructor(
         private _cmrService: CmrService,
         private route: ActivatedRoute,
-        private _mapService: MapService
+        private _router: Router,
+        private _mapService: MapService,
+        public dialog: MatDialog
     ) {}
 
     ngOnInit() {
+        this._router.routeReuseStrategy.shouldReuseRoute = () => false;
         this.route.params.subscribe(params => {
+            if (params.id_dataset != "none") {
+              this._cmrService.getDatasetInfo(params.id_dataset).subscribe((data) => this.dataset = data);
+            }
             this._cmrService.loadOneModule(params.module).pipe(
               mergeMap(() => {
                 return of(true);
@@ -39,7 +48,7 @@ export class ModuleHomeComponent implements OnInit {
                 }
                 this.siteListProperties = this.module.forms.site.display_list;
                 this.siteFieldsDef = this.module.forms.site.fields;
-                this._cmrService.getAllSitesByModule(this.module.id_module).subscribe((data) => this.sites = data);
+                this._cmrService.getAllSitesByModule(this.module.id_module, params.id_dataset).subscribe((data) => this.sites = data);
                 return of(true);
               })
             ).subscribe(() => {});
@@ -72,5 +81,17 @@ export class ModuleHomeComponent implements OnInit {
           this._mapService.map.invalidateSize();
         }, 10);
       }
+    }
+    onClickChangeDataset() {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.data = {};
+      dialogConfig.maxHeight = window.innerHeight - 20 + "px";
+      dialogConfig.position = { top: "30px" };
+      var dialogRef = this.dialog.open(ModuleDatasetChoiceComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe((result) => {
+          if (result) {
+            this._router.navigate(['..',result],{relativeTo: this.route});
+          }
+      });
     }
 }

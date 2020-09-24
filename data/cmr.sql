@@ -30,13 +30,15 @@ CREATE TABLE gn_cmr.t_site (
     id_site serial NOT NULL,
     uuid_site uuid NOT NULL DEFAULT uuid_generate_v4(),
     id_module integer NOT NULL,
+    id_dataset integer,
     name character varying (100),
     comments text,
     data jsonb,
     geom geometry(Geometry,4326),
     recurrent boolean,
     CONSTRAINT pk_gn_cmr_t_site PRIMARY KEY (id_site),
-    CONSTRAINT fk_gn_cmr_t_site_id_module FOREIGN KEY (id_module) REFERENCES gn_commons.t_modules(id_module)
+    CONSTRAINT fk_gn_cmr_t_site_id_module FOREIGN KEY (id_module) REFERENCES gn_commons.t_modules(id_module),
+    CONSTRAINT fk_gn_cmr_t_site_id_dataset FOREIGN KEY (id_dataset) REFERENCES gn_meta.t_datasets(id_dataset)
 );
 
 CREATE TABLE gn_cmr.cor_site_module(

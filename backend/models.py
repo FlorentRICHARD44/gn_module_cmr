@@ -23,6 +23,7 @@ class TSite(DB.Model):
     geom = DB.Column(Geometry("GEOMETRY", 4326))
     uuid_site = DB.Column(UUID(as_uuid=True), default=uuid4)
     id_module = DB.Column(DB.Integer)
+    id_dataset = DB.Column(DB.Integer)
 
 
 @serializable

@@ -38,7 +38,7 @@ export class SiteFormComponent implements OnInit {
         this.module = data;
         this.path = [{
             "text": "Module: " + this.module.module_label, 
-            "link": ['module',this.module.module_code]
+            "link": ['module',this.module.module_code, 'dataset',this._route.snapshot.paramMap.get('id_dataset')],
         }];
         this.leafletDrawOptions = this._cmrMapService.getLeafletDrawOptionDrawAll(data.forms.site.geometry_types);
         var schema = data.forms.site.fields;
@@ -93,6 +93,10 @@ export class SiteFormComponent implements OnInit {
     onSubmit() {
         var formData = this.siteForm.value;
         formData['id_module'] = this.module.id_module;
+        var id_dataset = this._route.snapshot.paramMap.get('id_dataset');
+        if (id_dataset != 'none') {
+          formData['id_dataset'] = id_dataset;
+        }
         this._cmrService.saveSite(formData).subscribe(result => {
             this._router.navigate(['..', 'site', result.id_site],{relativeTo: this._route});
           });

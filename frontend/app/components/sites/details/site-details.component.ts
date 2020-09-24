@@ -37,12 +37,10 @@ export class SiteDetailsComponent implements OnInit {
             this._cmrService.loadOneModule(params.module).subscribe(() => {
                 this.module = this._cmrService.getModule(params.module);
                 this.properties = this.module.forms.site.display_properties;
-                console.log(this.properties);
                 this.fields = this.module.forms.site.fields;
-                console.log(this.fields);
                 this.path = [{
                     "text": "Module: " + this.module.module_label, 
-                    "link": ['module',this.module.module_code]
+                    "link": ['module',this.module.module_code, 'dataset', params.id_dataset]
                 }];
                 this.path = [...this.path];
                 this._cmrService.getOneSite(params.id_site).subscribe((data) => this.site = data);
