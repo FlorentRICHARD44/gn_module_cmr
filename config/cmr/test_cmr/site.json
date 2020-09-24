@@ -1,15 +1,11 @@
 {
     "geometry_types": ["Point"],
-    "display_list": ["name", "lieu","commune","habitat","conductivité","piege_type","date_pose","date_retrait"],
+    "display_properties": ["name", "lieu","habitat","conductivité","piege_type","date_pose","date_retrait","comments"],
+    "display_list": ["name", "lieu","piege_type"],
     "specific": {
         "lieu": {
             "type_widget": "text",
             "attribut_label": "Lieu",
-            "required": true
-        },
-        "commune": {
-            "type_widget": "text",
-            "attribut_label": "Commune",
             "required": true
         },
         "habitat": {
