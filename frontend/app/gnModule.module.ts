@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from "@angular/router";
+import { MatSlideToggleModule } from "@angular/material";
 import { MatDialogModule } from '@angular/material/dialog';
 import { GN2CommonModule } from "@geonature_common/GN2Common.module";
 import { ModuleListComponent } from "./components/modules/list/module-list.component";
@@ -24,7 +25,7 @@ const routes: Routes = [
     ModuleListComponent, ModuleHomeComponent, ModuleDisclaimerComponent, ModuleDatasetChoiceComponent,
     SiteFormComponent, SiteDetailsComponent
   ],
-  imports: [GN2CommonModule, CommonModule, RouterModule.forChild(routes), MatDialogModule],
+  imports: [GN2CommonModule, CommonModule, RouterModule.forChild(routes), MatDialogModule, MatSlideToggleModule],
   entryComponents: [ModuleDisclaimerComponent, ModuleDatasetChoiceComponent],
   providers: [],
   bootstrap: []

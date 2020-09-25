@@ -1,9 +1,8 @@
 import { Component, HostListener, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Observable, of, forkJoin } from '@librairies/rxjs';
-import { mergeMap, concatMap } from '@librairies/rxjs/operators';
 import { MapService } from "@geonature_common/map/map.service";
+import { CommonService } from "@geonature_common/service/common.service";
 import { CmrService } from './../../../services/cmr.service';
 import { CmrMapService } from './../../../services/cmr-map.service';
 
@@ -15,11 +14,12 @@ import { CmrMapService } from './../../../services/cmr-map.service';
 export class SiteFormComponent implements OnInit {
     public path = [];
     public module: any = {config:{},forms:{site:{}}};
-    private moduleName = "";
     public cardContentHeight: any;
     public leafletDrawOptions: any = {};
     public siteForm: FormGroup;
     public siteFormDefinitions = [];
+
+    public bChainInput = false;
 
     constructor(
         private _cmrService: CmrService,
@@ -27,13 +27,13 @@ export class SiteFormComponent implements OnInit {
         private _route: ActivatedRoute,
         private _mapService: MapService,
         private _cmrMapService: CmrMapService,
-        private _formBuilder: FormBuilder
+        private _formBuilder: FormBuilder,
+        private _commonService: CommonService
     ) {
         
     }
 
     ngOnInit() {
-        //this.leafletDrawOptions = this._cmrMapService.getLeafletDrawOptionReadOnly();
         var data = this._cmrService.getModule(this._route.snapshot.paramMap.get('module'));
         this.module = data;
         this.path = [{
@@ -43,9 +43,6 @@ export class SiteFormComponent implements OnInit {
         this.leafletDrawOptions = this._cmrMapService.getLeafletDrawOptionDrawAll(data.forms.site.geometry_types);
         var schema = data.forms.site.fields;
         var fields = {};
-        /*for (let f of Object.keys(schema)) {
-            fields[f] = null;
-        }*/
         this.siteForm = this._formBuilder.group(fields);
         this.siteFormDefinitions = Object.keys(schema)
             // medias toujours à la fin
@@ -98,7 +95,22 @@ export class SiteFormComponent implements OnInit {
           formData['id_dataset'] = id_dataset;
         }
         this._cmrService.saveSite(formData).subscribe(result => {
-            this._router.navigate(['..', 'site', result.id_site],{relativeTo: this._route});
+            if (this.bChainInput) { // update form resetting all fields not configured to be kept.
+              this.siteForm.reset();
+              var patch = {};
+              for (var k of Object.keys(formData)) {
+                if( this.module.forms.site.properties_to_keep_when_chaining.indexOf(k) > -1) {
+                  patch[k] = formData[k]
+                }
+              }
+              this.siteForm.patchValue(patch);
+              this._commonService.regularToaster(
+                "info",
+                "Formulaire enregistré!"
+              );
+            } else {  // go the details page
+              this._router.navigate(['..', 'site', result.id_site],{relativeTo: this._route});
+            }
           });
     }
 }

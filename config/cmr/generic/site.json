@@ -4,6 +4,7 @@
     "geometry_types": ["Point","LineString","Polygon"],
     "display_properties": ["name","comments"],
     "display_list": ["name"],
+    "properties_to_keep_when_chaining": [],
     "generic": {
         "id_site": {
             "type_widget": "text",
