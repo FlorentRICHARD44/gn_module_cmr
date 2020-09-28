@@ -26,7 +26,9 @@ class TVisit(DB.Model):
     id_site = DB.Column(DB.Integer, foreign_key="TSite.id_site")
 
     def to_dict(self):
-        return self.as_dict()
+        data = self.as_dict()
+        data['site_name'] = self.site.name if self.site else None
+        return data
 
 
 @serializable
@@ -56,6 +58,7 @@ class TSite(DB.Model):
         data['nb_visits'] = self.nb_visits
         return data
 
+TVisit.site = DB.relationship(TSite, primaryjoin=(TVisit.id_site == TSite.id_site), foreign_keys=[TSite.id_site], uselist=False)
 
 @serializable
 class TModuleComplement(TModules):

@@ -1,5 +1,5 @@
 {
-    "display_properties": ["date","no_observation","comments","nb_visits"],
+    "display_properties": ["site_name","date","no_observation","comments","nb_visits"],
     "display_list": ["date","no_observation","nb_visits"],
     "properties_to_keep_when_chaining": [],
     "generic": {
@@ -23,6 +23,9 @@
             "type_widget": "textarea",
             "attribut_label": "Commentaires",
             "required": false
+        },
+        "site_name": {
+            "attribut_label": "Point de Capture"
         }
     }
 }

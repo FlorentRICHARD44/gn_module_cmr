@@ -1,5 +1,5 @@
 {
-    "display_properties": ["date","no_observation","comments"],
+    "display_properties": ["site_name","date","no_observation","comments"],
     "display_list": ["date","no_observation"],
     "properties_to_keep_when_chaining": [],
     "specific": {}

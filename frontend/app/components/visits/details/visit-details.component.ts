@@ -39,7 +39,7 @@ export class VisitDetailsComponent implements OnInit {
                         "text": "Module: " + this.module.module_label, 
                         "link": ['module',this.module.module_code, 'dataset', params.id_dataset]
                     },{
-                        "text": this.module.forms.site.label + ": ", /*+ this.visit.site.name*/
+                        "text": this.module.forms.site.label + ": " + this.visit.site_name,
                         "link": ['module',this.module.module_code, 'dataset',this._route.snapshot.paramMap.get('id_dataset'), 'site', this._route.snapshot.paramMap.get('id_site')],
                     }];
                     this.path = [...this.path];
