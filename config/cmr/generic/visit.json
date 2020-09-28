@@ -1,6 +1,6 @@
 {
-    "display_properties": ["site_name","date","no_observation","comments","nb_visits"],
-    "display_list": ["date","no_observation","nb_visits"],
+    "display_properties": ["site_name","date","observation","observers","comments"],
+    "display_list": ["date","observation","observers"],
     "properties_to_keep_when_chaining": [],
     "generic": {
         "id_visit": {
@@ -13,9 +13,16 @@
             "attribut_label": "Date",
             "required": true
         },
-        "no_observation": {
+        "observers": {
+            "type_widget": "observers",
+            "type_util": "user",
+            "code_list": "obsocctax",
+            "attribut_label": "Operateur(s)",
+            "required": true
+        },
+        "observation": {
             "type_widget": "checkbox",
-            "attribut_label": "Pas d'observation pendant la visite",
+            "attribut_label": "Observation pendant la visite?",
             "values": [true],
             "required": false
         },

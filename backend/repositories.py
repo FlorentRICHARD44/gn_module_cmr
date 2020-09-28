@@ -60,8 +60,6 @@ class SitesRepository(BaseRepository):
 
     def get_all_filter_by_module_and_dataset(self, id_module, id_dataset):
         q = DB.session.query(self.model).filter(TSite.id_module == id_module).filter(TSite.id_dataset == id_dataset)
-        for i in q:
-            print(i)
         return [d.to_dict() for d in q.all()]
     
     def get_all_filter_by(self, filter_column, value):

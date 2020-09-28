@@ -1,6 +1,6 @@
 {
-    "display_properties": ["site_name","date","no_observation","comments"],
-    "display_list": ["date","no_observation"],
+    "display_properties": ["site_name","date","observers","observation","comments"],
+    "display_list": ["date","observers","observation"],
     "properties_to_keep_when_chaining": [],
     "specific": {}
 }

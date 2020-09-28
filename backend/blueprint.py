@@ -1,6 +1,7 @@
 from flask import Blueprint, current_app, request
 from geonature.utils.env import DB
 from geonature.utils.utilssqlalchemy import json_resp
+from pypnusershub.db.models import User
 from .repositories import ModulesRepository, SitesRepository, VisitsRepository, ConfigRepository
 from .models import TModuleComplement, TSite, TVisit
 from .utils.transform import data_to_json, json_to_data
@@ -87,10 +88,6 @@ def get_one_site(id_site):
 @json_resp
 def get_one_site2(id_site):
     site = DB.session.query(TSite).filter(TSite.id_site == id_site).all()
-    for si in site:
-        print(si)
-        print(si.name2)
-        print(si.visits)
     return [si.as_dict() for si in site]
 
 
@@ -120,6 +117,16 @@ def get_one_visit(id_visit):
 def save_visit():
     data = request.json
     visit_repo = VisitsRepository()
+    observers_list = []
+    if data['observers']:
+        observers = (
+                DB.session.query(User).filter(
+                    User.id_role.in_(data['observers'])
+                    ).all()
+            )
+        for o in observers:
+            observers_list.append(o)
+    data['observers'] = observers_list
     if data['id_visit']:
         pass  # TODO use the merge
         return {}

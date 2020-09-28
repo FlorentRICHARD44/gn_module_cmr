@@ -49,3 +49,7 @@
     position: relative;
     top: -6px;
   }
+
+:host ::ng-deep pnx-observers .input-group {
+    height: 31px;
+}

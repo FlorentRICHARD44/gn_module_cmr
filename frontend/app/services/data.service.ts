@@ -21,6 +21,12 @@ export class DataService {
             }
         } else if (fieldDef.type_widget == "checkbox") {
             value = value === true ? "Oui" : "Non";
+        } else if (fieldDef.type_widget == "observers" && value) {
+            var users = [];
+            for (var i = 0; i < value.length; i++) {
+                users.push(value[i].nom_complet);
+            }
+            return users.join(', ');
         }
         return value;
     }

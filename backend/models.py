@@ -5,9 +5,22 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from uuid import uuid4
 from geoalchemy2 import Geometry
 from geonature.core.gn_commons.models import TModules
+from pypnusershub.db.models import User
 
 SCHEMA_NAME = 'gn_cmr'
 
+
+corVisitObserver = DB.Table('cor_visit_observer', 
+    DB.Column("id_visit",
+        DB.ForeignKey(SCHEMA_NAME +'.t_visit.id_visit'),
+        primary_key=True
+    ),
+    DB.Column("id_observer",
+        DB.ForeignKey('utilisateurs.t_roles.id_role'),
+        primary_key=True
+    ),
+    schema=SCHEMA_NAME
+)
 
 
 @serializable
@@ -22,12 +35,21 @@ class TVisit(DB.Model):
     data = DB.Column(JSONB)
     comments = DB.Column(DB.Unicode)
     date = DB.Column(DB.DateTime)
-    no_observation = DB.Column(DB.Boolean)
+    observation = DB.Column(DB.Boolean)
+    observers = DB.relationship(
+        User,
+        secondary=corVisitObserver,
+        primaryjoin=(corVisitObserver.c.id_visit == id_visit),
+        secondaryjoin=(corVisitObserver.c.id_observer == User.id_role),
+        foreign_keys=[corVisitObserver.c.id_visit,
+                      corVisitObserver.c.id_observer],
+    )
     id_site = DB.Column(DB.Integer, foreign_key="TSite.id_site")
 
     def to_dict(self):
         data = self.as_dict()
         data['site_name'] = self.site.name if self.site else None
+        data['observers'] = [o.as_dict() for o in self.observers]
         return data
 
 
