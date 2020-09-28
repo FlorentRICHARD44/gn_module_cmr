@@ -1,0 +1,28 @@
+{
+    "display_properties": ["date","no_observation","comments","nb_visits"],
+    "display_list": ["date","no_observation","nb_visits"],
+    "properties_to_keep_when_chaining": [],
+    "generic": {
+        "id_visit": {
+            "type_widget": "text",
+            "attribut_label": "Id visite",
+            "hidden": true
+        },
+        "date": {
+            "type_widget": "date",
+            "attribut_label": "Date",
+            "required": true
+        },
+        "no_observation": {
+            "type_widget": "checkbox",
+            "attribut_label": "Pas d'observation pendant la visite",
+            "values": [true],
+            "required": false
+        },
+        "comments": {
+            "type_widget": "textarea",
+            "attribut_label": "Commentaires",
+            "required": false
+        }
+    }
+}

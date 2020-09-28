@@ -40,11 +40,8 @@ export class BreadcrumbComponent implements OnInit{
         this.updatePaths();
     }
     updatePaths() {
-        if (this._paths.length > 0) {
-            this._paths[0].link = ['/', this.homePath].concat(this._paths[0].link);
-        }
-        for (var i=1; i< this._paths.length; i++) {
-            this._paths[i].link = ['/', this.homePath].concat(this._paths[i-1].link).concat(this._paths[i]);
+        for (var i=0; i< this._paths.length; i++) {
+            this._paths[i].link = ['/', this.homePath].concat(this._paths[i].link);
         }
     }
 }

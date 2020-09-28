@@ -81,6 +81,18 @@ def get_one_site(id_site):
     data = site_repo.get_one(TSite.id_site, id_site)
     return data_to_json(data)
 
+    
+# Get one site 2
+@blueprint.route('/site2/<int:id_site>', methods=['GET'])
+@json_resp
+def get_one_site2(id_site):
+    site = DB.session.query(TSite).filter(TSite.id_site == id_site).all()
+    for si in site:
+        print(si)
+        print(si.name2)
+        print(si.visits)
+    return [si.as_dict() for si in site]
+
 
 #############################
 # VISITS ROUTES

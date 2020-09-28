@@ -10,6 +10,8 @@ import { ModuleDisclaimerComponent } from "./components/modules/disclaimer/modul
 import { ModuleDatasetChoiceComponent } from "./components/modules/datasetchoice/module-datasetchoice.component";
 import { SiteFormComponent } from "./components/sites/form/site-form.component";
 import { SiteDetailsComponent } from "./components/sites/details/site-details.component";
+import { VisitFormComponent } from "./components/visits/form/visit-form.component";
+import { VisitDetailsComponent } from "./components/visits/details/visit-details.component";
 import { BreadcrumbComponent } from './components/common/breadcrumb/breadcrumb.component';
 
 // my module routing
@@ -17,13 +19,16 @@ const routes: Routes = [
   { path: "", component: ModuleListComponent },
   { path: "module/:module/dataset/:id_dataset", component: ModuleHomeComponent },
   { path: "module/:module/dataset/:id_dataset/site", component: SiteFormComponent },
-  { path: "module/:module/dataset/:id_dataset/site/:id_site", component: SiteDetailsComponent }
+  { path: "module/:module/dataset/:id_dataset/site/:id_site", component: SiteDetailsComponent },
+  { path: "module/:module/dataset/:id_dataset/site/:id_site/visit", component: VisitFormComponent },
+  { path: "module/:module/dataset/:id_dataset/site/:id_site/visit/:id_visit", component: VisitDetailsComponent }
 ];
 
 @NgModule({
   declarations: [BreadcrumbComponent,
     ModuleListComponent, ModuleHomeComponent, ModuleDisclaimerComponent, ModuleDatasetChoiceComponent,
-    SiteFormComponent, SiteDetailsComponent
+    SiteFormComponent, SiteDetailsComponent,
+    VisitFormComponent, VisitDetailsComponent
   ],
   imports: [GN2CommonModule, CommonModule, RouterModule.forChild(routes), MatDialogModule, MatSlideToggleModule],
   entryComponents: [ModuleDisclaimerComponent, ModuleDatasetChoiceComponent],

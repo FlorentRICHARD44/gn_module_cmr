@@ -63,4 +63,17 @@ export class CmrService {
     saveSite(data) {
         return this._api.put<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/site`, data);
     }
+
+    /* VISIT QUERIES */
+    getAllVisitsBySite(id_site) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/site/${id_site}/visits`);
+    }
+
+    getOneVisit(id_visit) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/visit/${id_visit}`);
+    }
+
+    saveVisit(data) {
+        return this._api.put<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/visit`, data);
+    }
 }

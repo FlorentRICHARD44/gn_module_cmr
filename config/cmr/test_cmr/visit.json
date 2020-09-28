@@ -1,0 +1,6 @@
+{
+    "display_properties": ["date","no_observation","comments"],
+    "display_list": ["date","no_observation"],
+    "properties_to_keep_when_chaining": [],
+    "specific": {}
+}

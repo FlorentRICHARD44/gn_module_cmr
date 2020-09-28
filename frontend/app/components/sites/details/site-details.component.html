@@ -43,10 +43,31 @@
                 <div class="">
                     <h3>Visites</h3>
                 </div>
-                <div class="toolbar clearfix">
-                    <button disabled class="btn btn-success float-left"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter une visite</button>
+                <div class="toolbar clearfix"><!-- TODO add cruved-->
+                    <button class="btn btn-success float-left" [routerLink]="['visit']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter une visite</button>
                     <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
                 </div>
+                <ngx-datatable #table
+                    class="material striped margin-top-xs"
+                    [rows]="visits"
+                    [rowHeight]="40"
+                    [draggable]="false"
+                    [count]="visits.length"
+                    [limit]="15"
+                    [headerHeight]="50"
+                    [footerHeight]="50">
+
+                    <ngx-datatable-column width="15">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['visit', row.id_visit]"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column width="200" *ngFor="let prop of visitListProperties" [name]="visitFieldsDef[prop].attribut_label" [prop]="prop" >
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <span>{{_dataService.formatProperty(row[prop], visitFieldsDef[prop])}}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
             </div>
             <div class="">
                 <div class="">

@@ -2,8 +2,8 @@
     "label": "Site",
     "label_plural": "Sites",
     "geometry_types": ["Point","LineString","Polygon"],
-    "display_properties": ["name","comments"],
-    "display_list": ["name"],
+    "display_properties": ["name","comments","nb_visits"],
+    "display_list": ["name","nb_visits"],
     "properties_to_keep_when_chaining": [],
     "generic": {
         "id_site": {
@@ -20,6 +20,9 @@
             "type_widget": "textarea",
             "attribut_label": "Commentaires",
             "required": false
+        },
+        "nb_visits": {
+            "attribut_label": "Nb Visites"
         }
     }
 }

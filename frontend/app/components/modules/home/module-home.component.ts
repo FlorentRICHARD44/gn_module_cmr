@@ -19,8 +19,8 @@ export class ModuleHomeComponent implements OnInit {
     public module: any = {config:{},forms:{site:{}}};
     public dataset: any = {};
     public cardContentHeight: any;
-    public sites: Array<any> = [];
     public individuals: Array<any> = [];
+    public sites: Array<any> = [];
     public siteListProperties: Array<any> = [];
     public siteFieldsDef: any = {};
 
