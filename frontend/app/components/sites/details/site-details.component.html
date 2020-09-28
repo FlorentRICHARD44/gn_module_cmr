@@ -39,44 +39,46 @@
             </pnx-map>
         </div>
         <div class="cadre scroll">
-            <div class="">
-                <div class="">
-                    <h3>Visites</h3>
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" data-toggle="tab" aria-selected="true" id="nav-visit-tab" href="#visit-tab">Visites<span class="badge badge-pill badge-primary ml-2">{{visits.length}}</span></a>
+                    <a class="nav-item nav-link" data-toggle="tab" aria-selected="false" id="nav-individuals-tab" href="#individuals-tab">Individus<span class="badge badge-pill badge-primary ml-2">{{individuals.length}}</span></a>
                 </div>
-                <div class="toolbar clearfix"><!-- TODO add cruved-->
-                    <button class="btn btn-success float-left" [routerLink]="['visit']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter une visite</button>
-                    <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
-                </div>
-                <ngx-datatable #table
-                    class="material striped margin-top-xs"
-                    [rows]="visits"
-                    [rowHeight]="40"
-                    [draggable]="false"
-                    [count]="visits.length"
-                    [limit]="15"
-                    [headerHeight]="50"
-                    [footerHeight]="50">
+                <div class="tab-content" id="nav-tabContentRight">
+                    <div class="tab-pane fade active show" id="visit-tab" role="tabpanel" attr.aria-labelledby="nav-visit-tab">
+                        <div class="toolbar clearfix"><!-- TODO add cruved-->
+                            <button class="btn btn-success float-left" [routerLink]="['visit']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter une visite</button>
+                            <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
+                        </div>
+                        <ngx-datatable #table
+                            class="material striped margin-top-xs"
+                            [rows]="visits"
+                            [rowHeight]="40"
+                            [draggable]="false"
+                            [count]="visits.length"
+                            [limit]="15"
+                            [headerHeight]="50"
+                            [footerHeight]="50">
 
-                    <ngx-datatable-column width="15">
-                        <ng-template let-row="row" ngx-datatable-cell-template>
-                            <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['visit', row.id_visit]"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column width="200" *ngFor="let prop of visitListProperties" [name]="visitFieldsDef[prop].attribut_label" [prop]="prop" >
-                        <ng-template let-row="row" ngx-datatable-cell-template>
-                            <span>{{_dataService.formatProperty(row[prop], visitFieldsDef[prop])}}</span>
-                        </ng-template>
-                    </ngx-datatable-column>
-                </ngx-datatable>
-            </div>
-            <div class="">
-                <div class="">
-                    <h3>Individus</h3>
+                            <ngx-datatable-column width="15">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['visit', row.id_visit]"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column width="200" *ngFor="let prop of visitListProperties" [name]="visitFieldsDef[prop].attribut_label" [prop]="prop" >
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <span>{{_dataService.formatProperty(row[prop], visitFieldsDef[prop])}}</span>
+                                </ng-template>
+                            </ngx-datatable-column>
+                        </ngx-datatable>
+                    </div>
+                    <div class="tab-pane fade" id="individuals-tab" role="tabpanel" attr.aria-labelledby="nav-individuals-tab">
+                        <div class="toolbar clearfix">
+                            <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="toolbar clearfix">
-                    <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
-                </div>
-            </div>
+            </nav>
         </div>
     </div>
 </div>
