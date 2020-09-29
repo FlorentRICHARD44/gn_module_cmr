@@ -4,7 +4,7 @@ def data_to_json(data):
     """
     Extract data attributes from JSONB column to set as "normal" attribute.
     """
-    if 'data' in data:
+    if data is not None and 'data' in data and data['data'] is not None:
         for (k,v) in data['data'].items():
             data[k] = v
         data.pop('data')

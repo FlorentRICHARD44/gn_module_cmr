@@ -21,6 +21,9 @@ export class VisitDetailsComponent implements OnInit {
     public visit: any = {};
     public properties: Array<any> = [];
     public fields: Array<any> = [];
+    public observations: Array<any> = [];
+    public observationListProperties: Array<String> = [];
+    public observationFieldsDef: any = {};
 
     constructor(
         private _cmrService: CmrService,
@@ -37,6 +40,10 @@ export class VisitDetailsComponent implements OnInit {
                 this.module = this._cmrService.getModule(params.module);
                 this.properties = this.module.forms.visit.display_properties;
                 this.fields = this.module.forms.visit.fields;
+
+                this.observationListProperties = this.module.forms.observation.display_list;
+                this.observationFieldsDef = this.module.forms.observation.fields;
+                
                 this._cmrService.getOneVisit(params.id_visit).subscribe((data) => {
                     this.visit = data
                     this.path = [{
@@ -47,6 +54,8 @@ export class VisitDetailsComponent implements OnInit {
                         "link": ['module',this.module.module_code, 'dataset',this._route.snapshot.paramMap.get('id_dataset'), 'site', this._route.snapshot.paramMap.get('id_site')],
                     }];
                     this.path = [...this.path];
+
+                    this._cmrService.getAllObservationsByVisit(this.visit.id_visit).subscribe((data) => this.observations = data);
                 });
             })
         });
@@ -92,7 +101,8 @@ export class VisitDetailsComponent implements OnInit {
       var dialogRef = this.dialog.open(IndividualFormObsComponent, dialogConfig);
       dialogRef.afterClosed().subscribe((result) => {
           if (result) {
-            this._router.navigate(['..',result],{relativeTo: this._route});
+            console.log(result);
+            this._router.navigate(['individual',result,'observation'],{relativeTo: this._route});
           }
       });
     }

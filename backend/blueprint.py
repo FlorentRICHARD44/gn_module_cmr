@@ -2,8 +2,8 @@ from flask import Blueprint, current_app, request
 from geonature.utils.env import DB
 from geonature.utils.utilssqlalchemy import json_resp
 from pypnusershub.db.models import User
-from .repositories import ModulesRepository, SitesRepository, VisitsRepository, IndividualsRepository, ConfigRepository
-from .models import TModuleComplement, TSite, TVisit, TIndividual
+from .repositories import ModulesRepository, SitesRepository, VisitsRepository, IndividualsRepository, ObservationsRepository, ConfigRepository
+from .models import TModuleComplement, TSite, TVisit, TIndividual, TObservation
 from .utils.transform import data_to_json, json_to_data
 
 blueprint = Blueprint('cmr', __name__)
@@ -72,15 +72,14 @@ def get_all_sites_by_module_and_dataset(id_module, id_dataset=None):
         data = site_repo.get_all_filter_by_module_and_dataset(id_module, id_dataset)
     else:
         data = site_repo.get_all_filter_by(TSite.id_module, id_module)
-    return [data_to_json(d) for d in data]
+    return data
 
 # Get one site
 @blueprint.route('/site/<int:id_site>', methods=['GET'])
 @json_resp
 def get_one_site(id_site):
     site_repo = SitesRepository()
-    data = site_repo.get_one(TSite.id_site, id_site)
-    return data_to_json(data)
+    return site_repo.get_one(TSite.id_site, id_site)
 
 
 #############################
@@ -92,16 +91,14 @@ def get_one_site(id_site):
 @json_resp
 def get_all_visits_by_site(id_site):
     visit_repo = VisitsRepository()
-    data = visit_repo.get_all_filter_by(TVisit.id_site, id_site)
-    return [data_to_json(d) for d in data]
+    return visit_repo.get_all_filter_by(TVisit.id_site, id_site)
 
 # Get one visit
 @blueprint.route('/visit/<int:id_visit>', methods=['GET'])
 @json_resp
 def get_one_visit(id_visit):
     visit_repo = VisitsRepository()
-    data = visit_repo.get_one(TVisit.id_visit, id_visit)
-    return data_to_json(data)
+    return visit_repo.get_one(TVisit.id_visit, id_visit)
 
 # Save a visit
 @blueprint.route('/visit', methods=['PUT'])
@@ -140,15 +137,14 @@ def get_all_individuals_by_module_and_dataset(id_module, id_dataset=None):
         data = ind_repo.get_all_filter_by_module_and_dataset(id_module, id_dataset)
     else:
         data = ind_repo.get_all_filter_by(TSite.id_module, id_module)
-    return [data_to_json(d) for d in data]
+    return data
 
 # Get one individual
 @blueprint.route('/individual/<int:id_individual>', methods=['GET'])
 @json_resp
 def get_one_individual(id_individual):
     ind_repo = IndividualsRepository()
-    data = ind_repo.get_one(TIndividual.id_individual, id_individual)
-    return data_to_json(data)
+    return ind_repo.get_one(TIndividual.id_individual, id_individual)
 
 # Save an individual
 @blueprint.route('/individual', methods=['PUT'])
@@ -161,3 +157,33 @@ def save_individual():
         return {}
     else:
         return ind_repo.create_one(json_to_data(data, TIndividual))
+
+
+#############################
+# OBSERVATIONS ROUTES
+#############################
+
+# Get one observation
+@blueprint.route('/observation/<int:id_observation>', methods=['GET'])
+@json_resp
+def get_one_observation(id_observation):
+    obs_repo = ObservationsRepository()
+    return obs_repo.get_one(TObservation.id_observation, id_observation)
+
+# Get all observations of one visit
+@blueprint.route('/visit/<int:id_visit>/observations', methods=['GET'])
+@json_resp
+def get_all_observations_of_a_visit(id_visit):
+    obs_repo = ObservationsRepository()
+    return obs_repo.get_all_filter_by(TObservation.id_visit, id_visit)
+
+# Save an observation
+@blueprint.route('/observation', methods=['PUT'])
+@json_resp
+def save_observation():
+    data = request.json
+    obs_repo = ObservationsRepository()
+    if data['id_observation']:
+        pass  # TODO use the merge
+    else:
+        return obs_repo.create_one(json_to_data(data, TObservation))

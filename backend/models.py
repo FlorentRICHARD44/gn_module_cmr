@@ -7,6 +7,8 @@ from geoalchemy2 import Geometry
 from geonature.core.gn_commons.models import TModules
 from pypnusershub.db.models import User
 
+from .utils.transform import data_to_json
+
 SCHEMA_NAME = 'gn_cmr'
 
 
@@ -50,7 +52,7 @@ class TVisit(DB.Model):
         data = self.as_dict()
         data['site_name'] = self.site.name if self.site else None
         data['observers'] = [o.as_dict() for o in self.observers]
-        return data
+        return data_to_json(data)
 
 
 @serializable
@@ -78,7 +80,7 @@ class TSite(DB.Model):
     def to_dict(self):
         data = self.as_dict()
         data['nb_visits'] = self.nb_visits
-        return data
+        return data_to_json(data)
 
 TVisit.site = DB.relationship(TSite, primaryjoin=(TVisit.id_site == TSite.id_site), foreign_keys=[TSite.id_site], uselist=False)
 
@@ -101,8 +103,27 @@ class TIndividual(DB.Model):
     id_dataset = DB.Column(DB.Integer)
 
     def to_dict(self):
-        return self.as_dict()
+        return data_to_json(self.as_dict())
 
+
+@serializable
+class TObservation(DB.Model):
+    """
+    The observation of an individual during a visit in a site.
+    Contains all the information about this individual at this visit date.
+    """
+    __tablename__ = 't_observation'
+    __table_args__ = {'schema': SCHEMA_NAME}
+    id_observation = DB.Column(DB.Integer, primary_key=True)
+    id_individual = DB.Column(DB.Integer)
+    id_visit = DB.Column(DB.Integer)
+    type_observation = DB.Column(DB.Integer)
+    data = DB.Column(JSONB)
+    comments = DB.Column(DB.Unicode)
+
+    def to_dict(self):
+        data = self.as_dict()
+        return data_to_json(data)
 
 
 @serializable
@@ -124,4 +145,4 @@ class TModuleComplement(TModules):
     uuid_module_complement = DB.Column(UUID(as_uuid=True), default=uuid4)
     
     def to_dict(self):
-        return self.as_dict()
+        return data_to_json(self.as_dict())

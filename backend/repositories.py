@@ -4,7 +4,7 @@ from geonature.utils.env import DB
 from sqlalchemy.orm import joinedload, subqueryload
 from sqlalchemy.inspection import inspect
 from sqlalchemy.ext.hybrid import hybrid_property
-from .models import TModuleComplement, TSite, TVisit, TIndividual
+from .models import TModuleComplement, TSite, TVisit, TIndividual, TObservation
 from .utils.config_utils import get_json_config_from_file, get_config_path
 
 
@@ -86,6 +86,14 @@ class IndividualsRepository(BaseRepository):
         return [d.to_dict() for d in q.all()]
 
 
+class ObservationsRepository(BaseRepository):
+    """
+    Repository for the CMR Observations. Access to database.
+    """
+    def __init__(self):
+        super().__init__(TObservation)
+
+
 class ConfigRepository:
     """
     Repository for configuration in json files.
@@ -123,4 +131,5 @@ class ConfigRepository:
         form_config['site'] = self._build_form_from_its_json(module_name, 'site')
         form_config['visit'] = self._build_form_from_its_json(module_name, 'visit')
         form_config['individual'] = self._build_form_from_its_json(module_name, 'individual')
+        form_config['observation'] = self._build_form_from_its_json(module_name, 'observation')
         return form_config
