@@ -98,6 +98,10 @@ export class CmrService {
     getAllObservationsByVisit(id_visit) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/visit/${id_visit}/observations`);
     }
+
+    getAllObservationsByIndividual(id_individual) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/individual/${id_individual}/observations`);
+    }
     
     getOneObservation(id_observation) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/observation/${id_observation}`);

@@ -1,0 +1,77 @@
+<div class="main">
+    <div class="cadre">
+        <gn-cmr-breadcrumb [path]="path" [currentPage]="'Individu: ' + individual.identifier"></gn-cmr-breadcrumb>
+        <div class="toolbar clearfix">
+            <h3 class="float-left">Individu: {{individual.identifier}}</h3>
+            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Télécharger la fiche individu</button>
+            <button disabled class="btn btn-success float-right ml-2"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter une visite</button>
+            <button disabled class="btn btn-success float-right ml-2"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
+        </div>
+        <div class="">
+            <span><strong>Identifier: </strong>{{individual.identifier}}</span>
+        </div>
+        <div class="" *ngIf="individual.rfid">
+            <span><strong>RFID: </strong>{{individual.rfid}}</span>
+        </div>
+        <div class="">
+            <span><strong>Marquage: </strong>{{individual.marker}}</span>
+        </div>
+        <div class="mt-2">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tabs" role="tablist">
+                    <a class="nav-item nav-link active" data-toggle="tab" aria-selected="true" id="nav-info-tab" href="#info-tab">Informations</a>
+                    <a class="nav-item nav-link" data-toggle="tab" aria-selected="true" id="nav-historic-tab" href="#historic-tab">Historique des actions<span class="badge badge-pill badge-primary ml-2">{{historic.length}}</span></a>
+                </div>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade active show" id="info-tab" role="tabpanel" attr.aria-labelledby="nav-info-tab">
+                        <div class="flex-container">
+                            <div class="">
+                                <h5>Détails individu</h5>
+                                <table class="table table-striped table-sm scrollable">
+                                    <tr *ngFor="let fieldName of properties">
+                                        <th>{{ fields[fieldName].attribut_label }}</th>
+                                        <td class="text-in-area">{{ _dataService.formatProperty(individual[fieldName], fields[fieldName])}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="">
+                                <h5>Médias</h5>
+                                <!-- TODO voir à mettre dans un onglet à part -->
+                            </div>
+                            <div class="">
+                                <h5>Taxonomie</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="historic-tab" role="tabpanel" attr.aria-labelledby="nav-historic-tab">
+                        <div class="flex-container">
+                            <div class="">
+                                <ngx-datatable #table
+                                    class="material striped margin-top-xs"
+                                    [rows]="historic"
+                                    [rowHeight]="40"
+                                    [draggable]="false"
+                                    [count]="historic.length"
+                                    [limit]="15"
+                                    [headerHeight]="50"
+                                    [footerHeight]="50">
+
+                                    <ngx-datatable-column width="200" *ngFor="let prop of historicListProperties" [name]="historicFieldsDef[prop].attribut_label" [prop]="prop" >
+                                        <ng-template let-row="row" ngx-datatable-cell-template>
+                                            <span>{{_dataService.formatProperty(row[prop], historicFieldsDef[prop])}}</span>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                </ngx-datatable>
+                                <!--<pnx-map height="40vh" class="map-card">
+                                </pnx-map>-->
+                            </div>
+                            <div class="">
+                                <h5>Détail de l'observation sélectionnée</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>

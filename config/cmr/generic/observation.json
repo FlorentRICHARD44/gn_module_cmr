@@ -1,7 +1,8 @@
 {
-    "display_properties": ["type","comments"],
-    "display_list": ["type"],
+    "display_properties": ["type","visit_date","comments"],
+    "display_list": ["type","visit_date"],
     "properties_to_keep_when_chaining": [],
+    "individual_historic_display_list": ["type","visit_date","site_name"],
     "generic": {
         "id_observation": {
             "type_widget": "text",
@@ -18,6 +19,12 @@
             "type_widget": "textarea",
             "attribut_label": "Commentaires",
             "required": false
+        },
+        "visit_date": {
+            "attribut_label": "Date de Visite"
+        },
+        "site_name": {
+            "attribut_label": "Site"
         }
     }
 }

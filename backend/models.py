@@ -29,6 +29,10 @@ class TObservation(DB.Model):
 
     def to_dict(self):
         data = self.as_dict()
+        if self.visit:
+            data['visit_id'] = self.visit.id_visit
+            data['visit_date'] = self.visit.to_dict()['date']
+            data["site_name"] = self.visit.site.name if self.visit.site else None
         return data_to_json(data)
 
 
@@ -97,7 +101,10 @@ class TSite(DB.Model):
     uuid_site = DB.Column(UUID(as_uuid=True), default=uuid4)
     id_module = DB.Column(DB.Integer)
     id_dataset = DB.Column(DB.Integer)
-    visits = DB.relationship(TVisit, primaryjoin=(id_site == TVisit.id_site),foreign_keys=[TVisit.id_site], lazy="joined")
+    visits = DB.relationship(TVisit, 
+            primaryjoin=(id_site == TVisit.id_site),
+            foreign_keys=[TVisit.id_site],
+            lazy="joined")
 
     @hybrid_property
     def nb_visits(self):
@@ -108,7 +115,10 @@ class TSite(DB.Model):
         data['nb_visits'] = self.nb_visits
         return data_to_json(data)
 
-TVisit.site = DB.relationship(TSite, primaryjoin=(TVisit.id_site == TSite.id_site), foreign_keys=[TSite.id_site], uselist=False)
+TVisit.site = DB.relationship(TSite,
+        primaryjoin=(TVisit.id_site == TSite.id_site),
+        foreign_keys=[TSite.id_site],
+        uselist=False)
 
 
 @serializable
@@ -130,6 +140,15 @@ class TIndividual(DB.Model):
 
     def to_dict(self):
         return data_to_json(self.as_dict())
+
+TObservation.individual = DB.relationship(TIndividual,
+        primaryjoin=(TObservation.id_individual == TIndividual.id_individual),
+        foreign_keys=[TIndividual.id_individual],
+        uselist=False)
+TObservation.visit = DB.relationship(TVisit,
+        primaryjoin=(TObservation.id_visit == TVisit.id_visit),
+        foreign_keys=[TVisit.id_visit],
+        uselist=False)
 
 
 @serializable

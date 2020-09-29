@@ -177,6 +177,13 @@ def get_all_observations_of_a_visit(id_visit):
     obs_repo = ObservationsRepository()
     return obs_repo.get_all_filter_by(TObservation.id_visit, id_visit)
 
+# Get all observations of one individual
+@blueprint.route('/individual/<int:id_individual>/observations')
+@json_resp
+def get_all_observations_of_an_individual(id_individual):
+    obs_repo = ObservationsRepository()
+    return obs_repo.get_all_filter_by(TObservation.id_individual, id_individual)
+
 # Save an observation
 @blueprint.route('/observation', methods=['PUT'])
 @json_resp
