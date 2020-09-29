@@ -82,6 +82,29 @@ class TSite(DB.Model):
 
 TVisit.site = DB.relationship(TSite, primaryjoin=(TVisit.id_site == TSite.id_site), foreign_keys=[TSite.id_site], uselist=False)
 
+
+@serializable
+class TIndividual(DB.Model):
+    """
+    An individual that is captured and maybe recaptured.
+    """
+    __tablename__ = 't_individual'
+    __table_args__ = {'schema': SCHEMA_NAME}
+    id_individual = DB.Column(DB.Integer, primary_key=True)
+    uuid_individual = DB.Column(UUID(as_uuid=True), default=uuid4)
+    identifier = DB.Column(DB.Unicode)
+    rfid = DB.Column(DB.Unicode)
+    marker = DB.Column(DB.Unicode)
+    comments = DB.Column(DB.Unicode)
+    data = DB.Column(JSONB)
+    id_module = DB.Column(DB.Integer)
+    id_dataset = DB.Column(DB.Integer)
+
+    def to_dict(self):
+        return self.as_dict()
+
+
+
 @serializable
 class TModuleComplement(TModules):
     """

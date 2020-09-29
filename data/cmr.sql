@@ -54,6 +54,7 @@ CREATE TABLE gn_cmr.t_individual(
     id_individual serial NOT NULL,
     uuid_individual uuid NOT NULL DEFAULT uuid_generate_v4(),
     id_module integer NOT NULL,
+    id_dataset integer,
     data jsonb,
     identifier character varying(100),
     rfid character varying(255),
@@ -63,6 +64,7 @@ CREATE TABLE gn_cmr.t_individual(
     CONSTRAINT pk_gn_cmr_t_individual PRIMARY KEY (id_individual),
     CONSTRAINT fk_gn_cmr_t_individual_id_module FOREIGN KEY (id_module) REFERENCES gn_commons.t_modules(id_module),
     CONSTRAINT fk_gn_cmr_t_individual_sex FOREIGN KEY (sex) REFERENCES ref_nomenclatures.t_nomenclatures(id_nomenclature),
+    CONSTRAINT fk_gn_cmr_t_individual_id_dataset FOREIGN KEY (id_dataset) REFERENCES gn_meta.t_datasets(id_dataset),
     CONSTRAINT check_gn_cmr_t_individual_sex_nomenclature CHECK (ref_nomenclatures.check_nomenclature_type_by_mnemonique(sex,'SEXE')) NOT VALID
 );
 

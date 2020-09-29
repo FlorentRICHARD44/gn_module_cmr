@@ -3,6 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MapService } from "@geonature_common/map/map.service";
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
+import { MatDialog, MatDialogConfig } from "@angular/material";
+import { IndividualFormObsComponent } from "./../../individuals/form-obs/individual-form-obs.component";
 
 /**
  * This component is the home page of a CMR Visit.
@@ -22,8 +24,10 @@ export class VisitDetailsComponent implements OnInit {
 
     constructor(
         private _cmrService: CmrService,
+        private _router: Router,
         private _route: ActivatedRoute,
         private _mapService: MapService,
+        public dialog: MatDialog,
         private _dataService: DataService // used in template
     ) {}
 
@@ -74,5 +78,22 @@ export class VisitDetailsComponent implements OnInit {
           this._mapService.map.invalidateSize();
         }, 10);
       }
+    }
+    onClickAddObservation() {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.data = {
+        module: this.module,
+        visit: this.visit,
+        dataset_id: this._route.snapshot.paramMap.get('id_dataset')
+      };
+      dialogConfig.maxHeight = window.innerHeight - 10 + "px";
+      dialogConfig.width = '500px';
+      dialogConfig.position = { top: "30px" };
+      var dialogRef = this.dialog.open(IndividualFormObsComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe((result) => {
+          if (result) {
+            this._router.navigate(['..',result],{relativeTo: this._route});
+          }
+      });
     }
 }

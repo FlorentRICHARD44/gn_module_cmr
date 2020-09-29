@@ -2,8 +2,8 @@ from flask import Blueprint, current_app, request
 from geonature.utils.env import DB
 from geonature.utils.utilssqlalchemy import json_resp
 from pypnusershub.db.models import User
-from .repositories import ModulesRepository, SitesRepository, VisitsRepository, ConfigRepository
-from .models import TModuleComplement, TSite, TVisit
+from .repositories import ModulesRepository, SitesRepository, VisitsRepository, IndividualsRepository, ConfigRepository
+from .models import TModuleComplement, TSite, TVisit, TIndividual
 from .utils.transform import data_to_json, json_to_data
 
 blueprint = Blueprint('cmr', __name__)
@@ -82,14 +82,6 @@ def get_one_site(id_site):
     data = site_repo.get_one(TSite.id_site, id_site)
     return data_to_json(data)
 
-    
-# Get one site 2
-@blueprint.route('/site2/<int:id_site>', methods=['GET'])
-@json_resp
-def get_one_site2(id_site):
-    site = DB.session.query(TSite).filter(TSite.id_site == id_site).all()
-    return [si.as_dict() for si in site]
-
 
 #############################
 # VISITS ROUTES
@@ -132,3 +124,40 @@ def save_visit():
         return {}
     else:
         return visit_repo.create_one(json_to_data(data, TVisit))
+
+
+#############################
+# INDIVIDUALS ROUTES
+#############################
+
+# Get the list of individuals by module and optionally dataset
+@blueprint.route('/module/<int:id_module>/individuals', methods=['GET'])
+@blueprint.route('/module/<int:id_module>/dataset/<int:id_dataset>/individuals', methods=['GET'])
+@json_resp
+def get_all_individuals_by_module_and_dataset(id_module, id_dataset=None):
+    ind_repo = IndividualsRepository()
+    if id_dataset:
+        data = ind_repo.get_all_filter_by_module_and_dataset(id_module, id_dataset)
+    else:
+        data = ind_repo.get_all_filter_by(TSite.id_module, id_module)
+    return [data_to_json(d) for d in data]
+
+# Get one individual
+@blueprint.route('/individual/<int:id_individual>', methods=['GET'])
+@json_resp
+def get_one_individual(id_individual):
+    ind_repo = IndividualsRepository()
+    data = ind_repo.get_one(TIndividual.id_individual, id_individual)
+    return data_to_json(data)
+
+# Save an individual
+@blueprint.route('/individual', methods=['PUT'])
+@json_resp
+def save_individual():
+    data = request.json
+    ind_repo = IndividualsRepository()
+    if data['id_individual']:
+        pass  # TODO use the merge
+        return {}
+    else:
+        return ind_repo.create_one(json_to_data(data, TIndividual))

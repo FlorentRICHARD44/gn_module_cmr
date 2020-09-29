@@ -76,4 +76,21 @@ export class CmrService {
     saveVisit(data) {
         return this._api.put<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/visit`, data);
     }
+
+    /* INDIVIDUAL QUERIES */
+    getAllIndividualsByModule(id_module, id_dataset) {
+        if (id_dataset == 'none') {
+            return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/individuals`);
+        } else {
+            return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/dataset/${id_dataset}/individuals`);
+        }
+    }
+    
+    getOneIndividual(id_individual) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/individual/${id_individual}`);
+    }
+
+    saveIndividual(data) {
+        return this._api.put<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/individual`, data);
+    }
 }

@@ -20,6 +20,8 @@ export class ModuleHomeComponent implements OnInit {
     public dataset: any = {};
     public cardContentHeight: any;
     public individuals: Array<any> = [];
+    public individualListProperties: Array<any> = [];
+    public individualFieldsDef: any = {};
     public sites: Array<any> = [];
     public siteListProperties: Array<any> = [];
     public siteFieldsDef: any = {};
@@ -49,6 +51,9 @@ export class ModuleHomeComponent implements OnInit {
                 this.siteListProperties = this.module.forms.site.display_list;
                 this.siteFieldsDef = this.module.forms.site.fields;
                 this._cmrService.getAllSitesByModule(this.module.id_module, params.id_dataset).subscribe((data) => this.sites = data);
+                this.individualListProperties = this.module.forms.individual.display_list;
+                this.individualFieldsDef = this.module.forms.individual.fields;
+                this._cmrService.getAllIndividualsByModule(this.module.id_module, params.id_dataset).subscribe((data) => this.individuals = data);
                 return of(true);
               })
             ).subscribe(() => {});

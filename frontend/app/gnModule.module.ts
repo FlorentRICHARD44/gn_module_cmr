@@ -12,6 +12,7 @@ import { SiteFormComponent } from "./components/sites/form/site-form.component";
 import { SiteDetailsComponent } from "./components/sites/details/site-details.component";
 import { VisitFormComponent } from "./components/visits/form/visit-form.component";
 import { VisitDetailsComponent } from "./components/visits/details/visit-details.component";
+import { IndividualFormObsComponent } from "./components/individuals/form-obs/individual-form-obs.component";
 import { BreadcrumbComponent } from './components/common/breadcrumb/breadcrumb.component';
 
 // my module routing
@@ -28,10 +29,11 @@ const routes: Routes = [
   declarations: [BreadcrumbComponent,
     ModuleListComponent, ModuleHomeComponent, ModuleDisclaimerComponent, ModuleDatasetChoiceComponent,
     SiteFormComponent, SiteDetailsComponent,
-    VisitFormComponent, VisitDetailsComponent
+    VisitFormComponent, VisitDetailsComponent,
+    IndividualFormObsComponent
   ],
   imports: [GN2CommonModule, CommonModule, RouterModule.forChild(routes), MatDialogModule, MatSlideToggleModule],
-  entryComponents: [ModuleDisclaimerComponent, ModuleDatasetChoiceComponent],
+  entryComponents: [ModuleDisclaimerComponent, ModuleDatasetChoiceComponent, IndividualFormObsComponent],
   providers: [],
   bootstrap: []
 })

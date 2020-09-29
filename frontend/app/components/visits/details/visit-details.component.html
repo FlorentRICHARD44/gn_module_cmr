@@ -25,8 +25,8 @@
             <div class="" *ngIf="visit.observation">
                 <h3>Observations</h3>
                 <div class="toolbar clearfix">
-                    <button disabled class="btn btn-success float-left">Ajout Observation</button>
-                    <button disabled class="btn btn-primary float-right">Filtrer</button>
+                    <button class="btn btn-success float-left" (click)="onClickAddObservation()"><i class="fa fa-plus-circle"></i>&nbsp;Ajout Observation</button>
+                    <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
                 </div>
             </div>
         </div>
