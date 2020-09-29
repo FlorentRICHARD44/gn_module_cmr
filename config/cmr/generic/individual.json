@@ -1,0 +1,32 @@
+{
+    "display_properties": ["identifier","rfid","marker","comments"],
+    "display_list": ["identifier","rfid","marker"],
+    "properties_to_keep_when_chaining": [],
+    "generic": {
+        "id_individual": {
+            "type_widget": "text",
+            "attribut_label": "Id Individu",
+            "hidden": true
+        },
+        "identifier": {
+            "type_widget": "text",
+            "attribut_label": "Identifiant",
+            "required": true
+        },
+        "rfid": {
+            "type_widget": "text",
+            "attribut_label": "RFID",
+            "required": false
+        },
+        "marker": {
+            "type_widget": "text",
+            "attribut_label": "Marquage",
+            "required": true
+        },
+        "comments": {
+            "type_widget": "textarea",
+            "attribut_label": "Commentaires",
+            "required": false
+        }
+    }
+}

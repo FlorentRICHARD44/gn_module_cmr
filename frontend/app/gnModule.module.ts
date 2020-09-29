@@ -25,6 +25,8 @@ const routes: Routes = [
   { path: "module/:module/dataset/:id_dataset/site/:id_site/visit", component: VisitFormComponent },
   { path: "module/:module/dataset/:id_dataset/site/:id_site/visit/:id_visit", component: VisitDetailsComponent },
   { path: "module/:module/dataset/:id_dataset/site/:id_site/visit/:id_visit/individual/:id_individual/observation", component: ObservationFormComponent }
+  /* TODO { path: "module/:module/dataset/:id_dataset/site/:id_site/visit/:id_visit/observation/:id_observation", component: } */
+  /* TODO { path: "module/:module/dataset/:id_dataset/individual/:id_individual", component: } */
 ];
 
 @NgModule({

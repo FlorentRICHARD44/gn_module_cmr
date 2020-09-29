@@ -12,6 +12,26 @@ from .utils.transform import data_to_json
 SCHEMA_NAME = 'gn_cmr'
 
 
+@serializable
+class TObservation(DB.Model):
+    """
+    The observation of an individual during a visit in a site.
+    Contains all the information about this individual at this visit date.
+    """
+    __tablename__ = 't_observation'
+    __table_args__ = {'schema': SCHEMA_NAME}
+    id_observation = DB.Column(DB.Integer, primary_key=True)
+    id_individual = DB.Column(DB.Integer)
+    id_visit = DB.Column(DB.Integer)
+    type_observation = DB.Column(DB.Integer)
+    data = DB.Column(JSONB)
+    comments = DB.Column(DB.Unicode)
+
+    def to_dict(self):
+        data = self.as_dict()
+        return data_to_json(data)
+
+
 corVisitObserver = DB.Table('cor_visit_observer', 
     DB.Column("id_visit",
         DB.ForeignKey(SCHEMA_NAME +'.t_visit.id_visit'),
@@ -47,11 +67,17 @@ class TVisit(DB.Model):
                       corVisitObserver.c.id_observer],
     )
     id_site = DB.Column(DB.Integer, foreign_key="TSite.id_site")
+    observations = DB.relationship(TObservation, primaryjoin=(id_visit == TObservation.id_visit), foreign_keys=[TObservation.id_visit], lazy="joined")
+
+    @hybrid_property
+    def nb_observations(self):
+        return len(self.observations) if self.observations else 0
 
     def to_dict(self):
         data = self.as_dict()
         data['site_name'] = self.site.name if self.site else None
         data['observers'] = [o.as_dict() for o in self.observers]
+        data['nb_observations'] = self.nb_observations
         return data_to_json(data)
 
 
@@ -104,26 +130,6 @@ class TIndividual(DB.Model):
 
     def to_dict(self):
         return data_to_json(self.as_dict())
-
-
-@serializable
-class TObservation(DB.Model):
-    """
-    The observation of an individual during a visit in a site.
-    Contains all the information about this individual at this visit date.
-    """
-    __tablename__ = 't_observation'
-    __table_args__ = {'schema': SCHEMA_NAME}
-    id_observation = DB.Column(DB.Integer, primary_key=True)
-    id_individual = DB.Column(DB.Integer)
-    id_visit = DB.Column(DB.Integer)
-    type_observation = DB.Column(DB.Integer)
-    data = DB.Column(JSONB)
-    comments = DB.Column(DB.Unicode)
-
-    def to_dict(self):
-        data = self.as_dict()
-        return data_to_json(data)
 
 
 @serializable

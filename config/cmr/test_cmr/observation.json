@@ -1,0 +1,31 @@
+{
+    "display_properties": ["type","comments"],
+    "display_list": ["type"],
+    "properties_to_keep_when_chaining": [],
+    "specific": {
+        "individual_state": {
+            "type_widget": "select",
+            "attribut_label": "Etat individu",
+            "required": true,
+            "values": ["Vivant","Mort"]
+        },
+        "development_step": {
+            "type_widget": "select",
+            "attribut_label": "Type",
+            "required": true,
+            "values": ["Emergent de l'année","Juvénile en croissance","Adulte avec stries encore visibles","Vieil adulte sans strie de croissance","Inconnu"]
+        },
+        "age": {
+            "type_widget": "number",
+            "attribut_label": "Âge estimé",
+            "min": 0,
+            "max": 20,
+            "required": false
+        },
+        "particular_signs": {
+            "type_widget": "textarea",
+            "attribut_label": "Signes particuliers",
+            "required": false
+        }
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "display_properties": ["identifier","rfid","marker","comments"],
+    "display_list": ["identifier","rfid","marker"],
+    "properties_to_keep_when_chaining": [],
+    "specific": {
+    }
+}

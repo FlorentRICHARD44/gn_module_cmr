@@ -1,6 +1,6 @@
 {
-    "display_properties": ["site_name","date","observation","observers","comments"],
-    "display_list": ["date","observation","observers"],
+    "display_properties": ["site_name","date","observation","observers","nb_observations","comments"],
+    "display_list": ["date","observation","observers","nb_observations"],
     "properties_to_keep_when_chaining": [],
     "generic": {
         "id_visit": {
@@ -33,6 +33,9 @@
         },
         "site_name": {
             "attribut_label": "Point de Capture"
+        },
+        "nb_observations": {
+            "attribut_label": "Nb Observations"
         }
     }
 }

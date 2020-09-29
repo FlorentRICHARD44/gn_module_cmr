@@ -1,0 +1,23 @@
+{
+    "display_properties": ["type","comments"],
+    "display_list": ["type"],
+    "properties_to_keep_when_chaining": [],
+    "generic": {
+        "id_observation": {
+            "type_widget": "text",
+            "attribut_label": "Id Observation",
+            "hidden": true
+        },
+        "type": {
+            "type_widget": "select",
+            "attribut_label": "Type",
+            "required": true,
+            "values": ["Capture-Marquage","Recapture"]
+        },
+        "comments": {
+            "type_widget": "textarea",
+            "attribut_label": "Commentaires",
+            "required": false
+        }
+    }
+}
