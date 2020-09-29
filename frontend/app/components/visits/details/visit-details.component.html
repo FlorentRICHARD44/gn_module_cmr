@@ -22,7 +22,13 @@
             </pnx-map>
         </div>
         <div class="cadre scroll">
-            <h3>Individus observés</h3>
+            <div class="" *ngIf="visit.observation">
+                <h3>Observations</h3>
+                <div class="toolbar clearfix">
+                    <button disabled class="btn btn-success float-left">Ajout Observation</button>
+                    <button disabled class="btn btn-primary float-right">Filtrer</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -15,7 +15,7 @@
             <div *ngIf="dataset.dataset_name" class="toolbar mb-2">
                 <span>
                     <strong>{{ 'Releve.Dataset' | translate }}: </strong>
-                    <a target="_blank" [routerLink]="'/metadata/dataset_detail/dataset.id_dataset'">{{dataset.dataset_name}}</a>
+                    <a target="_blank" [routerLink]="'/metadata/dataset_detail/' +dataset.id_dataset">{{dataset.dataset_name}}</a>
                     <i class="fa fa-ellipsis-h fa-border clickable ml-2" (click)="onClickChangeDataset()" matTooltip="Sélectionner un autre jeu de données"></i>
                 </span>
             </div>

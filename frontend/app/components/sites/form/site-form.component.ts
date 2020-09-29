@@ -87,7 +87,7 @@ export class SiteFormComponent implements OnInit {
 
     }
 
-    onSubmit() {
+    onSubmit(addVisit) {
         var formData = this.siteForm.value;
         formData['id_module'] = this.module.id_module;
         var id_dataset = this._route.snapshot.paramMap.get('id_dataset');
@@ -108,6 +108,8 @@ export class SiteFormComponent implements OnInit {
                 "info",
                 "Formulaire enregistré!"
               );
+            } else if (addVisit) {
+              this._router.navigate(['..', 'site', result.id_site, 'visit'],{relativeTo: this._route});
             } else {  // go the details page
               this._router.navigate(['..', 'site', result.id_site],{relativeTo: this._route});
             }
