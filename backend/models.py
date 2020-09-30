@@ -32,6 +32,7 @@ class TObservation(DB.Model):
         if self.visit:
             data['visit_id'] = self.visit.id_visit
             data['visit_date'] = self.visit.to_dict()['date']
+            data['site_id'] = self.visit.id_site
             data["site_name"] = self.visit.site.name if self.visit.site else None
         data["individual_identifier"] = self.individual.to_dict()['identifier'] if self.individual else None
         return data_to_json(data)

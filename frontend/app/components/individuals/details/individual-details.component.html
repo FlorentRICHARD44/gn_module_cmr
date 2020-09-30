@@ -56,7 +56,14 @@
                                     [headerHeight]="50"
                                     [footerHeight]="50"
                                     [sorts]="[{prop: 'visit_date',dir:'desc'}]">
-
+                                    
+                                    <ngx-datatable-column width="15">
+                                        <ng-template let-row="row" ngx-datatable-cell-template>
+                                            <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['../..','site', row.site_id, 'visit', row.id_visit, 'observation', row.id_observation]">
+                                                <i class="fa fa-info-circle" aria-hidden="true" matTooltip="Détails de l'Observation"></i>
+                                            </a>
+                                        </ng-template>
+                                    </ngx-datatable-column>
                                     <ngx-datatable-column width="200" *ngFor="let prop of historicListProperties" [name]="historicFieldsDef[prop].attribut_label" [prop]="prop" >
                                         <ng-template let-row="row" ngx-datatable-cell-template>
                                             <span>{{_dataService.formatProperty(row[prop], historicFieldsDef[prop])}}</span>

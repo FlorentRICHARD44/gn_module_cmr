@@ -63,8 +63,12 @@
 
                             <ngx-datatable-column width="60">
                                 <ng-template let-row="row" ngx-datatable-cell-template>
-                                    <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['visit', row.id_visit]"><i class="fa fa-info-circle" aria-hidden="true" matTooltip="Informations"></i></a>
-                                    <a class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['visit', {edit: row.id_visit}]"><i class="fa fa-pencil-square-o" aria-hidden="true" matTooltip="Editer"></i></a>
+                                    <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['visit', row.id_visit]">
+                                        <i class="fa fa-info-circle" aria-hidden="true" matTooltip="Informations Visite"></i>
+                                    </a>
+                                    <a class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['visit', {edit: row.id_visit}]">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true" matTooltip="Editer la Visite"></i>
+                                    </a>
                                 </ng-template>
                             </ngx-datatable-column>
                             <ngx-datatable-column width="200" *ngFor="let prop of visitListProperties" [name]="visitFieldsDef[prop].attribut_label" [prop]="prop" >
@@ -90,7 +94,9 @@
 
                             <ngx-datatable-column width="15">
                                 <ng-template let-row="row" ngx-datatable-cell-template>
-                                    <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['../..','individual', row.id_individual]"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                                    <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['../..','individual', row.id_individual]">
+                                        <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations Individu ' + row.identifier"></i>
+                                    </a>
                                 </ng-template>
                             </ngx-datatable-column>
                             <ngx-datatable-column width="200" *ngFor="let prop of individualListProperties" [name]="individualFieldsDef[prop].attribut_label" [prop]="prop" >
