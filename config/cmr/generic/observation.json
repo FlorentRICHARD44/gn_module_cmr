@@ -21,7 +21,8 @@
             "required": false
         },
         "visit_date": {
-            "attribut_label": "Date de Visite"
+            "attribut_label": "Date de Visite",
+            "type_column": "date"
         },
         "site_name": {
             "attribut_label": "Site"
