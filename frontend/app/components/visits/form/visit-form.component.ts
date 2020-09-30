@@ -36,28 +36,35 @@ export class VisitFormComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.visitForm = this._formBuilder.group({});
         var data = this._cmrService.getModule(this._route.snapshot.paramMap.get('module'));
-        this.module = data;
-        var schema = data.forms.visit.fields;
-        var fields = {};
-        this.visitForm = this._formBuilder.group(fields);
-        this.visitFormDefinitions = Object.keys(schema)
-            .filter((attribut_name) => schema[attribut_name].type_widget)
-            .map((attribut_name) => {
-                const elem = schema[attribut_name];
-                elem["attribut_name"] = attribut_name;
-                return elem;
-            });
-        this._cmrService.getOneSite(this._route.snapshot.paramMap.get('id_site')).subscribe((data) => {
-            this.site = data;
-            this.path = [{
-                "text": "Module: " + this.module.module_label, 
-                "link": ['module',this.module.module_code, 'dataset',this._route.snapshot.paramMap.get('id_dataset')]
-            },{
-                "text": this.module.forms.site.label + ": " + this.site.name,
-                "link": ['module',this.module.module_code, 'dataset',this._route.snapshot.paramMap.get('id_dataset'), 'site', this._route.snapshot.paramMap.get('id_site')],
-            }];
-        })
+        if (!data) { // if module not yet defined, reload the page to ensure module data is loaded
+          this._cmrService.loadOneModule(this._route.snapshot.paramMap.get('module')).subscribe(() => {
+            this._router.routeReuseStrategy.shouldReuseRoute = () => false;
+            this._router.onSameUrlNavigation = 'reload';
+            this._router.navigate(['.'],{relativeTo: this._route});
+          });
+        } else {
+          this.module = data;
+          var schema = data.forms.visit.fields;
+          this.visitFormDefinitions = Object.keys(schema)
+              .filter((attribut_name) => schema[attribut_name].type_widget)
+              .map((attribut_name) => {
+                  const elem = schema[attribut_name];
+                  elem["attribut_name"] = attribut_name;
+                  return elem;
+              });
+          this._cmrService.getOneSite(this._route.snapshot.paramMap.get('id_site')).subscribe((data) => {
+              this.site = data;
+              this.path = [{
+                  "text": "Module: " + this.module.module_label, 
+                  "link": ['module',this.module.module_code, 'dataset',this._route.snapshot.paramMap.get('id_dataset')]
+              },{
+                  "text": this.module.forms.site.label + ": " + this.site.name,
+                  "link": ['module',this.module.module_code, 'dataset',this._route.snapshot.paramMap.get('id_dataset'), 'site', this._route.snapshot.paramMap.get('id_site')],
+              }];
+          });
+        }
     }
      
     ngAfterViewInit() {

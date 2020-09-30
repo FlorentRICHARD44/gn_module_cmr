@@ -34,25 +34,33 @@ export class SiteFormComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.siteForm = this._formBuilder.group({});
+        this.leafletDrawOptions = this._cmrMapService.getLeafletDrawOptionReadOnly();
         var data = this._cmrService.getModule(this._route.snapshot.paramMap.get('module'));
-        this.module = data;
-        this.path = [{
-            "text": "Module: " + this.module.module_label, 
-            "link": ['module',this.module.module_code, 'dataset',this._route.snapshot.paramMap.get('id_dataset')],
-        }];
-        this.leafletDrawOptions = this._cmrMapService.getLeafletDrawOptionDrawAll(data.forms.site.geometry_types);
-        var schema = data.forms.site.fields;
-        var fields = {};
-        this.siteForm = this._formBuilder.group(fields);
-        this.siteFormDefinitions = Object.keys(schema)
-            // medias toujours à la fin
-            //.sort((a, b) => { return a == 'medias' ? +1 : b == "medias" ? -1 : 0 })
-            .filter((attribut_name) => schema[attribut_name].type_widget)
-            .map((attribut_name) => {
-                const elem = schema[attribut_name];
-                elem["attribut_name"] = attribut_name;
-                return elem;
-            });
+        if (!data) { // if module not yet defined, reload the page to ensure module data is loaded
+          this._cmrService.loadOneModule(this._route.snapshot.paramMap.get('module')).subscribe(() => {
+            this._router.routeReuseStrategy.shouldReuseRoute = () => false;
+            this._router.onSameUrlNavigation = 'reload';
+            this._router.navigate(['.'],{relativeTo: this._route});
+          });
+        } else {
+          this.module = data;
+          this.path = [{
+              "text": "Module: " + this.module.module_label, 
+              "link": ['module',this.module.module_code, 'dataset',this._route.snapshot.paramMap.get('id_dataset')],
+          }];
+          this.leafletDrawOptions = this._cmrMapService.getLeafletDrawOptionDrawAll(this.module.forms.site.geometry_types);
+          var schema = this.module.forms.site.fields;
+          this.siteFormDefinitions = Object.keys(schema)
+              // medias toujours à la fin
+              //.sort((a, b) => { return a == 'medias' ? +1 : b == "medias" ? -1 : 0 })
+              .filter((attribut_name) => schema[attribut_name].type_widget)
+              .map((attribut_name) => {
+                  const elem = schema[attribut_name];
+                  elem["attribut_name"] = attribut_name;
+                  return elem;
+              });
+        }
     }
      
     ngAfterViewInit() {
