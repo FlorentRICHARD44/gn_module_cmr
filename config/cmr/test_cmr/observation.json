@@ -1,5 +1,5 @@
 {
-    "display_properties": ["type","visit_date","comments"],
+    "display_properties": ["type","comments","individual_state","development_step","age","particular_signs"],
     "display_list": ["individual_identifier","type"],
     "properties_to_keep_when_chaining": [],
     "specific": {

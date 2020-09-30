@@ -15,6 +15,7 @@ import { VisitDetailsComponent } from "./components/visits/details/visit-details
 import { IndividualFormObsComponent } from "./components/individuals/form-obs/individual-form-obs.component";
 import { IndividualDetailsComponent } from "./components/individuals/details/individual-details.component";
 import { ObservationFormComponent } from "./components/observation/form/observation-form.component";
+import { ObservationDetailsComponent } from "./components/observation/details/observation-details.component";
 import { BreadcrumbComponent } from './components/common/breadcrumb/breadcrumb.component';
 
 // my module routing
@@ -26,7 +27,7 @@ const routes: Routes = [
   { path: "module/:module/dataset/:id_dataset/site/:id_site/visit", component: VisitFormComponent },
   { path: "module/:module/dataset/:id_dataset/site/:id_site/visit/:id_visit", component: VisitDetailsComponent },
   { path: "module/:module/dataset/:id_dataset/site/:id_site/visit/:id_visit/individual/:id_individual/observation", component: ObservationFormComponent },
-  /* TODO { path: "module/:module/dataset/:id_dataset/site/:id_site/visit/:id_visit/observation/:id_observation", component: } */
+  { path: "module/:module/dataset/:id_dataset/site/:id_site/visit/:id_visit/observation/:id_observation", component: ObservationDetailsComponent},
   { path: "module/:module/dataset/:id_dataset/individual/:id_individual", component: IndividualDetailsComponent } 
 ];
 
@@ -36,7 +37,7 @@ const routes: Routes = [
     SiteFormComponent, SiteDetailsComponent,
     VisitFormComponent, VisitDetailsComponent,
     IndividualFormObsComponent, IndividualDetailsComponent,
-    ObservationFormComponent
+    ObservationFormComponent, ObservationDetailsComponent
   ],
   imports: [GN2CommonModule, CommonModule, RouterModule.forChild(routes), MatDialogModule, MatSlideToggleModule],
   entryComponents: [ModuleDisclaimerComponent, ModuleDatasetChoiceComponent, IndividualFormObsComponent],

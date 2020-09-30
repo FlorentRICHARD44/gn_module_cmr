@@ -196,6 +196,6 @@ def save_observation():
     data = request.json
     obs_repo = ObservationsRepository()
     if data['id_observation']:
-        pass  # TODO use the merge
+        return obs_repo.update_one(json_to_data(data, TObservation))
     else:
         return obs_repo.create_one(json_to_data(data, TObservation))

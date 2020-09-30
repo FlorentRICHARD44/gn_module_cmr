@@ -13,6 +13,7 @@ export class DataService {
      * @param fieldDef 
      */
     formatProperty(value, fieldDef) {
+        if (!fieldDef) return value;
         if ((fieldDef.type_widget == 'date' || fieldDef.type_column == 'date') && value) {
             if (value.month && value.day && value.year) {
                 value = (new Date(value.month + '-' + value.day + '-' + value.year)).toLocaleDateString();

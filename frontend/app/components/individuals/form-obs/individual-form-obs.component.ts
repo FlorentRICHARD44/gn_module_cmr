@@ -70,7 +70,7 @@ export class IndividualFormObsComponent implements OnInit {
           formData['id_dataset'] = id_dataset;
         }
         this._cmrService.saveIndividual(this.individualForm.value).subscribe(result => {
-            this.dialogRef.close(this.selectedIndividual);
+            this.dialogRef.close(result.id_individual);
         });
     }
 }

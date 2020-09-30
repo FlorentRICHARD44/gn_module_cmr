@@ -12,7 +12,8 @@ import { DataService } from './../../../services/data.service';
 })
 export class ObservationFormComponent implements OnInit {
     public path = [];
-    public module: any = {config:{},forms:{observation:{}}};
+    public module: any = {config:{},forms:{observation:{},site:{}}};
+    public observation: any = {};
     public site: any = {};
     public visit: any = {};
     public individual: any = {};
@@ -21,6 +22,8 @@ export class ObservationFormComponent implements OnInit {
     public cardContentHeight: any;
     public observationForm: FormGroup;
     public observationFormDefinitions = [];
+
+    public bEdit = false;
 
     constructor(
         private _cmrService: CmrService,
@@ -73,6 +76,14 @@ export class ObservationFormComponent implements OnInit {
             this._cmrService.getOneIndividual(this._route.snapshot.paramMap.get('id_individual')).subscribe((data) => {
                 this.individual = data;
             });
+            var editId = this._route.snapshot.paramMap.get('edit');
+            if (editId) {
+                this.bEdit = true;
+                this._cmrService.getOneObservation(editId).subscribe((data) => {
+                    this.observation = data;
+                    this.observationForm.patchValue(data);
+                });
+            }
         }
     }
      
