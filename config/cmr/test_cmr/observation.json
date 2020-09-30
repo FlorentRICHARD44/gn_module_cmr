@@ -1,6 +1,6 @@
 {
     "display_properties": ["type","visit_date","comments"],
-    "display_list": ["type","visit_date"],
+    "display_list": ["individual_identifier","type"],
     "properties_to_keep_when_chaining": [],
     "specific": {
         "individual_state": {
