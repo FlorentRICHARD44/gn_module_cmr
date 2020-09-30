@@ -5,7 +5,7 @@
                 <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.site.label + ': ' + site.name"></gn-cmr-breadcrumb>
                 <div class="toolbar clearfix">
                     <h3 class="float-left">{{module.forms.site.label}}: {{ site.name }}</h3>
-                    <button disabled class="btn btn-primary float-right"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
+                    <button class="btn btn-primary float-right" [routerLink]="['..', {edit: site.id_site}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
                 </div>
                 <div class="">
                     <nav>

@@ -18,8 +18,10 @@ export class SiteFormComponent implements OnInit {
     public leafletDrawOptions: any = {};
     public siteForm: FormGroup;
     public siteFormDefinitions = [];
+    public site: any = {};
 
     public bChainInput = false;
+    public bEdit = false;
 
     constructor(
         private _cmrService: CmrService,
@@ -60,6 +62,14 @@ export class SiteFormComponent implements OnInit {
                   elem["attribut_name"] = attribut_name;
                   return elem;
               });
+        }
+        var editId = this._route.snapshot.paramMap.get('edit');
+        if (editId) {
+          this.bEdit = true;
+          this._cmrService.getOneSite(editId).subscribe((data) => {
+            this.site = data;
+            this.siteForm.patchValue(data);
+          });
         }
     }
      

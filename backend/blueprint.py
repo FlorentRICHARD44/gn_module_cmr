@@ -57,8 +57,7 @@ def save_site():
     data = request.json
     site_repo = SitesRepository()
     if data['id_site']:
-        pass  # TODO use the merge
-        return {}
+        return site_repo.update_one(json_to_data(data, TSite))
     else:
         return site_repo.create_one(json_to_data(data, TSite))
 

@@ -42,6 +42,16 @@ class BaseRepository:
         DB.session.add(data)
         DB.session.commit()
         return data.to_dict()
+    
+    def update_one(self, data):
+        """
+        Update an existing item.
+        """
+        data = self.model(**data)
+        DB.session.merge(data)
+        DB.session.commit()
+        return data.to_dict()
+
 
 class ModulesRepository(BaseRepository):
     """
