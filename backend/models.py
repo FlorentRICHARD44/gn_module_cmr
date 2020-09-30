@@ -138,9 +138,18 @@ class TIndividual(DB.Model):
     data = DB.Column(JSONB)
     id_module = DB.Column(DB.Integer)
     id_dataset = DB.Column(DB.Integer)
+    observations = DB.relationship(TObservation, 
+            primaryjoin=(TObservation.id_individual == id_individual),
+            foreign_keys=[TObservation.id_individual])
+
+    @hybrid_property
+    def nb_observations(self):
+        return len(self.observations)
 
     def to_dict(self):
-        return data_to_json(self.as_dict())
+        data = self.as_dict()
+        data['nb_observations'] = self.nb_observations
+        return data_to_json(data)
 
 TObservation.individual = DB.relationship(TIndividual,
         primaryjoin=(TObservation.id_individual == TIndividual.id_individual),

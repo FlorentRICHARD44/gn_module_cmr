@@ -38,6 +38,7 @@
                 <button class="btn btn-primary float-left" [routerLink]="[visit.id_visit]" *ngIf="bEdit">Annuler</button>
                 <button *ngIf="!bChainInput" class="btn btn-success float-right" [disabled]="!visitForm.valid || !genericVisitForm.valid" (click)="onSubmit()"><i class="fa fa-check"></i>&nbsp;Valider</button>
                 <button *ngIf="bChainInput && !bEdit" class="btn btn-success float-right" [disabled]="!visitForm.valid || !genericVisitForm.valid" (click)="onSubmit()"><i class="fa fa-check"></i>&nbsp;Valider et enchainer les saisies</button>
+                <!-- TODO button valider et ajouter observation (si formValid & !edit & observation=true -->
               </div>
             </form>
         </div> 

@@ -1,6 +1,7 @@
 import os
 from flask import current_app
 from geonature.utils.env import DB
+from sqlalchemy import func
 from sqlalchemy.orm import joinedload, subqueryload
 from sqlalchemy.inspection import inspect
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -96,11 +97,17 @@ class IndividualsRepository(BaseRepository):
         return [d.to_dict() for d in q.all()]
     
     def get_all_by_site(self, id_site):
-        q = DB.session.query(self.model).join(
+        result = []
+        q = DB.session.query(self.model, func.count(TObservation.id_observation)).join(
             TObservation, (TObservation.id_individual == TIndividual.id_individual)).join(
             TVisit, (TVisit.id_visit == TObservation.id_visit)).filter(
-                TVisit.id_site == id_site).distinct(TIndividual.id_individual)
-        return [d.to_dict() for d in q.all()]
+                TVisit.id_site == id_site).group_by(TIndividual.id_individual)
+        data = q.all()
+        for (item, count) in data:
+            r = item.to_dict()
+            r['nb_observations'] = count  # replace the overall nb_observations by nb observations on the site.
+            result.append(r)
+        return result
 
 
 class ObservationsRepository(BaseRepository):

@@ -1,6 +1,6 @@
 {
     "display_properties": ["identifier","rfid","marker","comments"],
-    "display_list": ["identifier","rfid","marker"],
+    "display_list": ["identifier","rfid","marker", "nb_observations"],
     "properties_to_keep_when_chaining": [],
     "generic": {
         "id_individual": {
@@ -27,6 +27,9 @@
             "type_widget": "textarea",
             "attribut_label": "Commentaires",
             "required": false
+        },
+        "nb_observations": {
+            "attribut_label": "Nb Observations"
         }
     }
 }
