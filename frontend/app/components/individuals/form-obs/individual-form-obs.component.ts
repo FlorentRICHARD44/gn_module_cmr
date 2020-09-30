@@ -53,7 +53,6 @@ export class IndividualFormObsComponent implements OnInit {
     }
 
     onSelectionChange() {
-        console.log(this.selectionType);
         if (this.selectionType == 'create') {
             this.individualForm.enable();
         } else {

@@ -5,7 +5,7 @@
                 <gn-cmr-breadcrumb [path]="path" [currentPage]="'Visite'"></gn-cmr-breadcrumb>
                 <div class="toolbar clearfix">
                     <h3 class="float-left">Visite</h3>
-                    <button disabled class="btn btn-primary float-right"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
+                    <button class="btn btn-primary float-right" [routerLink]="['..', {edit: visit.id_visit}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
                 </div>
                 <div class="">
                     <nav>

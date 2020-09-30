@@ -20,12 +20,6 @@
             "attribut_label": "Operateur(s)",
             "required": true
         },
-        "observation": {
-            "type_widget": "checkbox",
-            "attribut_label": "Observation pendant la visite?",
-            "values": [true],
-            "required": false
-        },
         "comments": {
             "type_widget": "textarea",
             "attribut_label": "Commentaires",
@@ -33,6 +27,10 @@
         },
         "site_name": {
             "attribut_label": "Point de Capture"
+        },
+        "observation": {
+            "attribut_label": "Observation pendant la visite?",
+            "type_column": "checkbox"
         },
         "nb_observations": {
             "attribut_label": "Nb Observations"

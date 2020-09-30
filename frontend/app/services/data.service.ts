@@ -19,7 +19,7 @@ export class DataService {
             } else {
                 value = (new Date(value)).toLocaleDateString();
             }
-        } else if (fieldDef.type_widget == "checkbox") {
+        } else if (fieldDef.type_widget == "checkbox" || fieldDef.type_column == 'checkbox') {
             value = value === true ? "Oui" : "Non";
         } else if (fieldDef.type_widget == "observers" && value) {
             var users = [];
@@ -49,5 +49,31 @@ export class DataService {
             }
         }
         return formValues;
+    }
+
+    /**
+     * Format the data to be used for the edition (need to be compatible with editor format).
+     * @param formValues 
+     * @param fieldDef 
+     */
+    formatDataForBeforeEdition(formValues, fieldDef) {
+        var data = formValues;
+        for (var def of Object.keys(fieldDef)) {
+            if (fieldDef[def].type_widget == 'date' && data[def]) {
+                var date = new Date(data[def]);
+                data[def] = {
+                    day: date.getDate(),
+                    month: date.getMonth() + 1, // JS Date() .getDate() return from 1 to 31 while .getMonth() return from 0 to 11
+                    year: date.getFullYear()
+                };
+            } else if (fieldDef[def].type_widget == 'observers' && data[def]) {
+                var observers = [];
+                for (var o of data[def]) {
+                    observers.push(o.id_role);
+                }
+                data[def] = observers;
+            }
+        }
+        return data;
     }
 }

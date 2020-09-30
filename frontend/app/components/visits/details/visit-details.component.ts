@@ -101,7 +101,6 @@ export class VisitDetailsComponent implements OnInit {
       var dialogRef = this.dialog.open(IndividualFormObsComponent, dialogConfig);
       dialogRef.afterClosed().subscribe((result) => {
           if (result) {
-            console.log(result);
             this._router.navigate(['individual',result,'observation'],{relativeTo: this._route});
           }
       });

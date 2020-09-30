@@ -17,10 +17,13 @@ export class VisitFormComponent implements OnInit {
     public module: any = {config:{},forms:{site:{}}};
     public site: any = {};
     public cardContentHeight: any;
+    public visit: any = {};
     public visitForm: FormGroup;
+    public genericVisitForm: FormGroup;
     public visitFormDefinitions = [];
 
     public bChainInput = false;
+    public bEdit = false;
 
     constructor(
         private _cmrService: CmrService,
@@ -36,7 +39,11 @@ export class VisitFormComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.visitForm = this._formBuilder.group({});
+        this.genericVisitForm =  this._formBuilder.group({});
+        this.visitForm = this._formBuilder.group({ // use a not generic form to manage the "observation" checkbox
+          'observation': null
+        });
+
         var data = this._cmrService.getModule(this._route.snapshot.paramMap.get('module'));
         if (!data) { // if module not yet defined, reload the page to ensure module data is loaded
           this._cmrService.loadOneModule(this._route.snapshot.paramMap.get('module')).subscribe(() => {
@@ -64,6 +71,17 @@ export class VisitFormComponent implements OnInit {
                   "link": ['module',this.module.module_code, 'dataset',this._route.snapshot.paramMap.get('id_dataset'), 'site', this._route.snapshot.paramMap.get('id_site')],
               }];
           });
+          var editId = this._route.snapshot.paramMap.get('edit');
+          if (editId) {
+            this.bEdit = true;
+            this._cmrService.getOneVisit(editId).subscribe((data) => {
+              this.visit = data;
+              var fields = this.module.forms.visit.fields;
+              var formattedValues = this._dataService.formatDataForBeforeEdition(data, fields);
+              this.visitForm.patchValue(formattedValues);
+              this.genericVisitForm.patchValue(formattedValues);
+            });
+          }
         }
     }
      
@@ -97,25 +115,29 @@ export class VisitFormComponent implements OnInit {
     }
 
     onSubmit() {
-        var formData = this._dataService.formatPropertiesBeforeSave(this.visitForm.value, this.module.forms.visit.fields);
-        formData['id_site'] = this.site.id_site;
-        this._cmrService.saveVisit(formData).subscribe(result => {
-            if (this.bChainInput) { // update form resetting all fields not configured to be kept.
-              this.visitForm.reset();
-              var patch = {};
-              for (var k of Object.keys(formData)) {
-                if( this.module.forms.visit.properties_to_keep_when_chaining.indexOf(k) > -1) {
-                  patch[k] = formData[k]
-                }
-              }
-              this.visitForm.patchValue(patch);
-              this._commonService.regularToaster(
-                "info",
-                "Formulaire enregistré!"
-              );
-            } else {  // go the details page
-              this._router.navigate(['..', 'visit', result.id_visit],{relativeTo: this._route});
+      var formValues = this.genericVisitForm.value;
+      formValues['observation'] = this.visitForm.get('observation').value;
+      var formData = this._dataService.formatPropertiesBeforeSave(formValues, this.module.forms.visit.fields);
+      formData['id_site'] = this.site.id_site;
+      this._cmrService.saveVisit(formData).subscribe(result => {
+        if (this.bChainInput) { // update form resetting all fields not configured to be kept.
+          this.visitForm.reset();
+          this.genericVisitForm.reset();
+          var patch = {};
+          for (var k of Object.keys(formData)) {
+            if( this.module.forms.visit.properties_to_keep_when_chaining.indexOf(k) > -1) {
+              patch[k] = formData[k]
             }
-          });
+          }
+          this.visitForm.patchValue(patch);
+          this.genericVisitForm.patchValue(patch);
+          this._commonService.regularToaster(
+            "info",
+            "Formulaire enregistré!"
+          );
+        } else {  // go the details page
+          this._router.navigate(['..', 'visit', result.id_visit],{relativeTo: this._route});
+        }
+      });
     }
 }

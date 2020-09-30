@@ -116,8 +116,7 @@ def save_visit():
             observers_list.append(o)
     data['observers'] = observers_list
     if data['id_visit']:
-        pass  # TODO use the merge
-        return {}
+        return visit_repo.update_one(json_to_data(data, TVisit))
     else:
         return visit_repo.create_one(json_to_data(data, TVisit))
 
