@@ -85,6 +85,10 @@ export class CmrService {
             return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/dataset/${id_dataset}/individuals`);
         }
     }
+
+    getAllIndividualsBySite(id_site) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/site/${id_site}/individuals`);
+    }
     
     getOneIndividual(id_individual) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/individual/${id_individual}`);

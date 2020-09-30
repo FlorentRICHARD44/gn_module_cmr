@@ -139,6 +139,13 @@ def get_all_individuals_by_module_and_dataset(id_module, id_dataset=None):
         data = ind_repo.get_all_filter_by(TSite.id_module, id_module)
     return data
 
+# Get list of individuals by site
+@blueprint.route('/site/<int:id_site>/individuals', methods=['GET'])
+@json_resp
+def get_all_individuals_by_site(id_site):
+    ind_repo = IndividualsRepository()
+    return ind_repo.get_all_by_site(id_site)
+
 # Get one individual
 @blueprint.route('/individual/<int:id_individual>', methods=['GET'])
 @json_resp

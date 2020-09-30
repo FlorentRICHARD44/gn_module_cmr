@@ -26,6 +26,8 @@ export class SiteDetailsComponent implements OnInit {
     public individuals: Array<any> = [];
     public properties: Array<any> = [];
     public fields: Array<any> = [];
+    public individualListProperties: Array<any> = [];
+    public individualFieldsDef: any = {};
 
     constructor(
         private _cmrService: CmrService,
@@ -49,6 +51,9 @@ export class SiteDetailsComponent implements OnInit {
                 this.visitFieldsDef = this.module.forms.visit.fields;
                 this._cmrService.getOneSite(params.id_site).subscribe((data) => this.site = data);
                 this._cmrService.getAllVisitsBySite(params.id_site).subscribe((data) => this.visits = data);
+                this.individualListProperties = this.module.forms.individual.display_list;
+                this.individualFieldsDef = this.module.forms.individual.fields;
+                this._cmrService.getAllIndividualsBySite(params.id_site).subscribe((data) => this.individuals = data);
             })
         });
     }

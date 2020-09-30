@@ -84,6 +84,13 @@ class IndividualsRepository(BaseRepository):
             TIndividual.id_module == id_module).filter(
             TIndividual.id_dataset == id_dataset)
         return [d.to_dict() for d in q.all()]
+    
+    def get_all_by_site(self, id_site):
+        q = DB.session.query(self.model).join(
+            TObservation, (TObservation.id_individual == TIndividual.id_individual)).join(
+            TVisit, (TVisit.id_visit == TObservation.id_visit)).filter(
+                TVisit.id_site == id_site).distinct(TIndividual.id_individual)
+        return [d.to_dict() for d in q.all()]
 
 
 class ObservationsRepository(BaseRepository):
