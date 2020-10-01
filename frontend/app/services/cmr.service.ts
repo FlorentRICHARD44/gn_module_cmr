@@ -30,17 +30,25 @@ export class CmrService {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/modules`);
     }
 
+    saveModule(module_code, data) {
+        return this._api.put<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${module_code}`, data);
+    }
+
     loadOneModule(module_code) {
         if (this._modules[module_code]) {
             return of(true);
         } else {
-            return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${module_code}`)
+            return this.reloadModuleFromApi(module_code);
+        }
+    }
+
+    reloadModuleFromApi(module_code) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${module_code}`)
                 .pipe(
                     mergeMap((data) => {
                         this._modules[module_code] = data;
                         return of(true);
                     }));
-        }
     }
 
     getModule(module_code) {

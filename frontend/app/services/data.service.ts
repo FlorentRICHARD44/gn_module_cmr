@@ -77,4 +77,18 @@ export class DataService {
         }
         return data;
     }
+
+    /**
+     * Build the fields definitions for the forms.
+     * @param schema 
+     */
+    buildFormDefinitions(schema) {
+        return Object.keys(schema)
+              .filter((attribut_name) => schema[attribut_name].type_widget)
+              .map((attribut_name) => {
+                  const elem = schema[attribut_name];
+                  elem["attribut_name"] = attribut_name;
+                  return elem;
+              });
+    }
 }

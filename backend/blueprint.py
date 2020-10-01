@@ -45,6 +45,13 @@ def get_specific_module(module_name):
     module['forms'] = cfg_repo.get_module_forms_config(module['module_code'])
     return module
 
+@blueprint.route('/module/<module_name>', methods=['PUT'])
+@json_resp
+def update_module(module_name):
+    data = request.json
+    mod_repo = ModulesRepository()
+    return mod_repo.update_one(module_name, json_to_data(data, TModuleComplement))
+
 
 #############################
 # SITES ROUTES

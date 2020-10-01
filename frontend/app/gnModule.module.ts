@@ -8,6 +8,7 @@ import { ModuleListComponent } from "./components/modules/list/module-list.compo
 import { ModuleHomeComponent } from "./components/modules/home/module-home.component";
 import { ModuleDisclaimerComponent } from "./components/modules/disclaimer/module-disclaimer.component";
 import { ModuleDatasetChoiceComponent } from "./components/modules/datasetchoice/module-datasetchoice.component";
+import { ModuleFormComponent } from "./components/modules/form/module-form.component";
 import { SiteFormComponent } from "./components/sites/form/site-form.component";
 import { SiteDetailsComponent } from "./components/sites/details/site-details.component";
 import { VisitFormComponent } from "./components/visits/form/visit-form.component";
@@ -21,6 +22,7 @@ import { BreadcrumbComponent } from './components/common/breadcrumb/breadcrumb.c
 // my module routing
 const routes: Routes = [
   { path: "", component: ModuleListComponent },
+  { path: "module/:module/dataset/:id_dataset/module", component: ModuleFormComponent },
   { path: "module/:module/dataset/:id_dataset", component: ModuleHomeComponent },
   { path: "module/:module/dataset/:id_dataset/site", component: SiteFormComponent },
   { path: "module/:module/dataset/:id_dataset/site/:id_site", component: SiteDetailsComponent },
@@ -33,7 +35,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [BreadcrumbComponent,
-    ModuleListComponent, ModuleHomeComponent, ModuleDisclaimerComponent, ModuleDatasetChoiceComponent,
+    ModuleListComponent, ModuleHomeComponent, ModuleDisclaimerComponent, ModuleDatasetChoiceComponent, ModuleFormComponent,
     SiteFormComponent, SiteDetailsComponent,
     VisitFormComponent, VisitDetailsComponent,
     IndividualFormObsComponent, IndividualDetailsComponent,

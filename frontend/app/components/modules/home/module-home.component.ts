@@ -4,6 +4,7 @@ import { Observable, of, forkJoin } from '@librairies/rxjs';
 import { mergeMap, concatMap } from '@librairies/rxjs/operators';
 import { MapService } from "@geonature_common/map/map.service";
 import { CmrService } from './../../../services/cmr.service';
+import { DataService } from './../../../services/data.service';
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { ModuleDatasetChoiceComponent } from "./../datasetchoice/module-datasetchoice.component";
 
@@ -13,10 +14,12 @@ import { ModuleDatasetChoiceComponent } from "./../datasetchoice/module-datasetc
 @Component({
     selector : 'pnx-cmr-module-home',
     templateUrl: './module-home.component.html',
-    styleUrls: ['./../../../../style.scss']
+    styleUrls: ['./../../../../style.scss', './module-home.component.scss']
 })
 export class ModuleHomeComponent implements OnInit {
-    public module: any = {config:{},forms:{site:{}}};
+    public module: any = {config:{},forms:{site:{},module:{}}};
+    public properties: Array<any> = [];
+    public fields: any = {};
     public dataset: any = {};
     public cardContentHeight: any;
     public individuals: Array<any> = [];
@@ -31,7 +34,8 @@ export class ModuleHomeComponent implements OnInit {
         private route: ActivatedRoute,
         private _router: Router,
         private _mapService: MapService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private _dataService: DataService
     ) {}
 
     ngOnInit() {
@@ -42,12 +46,11 @@ export class ModuleHomeComponent implements OnInit {
             }
             this._cmrService.loadOneModule(params.module).pipe(
               mergeMap(() => {
-                return of(true);
-              }),
-              mergeMap(() => {
                 this.module = this._cmrService.getModule(params.module);
                 if (this.module.config.use_dataset_filter) {
                 }
+                this.properties = this.module.forms.module.display_properties;
+                this.fields = this.module.forms.module.fields;
                 this.siteListProperties = this.module.forms.site.display_list;
                 this.siteFieldsDef = this.module.forms.site.fields;
                 this._cmrService.getAllSitesByModule(this.module.id_module, params.id_dataset).subscribe((data) => this.sites = data);

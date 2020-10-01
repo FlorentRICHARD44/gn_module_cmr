@@ -1,5 +1,10 @@
 {
+    "display_properties": ["comments"],
     "generic": {
-        
+        "comments": {
+            "type_widget": "textarea",
+            "attribut_label": "Commentaires",
+            "required": false
+        }
     }
 }

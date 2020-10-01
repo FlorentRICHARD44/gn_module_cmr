@@ -61,6 +61,16 @@ class ModulesRepository(BaseRepository):
     def __init__(self):
         super().__init__(TModuleComplement)
 
+    def update_one(self, module_code, data):
+        """
+        Update an existing module, override because need only to update few informations.
+        """
+        module_to_update = DB.session.query(self.model).filter(TModuleComplement.module_code == module_code).one()
+        module_to_update.data = data['data']  # Update the JSONB column "data"
+        DB.session.merge(module_to_update)
+        DB.session.commit()
+        return module_to_update.to_dict()
+
 
 class SitesRepository(BaseRepository):
     """
@@ -152,6 +162,7 @@ class ConfigRepository:
         """
         form_config = {}
         module_code = module_name if module_name else 'generic'
+        form_config['module'] = self._build_form_from_its_json(module_name, 'module')
         form_config['site'] = self._build_form_from_its_json(module_name, 'site')
         form_config['visit'] = self._build_form_from_its_json(module_name, 'visit')
         form_config['individual'] = self._build_form_from_its_json(module_name, 'individual')
