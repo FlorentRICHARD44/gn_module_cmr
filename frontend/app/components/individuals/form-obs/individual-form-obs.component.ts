@@ -38,13 +38,7 @@ export class IndividualFormObsComponent implements OnInit {
         var schema = this.data.module.forms.individual.fields;
         var fields = {};
         this.individualForm = this._formBuilder.group(fields);
-        this.individualFormDefinitions = Object.keys(schema)
-            .filter((attribut_name) => schema[attribut_name].type_widget)
-            .map((attribut_name) => {
-                const elem = schema[attribut_name];
-                elem["attribut_name"] = attribut_name;
-                return elem;
-            });
+        this.individualFormDefinitions = this._dataService.buildFormDefinitions(schema);
         this._cmrService.getAllIndividualsByModule(this.data.module.id_module, this.data.dataset_id).subscribe((data) => this.individuals = data);
     }
 

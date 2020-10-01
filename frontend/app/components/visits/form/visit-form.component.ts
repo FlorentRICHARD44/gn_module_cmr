@@ -54,13 +54,7 @@ export class VisitFormComponent implements OnInit {
         } else {
           this.module = data;
           var schema = data.forms.visit.fields;
-          this.visitFormDefinitions = Object.keys(schema)
-              .filter((attribut_name) => schema[attribut_name].type_widget)
-              .map((attribut_name) => {
-                  const elem = schema[attribut_name];
-                  elem["attribut_name"] = attribut_name;
-                  return elem;
-              });
+          this.visitFormDefinitions = this._dataService.buildFormDefinitions(schema);
           this._cmrService.getOneSite(this._route.snapshot.paramMap.get('id_site')).subscribe((data) => {
               this.site = data;
               this.path = [{

@@ -5,6 +5,7 @@ import { MapService } from "@geonature_common/map/map.service";
 import { CommonService } from "@geonature_common/service/common.service";
 import { CmrService } from './../../../services/cmr.service';
 import { CmrMapService } from './../../../services/cmr-map.service';
+import { DataService } from '../../../services/data.service';
 
 @Component({
     selector : 'pnx-cmr-site-form',
@@ -30,7 +31,8 @@ export class SiteFormComponent implements OnInit {
         private _mapService: MapService,
         private _cmrMapService: CmrMapService,
         private _formBuilder: FormBuilder,
-        private _commonService: CommonService
+        private _commonService: CommonService,
+        private _dataService: DataService
     ) {
         
     }
@@ -53,22 +55,14 @@ export class SiteFormComponent implements OnInit {
           }];
           this.leafletDrawOptions = this._cmrMapService.getLeafletDrawOptionDrawAll(this.module.forms.site.geometry_types);
           var schema = this.module.forms.site.fields;
-          this.siteFormDefinitions = Object.keys(schema)
-              // medias toujours à la fin
-              //.sort((a, b) => { return a == 'medias' ? +1 : b == "medias" ? -1 : 0 })
-              .filter((attribut_name) => schema[attribut_name].type_widget)
-              .map((attribut_name) => {
-                  const elem = schema[attribut_name];
-                  elem["attribut_name"] = attribut_name;
-                  return elem;
-              });
+          this.siteFormDefinitions = this._dataService.buildFormDefinitions(schema);
         }
         var editId = this._route.snapshot.paramMap.get('edit');
         if (editId) {
           this.bEdit = true;
           this._cmrService.getOneSite(editId).subscribe((data) => {
             this.site = data;
-            this.siteForm.patchValue(data);
+            this.siteForm.patchValue(this._dataService.formatDataForBeforeEdition(data, this.module.forms.site.fields));
           });
         }
     }
@@ -106,7 +100,7 @@ export class SiteFormComponent implements OnInit {
     }
 
     onSubmit(addVisit) {
-        var formData = this.siteForm.value;
+        var formData = this._dataService.formatPropertiesBeforeSave(this.siteForm.value,this.module.forms.site.fields);
         formData['id_module'] = this.module.id_module;
         var id_dataset = this._route.snapshot.paramMap.get('id_dataset');
         if (id_dataset != 'none') {

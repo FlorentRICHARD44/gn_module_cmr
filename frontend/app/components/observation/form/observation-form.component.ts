@@ -49,13 +49,7 @@ export class ObservationFormComponent implements OnInit {
             var schema = this.module.forms.observation.fields;
             this.individualProperties = this.module.forms.individual.display_properties;
             this.individualFields = this.module.forms.individual.fields;
-            this.observationFormDefinitions = Object.keys(schema)
-                .filter((attribut_name) => schema[attribut_name].type_widget)
-                .map((attribut_name) => {
-                    const elem = schema[attribut_name];
-                    elem["attribut_name"] = attribut_name;
-                    return elem;
-                });
+            this.observationFormDefinitions = this._dataService.buildFormDefinitions(schema);
             this._cmrService.getOneVisit(this._route.snapshot.paramMap.get('id_visit')).subscribe((data) => {
                 this.visit = data;
                 this.site = {
