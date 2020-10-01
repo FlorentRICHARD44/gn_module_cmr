@@ -1,7 +1,7 @@
 import os
 from flask import current_app
 from geonature.utils.env import DB
-from sqlalchemy import func
+from sqlalchemy import distinct, func
 from sqlalchemy.orm import joinedload, subqueryload
 from sqlalchemy.inspection import inspect
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -80,10 +80,24 @@ class SitesRepository(BaseRepository):
         super().__init__(TSite)
 
     def get_all_filter_by_module_and_dataset(self, id_module, id_dataset):
-        q = DB.session.query(self.model).filter(
-            TSite.id_module == id_module).filter(
-            TSite.id_dataset == id_dataset)
-        return [d.to_dict() for d in q.all()]
+        result = []
+        q = DB.session.query(TSite, 
+                func.count(distinct(TVisit.id_visit)),
+                func.count(distinct(TObservation.id_observation)),
+                func.count(distinct(TObservation.id_individual))).join(
+                    TVisit, (TVisit.id_site == TSite.id_site), isouter=True).join(
+                    TObservation, (TObservation.id_visit == TVisit.id_visit), isouter=True).filter(
+            TSite.id_module == id_module)
+        if id_dataset is not None:
+            q = q.filter(TSite.id_dataset == id_dataset)
+        data = q.group_by(TSite.id_site).all()
+        for (item, count_visit, count_observation, count_individual) in data:
+            r = item.to_dict()
+            r['nb_visit'] = count_visit
+            r['nb_observations'] = count_observation
+            r['nb_individuals'] = count_individual
+            result.append(r)
+        return result
 
 class VisitsRepository(BaseRepository):
     """
@@ -109,8 +123,8 @@ class IndividualsRepository(BaseRepository):
     def get_all_by_site(self, id_site):
         result = []
         q = DB.session.query(self.model, func.count(TObservation.id_observation)).join(
-            TObservation, (TObservation.id_individual == TIndividual.id_individual)).join(
-            TVisit, (TVisit.id_visit == TObservation.id_visit)).filter(
+            TObservation, (TObservation.id_individual == TIndividual.id_individual), isouter=True).join(
+            TVisit, (TVisit.id_visit == TObservation.id_visit), isouter=True).filter(
                 TVisit.id_site == id_site).group_by(TIndividual.id_individual)
         data = q.all()
         for (item, count) in data:

@@ -3,7 +3,7 @@
     "label_plural": "Sites",
     "geometry_types": ["Point","LineString","Polygon"],
     "display_properties": ["name","comments","nb_visits"],
-    "display_list": ["name","nb_visits"],
+    "display_list": ["name","nb_visits","nb_observations","nb_individuals"],
     "properties_to_keep_when_chaining": [],
     "generic": {
         "id_site": {
@@ -23,6 +23,12 @@
         },
         "nb_visits": {
             "attribut_label": "Nb Visites"
+        },
+        "nb_observations": {
+            "attribut_label": "Nb Observations"
+        },
+        "nb_individuals": {
+            "attribut_label": "Nb Individus"
         }
     }
 }

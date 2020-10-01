@@ -73,7 +73,7 @@ class TVisit(DB.Model):
                       corVisitObserver.c.id_observer],
     )
     id_site = DB.Column(DB.Integer, foreign_key="TSite.id_site")
-    observations = DB.relationship(TObservation, primaryjoin=(id_visit == TObservation.id_visit), foreign_keys=[TObservation.id_visit], lazy="joined")
+    observations = DB.relationship(TObservation, primaryjoin=(id_visit == TObservation.id_visit), foreign_keys=[TObservation.id_visit])
 
     @hybrid_property
     def nb_observations(self):
@@ -105,8 +105,7 @@ class TSite(DB.Model):
     id_dataset = DB.Column(DB.Integer)
     visits = DB.relationship(TVisit, 
             primaryjoin=(id_site == TVisit.id_site),
-            foreign_keys=[TVisit.id_site],
-            lazy="joined")
+            foreign_keys=[TVisit.id_site])
 
     @hybrid_property
     def nb_visits(self):

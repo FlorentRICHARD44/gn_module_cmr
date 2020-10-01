@@ -74,10 +74,7 @@ def save_site():
 @json_resp
 def get_all_sites_by_module_and_dataset(id_module, id_dataset=None):
     site_repo = SitesRepository()
-    if id_dataset:
-        data = site_repo.get_all_filter_by_module_and_dataset(id_module, id_dataset)
-    else:
-        data = site_repo.get_all_filter_by(TSite.id_module, id_module)
+    data = site_repo.get_all_filter_by_module_and_dataset(id_module, id_dataset)
     return data
 
 # Get one site
