@@ -94,7 +94,7 @@
                         role="tabpanel"
                         attr.aria-labelledby="nav-individuals-tab">
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
-                            <button disabled class="btn btn-success float-left"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter individu</button>
+                            <button class="btn btn-success float-left" [routerLink]="['individual']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter individu</button>
                             <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export CSV</button>
                             <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
                         </div>
@@ -108,10 +108,13 @@
                             [headerHeight]="50"
                             [footerHeight]="50">
 
-                            <ngx-datatable-column width="15">
+                            <ngx-datatable-column width="60">
                                 <ng-template let-row="row" ngx-datatable-cell-template>
                                     <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['individual', row.id_individual]">
                                         <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations Individu ' + row.identifier"></i>
+                                    </a>
+                                    <a class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['individual', {edit: row.id_individual}]">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true" [matTooltip]="'Editer Individu' + row.identifier"></i>
                                     </a>
                                 </ng-template>
                             </ngx-datatable-column>

@@ -165,8 +165,7 @@ def save_individual():
     data = request.json
     ind_repo = IndividualsRepository()
     if data['id_individual']:
-        pass  # TODO use the merge
-        return {}
+        return ind_repo.update_one(json_to_data(data, TIndividual))
     else:
         return ind_repo.create_one(json_to_data(data, TIndividual))
 

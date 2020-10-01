@@ -15,6 +15,7 @@ import { VisitFormComponent } from "./components/visits/form/visit-form.componen
 import { VisitDetailsComponent } from "./components/visits/details/visit-details.component";
 import { IndividualFormObsComponent } from "./components/individuals/form-obs/individual-form-obs.component";
 import { IndividualDetailsComponent } from "./components/individuals/details/individual-details.component";
+import { IndividualFormComponent } from "./components/individuals/form/individual-form.component";
 import { ObservationFormComponent } from "./components/observation/form/observation-form.component";
 import { ObservationDetailsComponent } from "./components/observation/details/observation-details.component";
 import { BreadcrumbComponent } from './components/common/breadcrumb/breadcrumb.component';
@@ -30,7 +31,8 @@ const routes: Routes = [
   { path: "module/:module/dataset/:id_dataset/site/:id_site/visit/:id_visit", component: VisitDetailsComponent },
   { path: "module/:module/dataset/:id_dataset/site/:id_site/visit/:id_visit/individual/:id_individual/observation", component: ObservationFormComponent },
   { path: "module/:module/dataset/:id_dataset/site/:id_site/visit/:id_visit/observation/:id_observation", component: ObservationDetailsComponent},
-  { path: "module/:module/dataset/:id_dataset/individual/:id_individual", component: IndividualDetailsComponent } 
+  { path: "module/:module/dataset/:id_dataset/individual/:id_individual", component: IndividualDetailsComponent },
+  { path: "module/:module/dataset/:id_dataset/individual", component: IndividualFormComponent}
 ];
 
 @NgModule({
@@ -38,7 +40,7 @@ const routes: Routes = [
     ModuleListComponent, ModuleHomeComponent, ModuleDisclaimerComponent, ModuleDatasetChoiceComponent, ModuleFormComponent,
     SiteFormComponent, SiteDetailsComponent,
     VisitFormComponent, VisitDetailsComponent,
-    IndividualFormObsComponent, IndividualDetailsComponent,
+    IndividualFormObsComponent, IndividualFormComponent, IndividualDetailsComponent,
     ObservationFormComponent, ObservationDetailsComponent
   ],
   imports: [GN2CommonModule, CommonModule, RouterModule.forChild(routes), MatDialogModule, MatSlideToggleModule],
