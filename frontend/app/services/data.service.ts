@@ -21,7 +21,9 @@ export class DataService {
                 value = (new Date(value)).toLocaleDateString();
             }
         } else if (fieldDef.type_widget == "checkbox" || fieldDef.type_column == 'checkbox') {
-            value = value === true ? "Oui" : "Non";
+            if (!Array.isArray(value)) {
+                value = value === true ? "Oui" : "Non";
+            }
         } else if (fieldDef.type_widget == "observers" && value) {
             var users = [];
             for (var i = 0; i < value.length; i++) {

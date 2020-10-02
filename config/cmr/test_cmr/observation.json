@@ -30,5 +30,143 @@
         "site_name": {
             "attribut_label": "Point de Capture"
         }
-    }
+    },
+    "groups": [{
+        "label": "Mesures biométriques",
+        "defaults": {
+            "opened": true
+        },
+        "fields": {
+            "poids_g": {
+                "attribut_label": "Poids (g)",
+                "type_widget": "number",
+                "min": 1,
+                "required": true
+            },
+            "longueur_dossiere_mm": {
+                "attribut_label": "Longueur dossière (mm)",
+                "type_widget": "number",
+                "min": 1,
+                "required": true
+            },
+            "largeur_dossiere_mm": {
+                "attribut_label": "Largeur dossière (mm)",
+                "type_widget": "number",
+                "min": 1,
+                "required": true
+            },
+            "longueur_plastron_mm": {
+                "attribut_label": "Longueur plastron (mm)",
+                "type_widget": "number",
+                "min": 1,
+                "required": true
+            },
+            "largeur_avant_plastron_mm": {
+                "attribut_label": "Largeur avant du plastron (mm)",
+                "type_widget": "number",
+                "min": 1,
+                "required": true
+            },
+            "largeur_arriere_plastron_mm": {
+                "attribut_label": "Largeur arrière du plastron (mm)",
+                "type_widget": "number",
+                "min": 1,
+                "required": true
+            },
+            "mesures_complementaire": {
+                "attribut_label": "Mesures complémentaires",
+                "type_widget": "textarea",
+                "required": false
+            }
+        }
+    },{
+        "label": "Elements relatifs à la capture",
+        "defaults": {
+            "opened": false
+        },
+        "fields": {
+            "date_relache": {
+                "attribut_label": "Date de relâché",
+                "type_widget": "date",
+                "required": false
+            },
+            "conditions_manipulation": {
+                "attribut_label": "Description conditions de manipulation",
+                "type_widget": "textarea",
+                "required": false
+            }
+        }
+    },{
+        "label": "Typage génétique",
+        "defaults": {
+            "opened": false
+        },
+        "fields": {
+            "typage_gen_date_prelevement": {
+                "attribut_label": "Date de prélèvement",
+                "type_widget": "date",
+                "required": true
+            },
+            "typage_gen_type_prelevement": {
+                "attribut_label": "Type de Prélèvement",
+                "type_widget": "select",
+                "values" : ["Echantillon de sang", "Echantillon buccal"],
+                "required": true
+            },
+            "typage_gen_analyse_par": {
+                "attribut_label": "Analyse effectuée par",
+                "type_widget": "text",
+                "required": true
+            },
+            "typage_gen_type_analyse": {
+                "attribut_label": "Type d'Analyse",
+                "type_widget": "select",
+                "values": ["ADN mitochondrial","ADN nucléaire","ADN mitochondrial + ADN nucléaire"],
+                "required": true
+            }
+        }
+    },{
+        "label": "Analyses complémentaires",
+        "defaults" : {
+            "opened": false
+        },
+        "fields": {
+            "analyse_comp_date_prelevement": {
+                "attribut_label": "Date de prélèvement",
+                "type_widget": "date",
+                "required": true
+            },
+            "analyse_comp_type_prelevement": {
+                "attribut_label": "Type de Prélèvement",
+                "type_widget": "checkbox",
+                "values": ["Prélèvement sanguin","Frottis carapace","Echantillon de griffe","Fèces","Autre"],
+                "required": true
+            },
+            "analyse_comp_type_prelevement_autre": {
+                "attribut_label": "Type Autre prélèvement",
+                "type_widget":"text",
+                "required": false
+            },
+            "analyse_comp_objectif": {
+                "attribut_label": "Objectif du prélèvement",
+                "type_widget": "text",
+                "required": false
+            },
+            "analyse_comp_analyse_par": {
+                "attribut_label": "Analyse effectuée par",
+                "type_widget": "text",
+                "required": false
+            },
+            "analyse_comp_type_analyse": {
+                "attribut_label": "Type d'analyse",
+                "type_widget": "text",
+                "required": false
+            },
+            "analyse_comp_resultats": {
+                "attribut_label": "Résultats de l'analyse",
+                "type_widget": "textarea",
+                "required": true
+            }
+        }
+    }]
 }

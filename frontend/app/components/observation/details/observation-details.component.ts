@@ -8,7 +8,7 @@ import { DataService } from './../../../services/data.service';
 @Component({
     selector : 'pnx-cmr-observation-details',
     templateUrl: './observation-details.component.html',
-    styleUrls: ['./../../../../style.scss']
+    styleUrls: ['./../../../../style.scss', './observation-details.component.scss']
 })
 export class ObservationDetailsComponent implements OnInit {
     public path = [];
@@ -25,13 +25,14 @@ export class ObservationDetailsComponent implements OnInit {
     public observationForm: FormGroup;
     public observationFormDefinitions = [];
 
+    public formGroups: Array<any> = [];
+
     constructor(
         private _cmrService: CmrService,
         private _dataService: DataService,
         private _router: Router,
         private _route: ActivatedRoute,
-        private _mapService: MapService,
-        private _formBuilder: FormBuilder
+        private _mapService: MapService
     ) {
     }
 
@@ -44,7 +45,15 @@ export class ObservationDetailsComponent implements OnInit {
                 this.individualProperties = this.module.forms.individual.display_properties;
                 this.individualFields = this.module.forms.individual.fields;
                 this._cmrService.getOneObservation(params.id_observation).subscribe((data) => {
-                    this.observation = data
+                    this.observation = data;
+                    this.formGroups = this.module.forms.observation.groups;
+                    var i = 1;
+                    for (var grp of this.formGroups) {
+                        grp['id'] = i;
+                        grp['properties'] = Object.keys(grp['fields']);
+                        i++;
+                        grp['formDef'] = this._dataService.buildFormDefinitions(grp['fields']);
+                    }
                 
                     this._cmrService.getOneIndividual(this.observation.id_individual).subscribe((data) => {
                         this.individual = data;

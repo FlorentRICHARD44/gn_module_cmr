@@ -1,6 +1,6 @@
 <div class="main">
     <div class="flex-container">
-        <div class="cadre" [style.min-height]="cardContentHeight + 'px'">
+        <div class="cadre" [style.min-height]="cardContentHeight + 'px'" [style.max-height]="cardContentHeight + 'px'">
             <div id="details">
                 <gn-cmr-breadcrumb [path]="path" [currentPage]="'Observation Individu'"></gn-cmr-breadcrumb>
                 <div class="toolbar clearfix">
@@ -37,6 +37,26 @@
                         <td class="text-in-area">{{ _dataService.formatProperty(observation[fieldName], fields[fieldName])}}</td>
                     </tr>
                 </table>
+
+                <div class="card mt-3" *ngFor="let grp of formGroups" >
+                    <div class="card-header">
+                        <a data-toggle="collapse" [href]="'#collapse-body-' + grp['id']" role="button" [attr.aria-expanded]="grp.defaults.opened === true" [attr.aria-controls]="'collapse-body-' + grp['id']">
+                            <h5 class="float-left card-title">{{grp.label}}</h5>
+                            <span class="float-right">
+                                <i class="fa fa-chevron-down"></i>
+                                <i class="fa fa-chevron-up"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div [id]="'collapse-body-' + grp['id']" [class]="'card-body collapse' +(grp.defaults.opened === true ? ' show' : '')">
+                        <table class="table table-striped table-sm scrollable">
+                            <tr *ngFor="let fieldName of grp['properties']">
+                                <th>{{ grp['fields'][fieldName].attribut_label }}</th>
+                                <td class="text-in-area">{{ _dataService.formatProperty(observation[fieldName], grp['fields'][fieldName])}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

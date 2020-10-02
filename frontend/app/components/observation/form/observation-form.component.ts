@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, ValidatorFn } from '@angular/forms';
 import { MapService } from "@geonature_common/map/map.service";
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
@@ -12,7 +12,7 @@ import { DataService } from './../../../services/data.service';
 })
 export class ObservationFormComponent implements OnInit {
     public path = [];
-    public module: any = {config:{},forms:{observation:{},site:{}}};
+    public module: any = {config:{},forms:{observation:{},site:{},visit:{fields:{}}}};
     public observation: any = {};
     public site: any = {};
     public visit: any = {};
@@ -20,10 +20,15 @@ export class ObservationFormComponent implements OnInit {
     public individualProperties: Array<any> = [];
     public individualFields: any = {};
     public cardContentHeight: any;
+    public allForm: FormGroup;
     public observationForm: FormGroup;
     public observationFormDefinitions = [];
 
+    // Management of additional form groups
+    public formGroups: Array<any> = [];
+
     public bEdit = false;
+    private _document = {};
 
     constructor(
         private _cmrService: CmrService,
@@ -36,7 +41,9 @@ export class ObservationFormComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.allForm = this._formBuilder.group({});
         this.observationForm = this._formBuilder.group({});
+        this.allForm.addControl('child0',this.observationForm);
         var data = this._cmrService.getModule(this._route.snapshot.paramMap.get('module'));
         if (!data) { // if module not yet defined, reload the page to ensure module data is loaded
             this._cmrService.loadOneModule(this._route.snapshot.paramMap.get('module')).subscribe(() => {
@@ -44,12 +51,21 @@ export class ObservationFormComponent implements OnInit {
               this._router.onSameUrlNavigation = 'reload';
               this._router.navigate(['.'],{relativeTo: this._route});
             });
-          } else {
+        } else {
             this.module = data;
-            var schema = this.module.forms.observation.fields;
             this.individualProperties = this.module.forms.individual.display_properties;
             this.individualFields = this.module.forms.individual.fields;
-            this.observationFormDefinitions = this._dataService.buildFormDefinitions(schema);
+            this.observationFormDefinitions = this._dataService.buildFormDefinitions(this.module.forms.observation.fields);
+
+            this.formGroups = this.module.forms.observation.groups;
+            var i = 1;
+            for (var grp of this.formGroups) {
+              grp['id'] = i;
+              grp['form'] = this._formBuilder.group({});
+              this.allForm.addControl('child' + i,grp['form']);
+              i++;
+              grp['formDef'] = this._dataService.buildFormDefinitions(grp['fields']);
+            }
             this._cmrService.getOneVisit(this._route.snapshot.paramMap.get('id_visit')).subscribe((data) => {
                 this.visit = data;
                 this.site = {
@@ -75,12 +91,23 @@ export class ObservationFormComponent implements OnInit {
                 this.bEdit = true;
                 this._cmrService.getOneObservation(editId).subscribe((data) => {
                     this.observation = data;
-                    this.observationForm.patchValue(data);
+                    this.observationForm.patchValue(this._dataService.formatDataForBeforeEdition(data, this.module.forms.observation.fields));
+                    for (var grp of this.formGroups) {
+                      grp['form'].patchValue(this._dataService.formatDataForBeforeEdition(data, grp['fields']));
+                      for (var field of Object.keys(grp['fields'])) {
+                        if (grp['fields'][field].type_widget == "checkbox") {
+                          for (var i = 0; i < data[field].length; i++) {
+                            var input = <HTMLInputElement>(document.getElementById(data[field][i]));
+                            input.checked = true;
+                        }
+                      }
+                    }
+                  }
                 });
             }
         }
     }
-     
+
     ngAfterViewInit() {
         setTimeout(() => this.calcCardContentHeight(), 300);
     }
@@ -110,7 +137,14 @@ export class ObservationFormComponent implements OnInit {
     }
 
     onSubmit() {
-        var formData = this._dataService.formatPropertiesBeforeSave(this.observationForm.value, this.module.forms.observation.fields);
+        var data = this.observationForm.value;
+        var fields =  JSON.parse(JSON.stringify(this.module.forms.observation.fields));
+        for (let grp of this.formGroups) {
+          data = Object.assign(data, grp['form'].value);
+          fields = Object.assign(fields, grp['fields'])
+        }
+
+        var formData = this._dataService.formatPropertiesBeforeSave(data, fields);
         formData["id_visit"] = this._route.snapshot.paramMap.get('id_visit'),
         formData["id_individual"] = this._route.snapshot.paramMap.get('id_individual')
     
