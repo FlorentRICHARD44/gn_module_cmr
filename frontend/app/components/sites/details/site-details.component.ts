@@ -44,7 +44,7 @@ export class SiteDetailsComponent implements OnInit {
                 this.fields = this.module.forms.site.fields;
                 this.path = [{
                     "text": "Module: " + this.module.module_label, 
-                    "link": ['module',this.module.module_code, 'dataset', params.id_dataset]
+                    "link": ['module',this.module.module_code]
                 }];
                 this.path = [...this.path];
                 this.visitListProperties = this.module.forms.visit.display_list;

@@ -6,6 +6,5 @@
         "",
         "Avez-vous connaissance de la réglementation?"
     ],
-    "use_dataset_filter": true,
     "welcome": "Bienvenue dans le module de saisie de la CMR Cistude"
 }

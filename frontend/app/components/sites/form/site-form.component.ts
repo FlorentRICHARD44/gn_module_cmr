@@ -51,7 +51,7 @@ export class SiteFormComponent implements OnInit {
           this.module = data;
           this.path = [{
               "text": "Module: " + this.module.module_label, 
-              "link": ['module',this.module.module_code, 'dataset',this._route.snapshot.paramMap.get('id_dataset')],
+              "link": ['module',this.module.module_code],
           }];
           this.leafletDrawOptions = this._cmrMapService.getLeafletDrawOptionDrawAll(this.module.forms.site.geometry_types);
           var schema = this.module.forms.site.fields;
@@ -102,10 +102,6 @@ export class SiteFormComponent implements OnInit {
     onSubmit(addVisit) {
         var formData = this._dataService.formatPropertiesBeforeSave(this.siteForm.value,this.module.forms.site.fields);
         formData['id_module'] = this.module.id_module;
-        var id_dataset = this._route.snapshot.paramMap.get('id_dataset');
-        if (id_dataset != 'none') {
-          formData['id_dataset'] = id_dataset;
-        }
         this._cmrService.saveSite(formData).subscribe(result => {
             if (this.bChainInput) { // update form resetting all fields not configured to be kept.
               this.siteForm.reset();

@@ -48,10 +48,10 @@ export class VisitDetailsComponent implements OnInit {
                     this.visit = data
                     this.path = [{
                         "text": "Module: " + this.module.module_label, 
-                        "link": ['module',this.module.module_code, 'dataset', params.id_dataset]
+                        "link": ['module',this.module.module_code]
                     },{
                         "text": this.module.forms.site.label + ": " + this.visit.site_name,
-                        "link": ['module',this.module.module_code, 'dataset',this._route.snapshot.paramMap.get('id_dataset'), 'site', this._route.snapshot.paramMap.get('id_site')],
+                        "link": ['module',this.module.module_code, 'site', this._route.snapshot.paramMap.get('id_site')],
                     }];
                     this.path = [...this.path];
 
@@ -92,8 +92,7 @@ export class VisitDetailsComponent implements OnInit {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.data = {
         module: this.module,
-        visit: this.visit,
-        dataset_id: this._route.snapshot.paramMap.get('id_dataset')
+        visit: this.visit
       };
       dialogConfig.maxHeight = window.innerHeight - 10 + "px";
       dialogConfig.width = '500px';

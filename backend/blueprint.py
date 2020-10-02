@@ -68,13 +68,12 @@ def save_site():
     else:
         return site_repo.create_one(json_to_data(data, TSite))
 
-# Get the list of sites by module and optionally dataset
+# Get the list of sites by module
 @blueprint.route('/module/<int:id_module>/sites', methods=['GET'])
-@blueprint.route('/module/<int:id_module>/dataset/<int:id_dataset>/sites', methods=['GET'])
 @json_resp
-def get_all_sites_by_module_and_dataset(id_module, id_dataset=None):
+def get_all_sites_by_module(id_module):
     site_repo = SitesRepository()
-    data = site_repo.get_all_filter_by_module_and_dataset(id_module, id_dataset)
+    data = site_repo.get_all_filter_by_module(id_module)
     return data
 
 # Get one site
@@ -129,17 +128,12 @@ def save_visit():
 # INDIVIDUALS ROUTES
 #############################
 
-# Get the list of individuals by module and optionally dataset
+# Get the list of individuals by module
 @blueprint.route('/module/<int:id_module>/individuals', methods=['GET'])
-@blueprint.route('/module/<int:id_module>/dataset/<int:id_dataset>/individuals', methods=['GET'])
 @json_resp
-def get_all_individuals_by_module_and_dataset(id_module, id_dataset=None):
+def get_all_individuals_by_module(id_module):
     ind_repo = IndividualsRepository()
-    if id_dataset:
-        data = ind_repo.get_all_filter_by_module_and_dataset(id_module, id_dataset)
-    else:
-        data = ind_repo.get_all_filter_by(TSite.id_module, id_module)
-    return data
+    return ind_repo.get_all_filter_by(TSite.id_module, id_module)
 
 # Get list of individuals by site
 @blueprint.route('/site/<int:id_site>/individuals', methods=['GET'])

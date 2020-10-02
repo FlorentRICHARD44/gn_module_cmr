@@ -74,13 +74,13 @@ export class ObservationFormComponent implements OnInit {
                 };
                 this.path = [{
                     "text": "Module: " + this.module.module_label, 
-                    "link": ['module',this.module.module_code, 'dataset',this._route.snapshot.paramMap.get('id_dataset')]
+                    "link": ['module',this.module.module_code]
                 }, {
                     "text": this.module.forms.site.label + ": " + this.site.name,
-                    "link": ['module',this.module.module_code, 'dataset',this._route.snapshot.paramMap.get('id_dataset'), 'site', this._route.snapshot.paramMap.get('id_site')],
+                    "link": ['module',this.module.module_code, 'site', this._route.snapshot.paramMap.get('id_site')],
                 }, {
                     "text": "Visite",
-                    "link": ['module',this.module.module_code, 'dataset',this._route.snapshot.paramMap.get('id_dataset'), 'site', this._route.snapshot.paramMap.get('id_site'), 'visit', this._route.snapshot.paramMap.get('id_visit')],
+                    "link": ['module',this.module.module_code, 'site', this._route.snapshot.paramMap.get('id_site'), 'visit', this._route.snapshot.paramMap.get('id_visit')],
                 }];
             });
             this._cmrService.getOneIndividual(this._route.snapshot.paramMap.get('id_individual')).subscribe((data) => {

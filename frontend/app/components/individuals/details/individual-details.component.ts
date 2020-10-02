@@ -38,7 +38,7 @@ export class IndividualDetailsComponent implements OnInit {
                 this.fields = this.module.forms.individual.fields;
                 this.path = [{
                     "text": "Module: " + this.module.module_label, 
-                    "link": ['module',this.module.module_code, 'dataset', params.id_dataset]
+                    "link": ['module',this.module.module_code]
                 }];
                 this.path = [...this.path];
                 this._cmrService.getOneIndividual(params.id_individual).subscribe((data) => this.individual = data);

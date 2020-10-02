@@ -6,7 +6,6 @@ import { MapService } from "@geonature_common/map/map.service";
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { MatDialog, MatDialogConfig } from "@angular/material";
-import { ModuleDatasetChoiceComponent } from "./../datasetchoice/module-datasetchoice.component";
 
 /**
  * This component is the home page of a CMR Sub-module.
@@ -20,7 +19,6 @@ export class ModuleHomeComponent implements OnInit {
     public module: any = {config:{},forms:{site:{},module:{}}};
     public properties: Array<any> = [];
     public fields: any = {};
-    public dataset: any = {};
     public cardContentHeight: any;
     public individuals: Array<any> = [];
     public individualListProperties: Array<any> = [];
@@ -41,22 +39,17 @@ export class ModuleHomeComponent implements OnInit {
     ngOnInit() {
         this._router.routeReuseStrategy.shouldReuseRoute = () => false;
         this.route.params.subscribe(params => {
-            if (params.id_dataset != "none") {
-              this._cmrService.getDatasetInfo(params.id_dataset).subscribe((data) => this.dataset = data);
-            }
             this._cmrService.loadOneModule(params.module).pipe(
               mergeMap(() => {
                 this.module = this._cmrService.getModule(params.module);
-                if (this.module.config.use_dataset_filter) {
-                }
                 this.properties = this.module.forms.module.display_properties;
                 this.fields = this.module.forms.module.fields;
                 this.siteListProperties = this.module.forms.site.display_list;
                 this.siteFieldsDef = this.module.forms.site.fields;
-                this._cmrService.getAllSitesByModule(this.module.id_module, params.id_dataset).subscribe((data) => this.sites = data);
+                this._cmrService.getAllSitesByModule(this.module.id_module).subscribe((data) => this.sites = data);
                 this.individualListProperties = this.module.forms.individual.display_list;
                 this.individualFieldsDef = this.module.forms.individual.fields;
-                this._cmrService.getAllIndividualsByModule(this.module.id_module, params.id_dataset).subscribe((data) => this.individuals = data);
+                this._cmrService.getAllIndividualsByModule(this.module.id_module).subscribe((data) => this.individuals = data);
                 return of(true);
               })
             ).subscribe(() => {});
@@ -89,17 +82,5 @@ export class ModuleHomeComponent implements OnInit {
           this._mapService.map.invalidateSize();
         }, 10);
       }
-    }
-    onClickChangeDataset() {
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.data = {};
-      dialogConfig.maxHeight = window.innerHeight - 20 + "px";
-      dialogConfig.position = { top: "30px" };
-      var dialogRef = this.dialog.open(ModuleDatasetChoiceComponent, dialogConfig);
-      dialogRef.afterClosed().subscribe((result) => {
-          if (result) {
-            this._router.navigate(['..',result],{relativeTo: this.route});
-          }
-      });
     }
 }

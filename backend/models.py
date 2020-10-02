@@ -102,7 +102,6 @@ class TSite(DB.Model):
     geom = DB.Column(Geometry("GEOMETRY", 4326))
     uuid_site = DB.Column(UUID(as_uuid=True), default=uuid4)
     id_module = DB.Column(DB.Integer)
-    id_dataset = DB.Column(DB.Integer)
     visits = DB.relationship(TVisit, 
             primaryjoin=(id_site == TVisit.id_site),
             foreign_keys=[TVisit.id_site])
@@ -137,7 +136,6 @@ class TIndividual(DB.Model):
     comments = DB.Column(DB.Unicode)
     data = DB.Column(JSONB)
     id_module = DB.Column(DB.Integer)
-    id_dataset = DB.Column(DB.Integer)
     observations = DB.relationship(TObservation, 
             primaryjoin=(TObservation.id_individual == id_individual),
             foreign_keys=[TObservation.id_individual])

@@ -41,7 +41,7 @@ export class IndividualFormComponent implements OnInit {
             this.module = data;
             this.path = [{
                 "text": "Module: " + this.module.module_label, 
-                "link": ['module',this.module.module_code, 'dataset',this._route.snapshot.paramMap.get('id_dataset')]
+                "link": ['module',this.module.module_code]
             }];
             var schema = this.module.forms.individual.fields;
             this.individualFormDefinitions = this._dataService.buildFormDefinitions(schema);
@@ -59,7 +59,6 @@ export class IndividualFormComponent implements OnInit {
     onSubmit() {
         var formData = this._dataService.formatPropertiesBeforeSave(this.individualForm.value, this.module.forms.individual.fields);
         formData["id_module"] = this.module.id_module;
-        formData["id_dataset"] = this._route.snapshot.paramMap.get('id_dataset')
     
         this._cmrService.saveIndividual(formData).subscribe(result => {
             this._router.navigate([result.id_individual],{relativeTo: this._route});

@@ -79,7 +79,7 @@ class SitesRepository(BaseRepository):
     def __init__(self):
         super().__init__(TSite)
 
-    def get_all_filter_by_module_and_dataset(self, id_module, id_dataset):
+    def get_all_filter_by_module(self, id_module):
         result = []
         q = DB.session.query(TSite, 
                 func.count(distinct(TVisit.id_visit)),
@@ -87,10 +87,8 @@ class SitesRepository(BaseRepository):
                 func.count(distinct(TObservation.id_individual))).join(
                     TVisit, (TVisit.id_site == TSite.id_site), isouter=True).join(
                     TObservation, (TObservation.id_visit == TVisit.id_visit), isouter=True).filter(
-            TSite.id_module == id_module)
-        if id_dataset is not None:
-            q = q.filter(TSite.id_dataset == id_dataset)
-        data = q.group_by(TSite.id_site).all()
+            TSite.id_module == id_module).group_by(TSite.id_site)
+        data = q.all()
         for (item, count_visit, count_observation, count_individual) in data:
             r = item.to_dict()
             r['nb_visit'] = count_visit
@@ -113,12 +111,6 @@ class IndividualsRepository(BaseRepository):
     """
     def __init__(self):
         super().__init__(TIndividual)
-
-    def get_all_filter_by_module_and_dataset(self, id_module, id_dataset):
-        q = DB.session.query(self.model).filter(
-            TIndividual.id_module == id_module).filter(
-            TIndividual.id_dataset == id_dataset)
-        return [d.to_dict() for d in q.all()]
     
     def get_all_by_site(self, id_site):
         result = []

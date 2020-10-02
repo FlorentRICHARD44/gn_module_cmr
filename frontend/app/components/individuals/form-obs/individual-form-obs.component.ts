@@ -39,7 +39,7 @@ export class IndividualFormObsComponent implements OnInit {
         var fields = {};
         this.individualForm = this._formBuilder.group(fields);
         this.individualFormDefinitions = this._dataService.buildFormDefinitions(schema);
-        this._cmrService.getAllIndividualsByModule(this.data.module.id_module, this.data.dataset_id).subscribe((data) => this.individuals = data);
+        this._cmrService.getAllIndividualsByModule(this.data.module.id_module).subscribe((data) => this.individuals = data);
     }
 
     ngAfterViewInit() {
@@ -59,10 +59,6 @@ export class IndividualFormObsComponent implements OnInit {
     onSubmitNewIndividual() {
         var formData = this._dataService.formatPropertiesBeforeSave(this.individualForm.value, this.data.module.forms.individual.fields);
         formData['id_module'] = this.data.module.id_module;
-        var id_dataset = this.data.dataset_id;
-        if (id_dataset != 'none') {
-          formData['id_dataset'] = id_dataset;
-        }
         this._cmrService.saveIndividual(this.individualForm.value).subscribe(result => {
             this.dialogRef.close(result.id_individual);
         });

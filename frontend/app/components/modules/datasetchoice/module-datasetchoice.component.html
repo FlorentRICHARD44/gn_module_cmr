@@ -1,9 +1,0 @@
-<h2 mat-dialog-title>Sélection du jeu de données</h2>
-<mat-dialog-content>
-    <pnx-datasets label="{{ 'MetaData.Datasets' | translate }}" [parentFormControl]="selectDatasetForm">
-    </pnx-datasets>
-</mat-dialog-content>
-<div mat-dialog-actions class="button-container">
-    <button mat-raised-button class="btn btn-success" (click)="dialogRef.close(selectDatasetForm.value)">OK</button>
-    <button mat-raised-button class="btn btn-warning" (click)="dialogRef.close()">{{ 'Cancel' | translate }}</button>
-</div>
