@@ -26,14 +26,28 @@ const routes: Routes = [
   { path: "", component: ModuleListComponent },
   { path: "module/:module/module", component: ModuleFormComponent },
   { path: "module/:module", component: ModuleHomeComponent },
+
   { path: "module/:module/sitegroup", component: SiteGroupFormComponent },
   { path: "module/:module/sitegroup/:id_sitegroup", component: SiteGroupDetailsComponent },
+
+  /* 2 ways to access site (with and without site group) */
   { path: "module/:module/site", component: SiteFormComponent },
+  { path: "module/:module/sitegroup/:id_sitegroup/site", component: SiteFormComponent },
   { path: "module/:module/site/:id_site", component: SiteDetailsComponent },
+  { path: "module/:module/sitegroup/:id_sitegroup/site/:id_site", component: SiteDetailsComponent },
+
+  /* 2 ways to access site (with and without site group) */
   { path: "module/:module/site/:id_site/visit", component: VisitFormComponent },
+  { path: "module/:module/sitegroup/:id_sitegroup/site/:id_site/visit", component: VisitFormComponent },
   { path: "module/:module/site/:id_site/visit/:id_visit", component: VisitDetailsComponent },
+  { path: "module/:module/sitegroup/:id_sitegroup/site/:id_site/visit/:id_visit", component: VisitDetailsComponent },
+
+  /* 2 ways to access site (with and without site group) */
   { path: "module/:module/site/:id_site/visit/:id_visit/individual/:id_individual/observation", component: ObservationFormComponent },
+  { path: "module/:module/sitegroup/:id_sitegroup/site/:id_site/visit/:id_visit/individual/:id_individual/observation", component: ObservationFormComponent },
   { path: "module/:module/site/:id_site/visit/:id_visit/observation/:id_observation", component: ObservationDetailsComponent},
+  { path: "module/:module/sitegroup/:id_sitegroup/site/:id_site/visit/:id_visit/observation/:id_observation", component: ObservationDetailsComponent},
+
   { path: "module/:module/individual/:id_individual", component: IndividualDetailsComponent },
   { path: "module/:module/individual", component: IndividualFormComponent}
 ];

@@ -175,7 +175,7 @@ def get_all_individuals_by_module(id_module):
 # Get list of individuals by site group
 @blueprint.route('/sitegroup/<int:id_sitegroup>/individuals', methods=['GET'])
 @json_resp
-def get_all_individuals_by_site(id_sitegroup):
+def get_all_individuals_by_sitegroup(id_sitegroup):
     ind_repo = IndividualsRepository()
     return ind_repo.get_all_by_sitegroup(id_sitegroup)
 

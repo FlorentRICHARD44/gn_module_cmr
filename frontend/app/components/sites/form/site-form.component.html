@@ -12,10 +12,10 @@
             </pnx-map>
         </div>
         <div class="cadre scroll">
-            <gn-cmr-breadcrumb [path]="path" [currentPage]="(bEdit ? 'Edition ' : 'Nouveau ')+ module.forms.site.label + (bEdit ? ' ' + site.name : '')"></gn-cmr-breadcrumb>
+            <gn-cmr-breadcrumb [path]="path" [currentPage]="(bEdit ? 'Edition ' : 'Création ')+ module.forms.site.label + (bEdit ? ' ' + site.name : '')"></gn-cmr-breadcrumb>
             <h3>Module: {{ module.module_label }}</h3>
             <div class="clearfix">
-              <h4 class="float-left">{{ bEdit ? 'Edition' : 'Nouveau'}} {{module.forms.site.label}} {{bEdit ? ': ' + site.name : ''}}</h4>
+              <h4 class="float-left">{{ bEdit ? 'Edition' : 'Création'}} {{module.forms.site.label}} {{bEdit ? ': ' + site.name : ''}}</h4>
               <span class="float-right" *ngIf="!bEdit">
                 <i class="fa fa-repeat fa-lg"></i>
                 <mat-slide-toggle id="repeat" color="primary" [(ngModel)]="bChainInput"></mat-slide-toggle>
@@ -35,7 +35,7 @@
 
               <div class="clearfix">
                 <button class="btn btn-primary float-left" [routerLink]="['..']" *ngIf="!bEdit">Annuler</button>
-                <button class="btn btn-primary float-left" [routerLink]="[site.id_site]" *ngIf="bEdit">Annuler</button>
+                <button class="btn btn-primary float-left" [routerLink]="['..', 'site', site.id_site]" *ngIf="bEdit">Annuler</button>
                 <button *ngIf="!bChainInput  && !bEdit" class="btn btn-success float-right" [disabled]="!siteForm.valid" (click)="onSubmit(true)"><i class="fa fa-check"></i>&nbsp;Valider et ajouter une visite</button>
                 <button *ngIf="!bChainInput" class="btn btn-success float-right mr-2" [disabled]="!siteForm.valid" (click)="onSubmit(false)"><i class="fa fa-check"></i>&nbsp;Valider</button>
                 <button *ngIf="bChainInput" class="btn btn-success float-right" [disabled]="!siteForm.valid" (click)="onSubmit(false)"><i class="fa fa-check"></i>&nbsp;Valider et enchainer les saisies</button>

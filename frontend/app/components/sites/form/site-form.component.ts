@@ -53,6 +53,17 @@ export class SiteFormComponent implements OnInit {
               "text": "Module: " + this.module.module_label, 
               "link": ['module',this.module.module_code],
           }];
+          if (this._route.snapshot.paramMap.get('id_sitegroup')) {
+            this._cmrService.getOneSiteGroup(this._route.snapshot.paramMap.get('id_sitegroup')).subscribe(
+              (data) => {
+                this.path.push({
+                  "text": this.module.forms.sitegroup.label + ": " + data.name,
+                  "link": ['module',this.module.module_code, 'sitegroup', data.id_sitegroup]
+                });
+                this.path = [...this.path];
+              }
+            );
+          }
           this.leafletDrawOptions = this._cmrMapService.getLeafletDrawOptionDrawAll(this.module.forms.site.geometry_types);
           var schema = this.module.forms.site.fields;
           this.siteFormDefinitions = this._dataService.buildFormDefinitions(schema);
@@ -102,6 +113,9 @@ export class SiteFormComponent implements OnInit {
     onSubmit(addVisit) {
         var formData = this._dataService.formatPropertiesBeforeSave(this.siteForm.value,this.module.forms.site.fields);
         formData['id_module'] = this.module.id_module;
+        if (this._route.snapshot.paramMap.get('id_sitegroup')) {
+          formData['id_sitegroup'] = this._route.snapshot.paramMap.get('id_sitegroup');
+        }
         this._cmrService.saveSite(formData).subscribe(result => {
             if (this.bChainInput) { // update form resetting all fields not configured to be kept.
               this.siteForm.reset();

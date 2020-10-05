@@ -42,14 +42,23 @@ export class SiteDetailsComponent implements OnInit {
                 this.module = this._cmrService.getModule(params.module);
                 this.properties = this.module.forms.site.display_properties;
                 this.fields = this.module.forms.site.fields;
-                this.path = [{
-                    "text": "Module: " + this.module.module_label, 
-                    "link": ['module',this.module.module_code]
-                }];
-                this.path = [...this.path];
                 this.visitListProperties = this.module.forms.visit.display_list;
                 this.visitFieldsDef = this.module.forms.visit.fields;
-                this._cmrService.getOneSite(params.id_site).subscribe((data) => this.site = data);
+                this._cmrService.getOneSite(params.id_site).subscribe((data) => {
+                  this.site = data;
+                  this.path = [{
+                    "text": "Module: " + this.module.module_label, 
+                    "link": ['module',this.module.module_code]
+                  }];
+                  if (this.site.id_sitegroup) {
+                    this.path.push({
+                      "text": this.module.forms.sitegroup.label + ": " + this.site.sitegroup.name,
+                      "link": ['module',this.module.module_code, 'sitegroup', this.site.id_sitegroup]
+                    });
+                  }
+                  this.path = [...this.path];
+                
+                });
                 this._cmrService.getAllVisitsBySite(params.id_site).subscribe((data) => this.visits = data);
                 this.individualListProperties = this.module.forms.individual.display_list;
                 this.individualFieldsDef = this.module.forms.individual.fields;

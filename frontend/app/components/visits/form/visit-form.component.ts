@@ -60,10 +60,23 @@ export class VisitFormComponent implements OnInit {
               this.path = [{
                   "text": "Module: " + this.module.module_label, 
                   "link": ['module',this.module.module_code]
-              },{
+              }];
+              if (this.site.id_sitegroup) {
+                this.path.push({
+                  "text": this.module.forms.sitegroup.label + ": " + this.site.sitegroup.name,
+                  "link": ['module',this.module.module_code, 'sitegroup', this.site.id_sitegroup]
+                });
+                this.path.push({
+                  "text": this.module.forms.site.label + ": " + this.site.name,
+                  "link": ['module',this.module.module_code, 'sitegroup', this.site.id_sitegroup, 'site', this._route.snapshot.paramMap.get('id_site')],
+                });
+              } else {
+                this.path.push({
                   "text": this.module.forms.site.label + ": " + this.site.name,
                   "link": ['module',this.module.module_code, 'site', this._route.snapshot.paramMap.get('id_site')],
-              }];
+                });
+              }
+              this.path = [...this.path];
           });
           var editId = this._route.snapshot.paramMap.get('edit');
           if (editId) {

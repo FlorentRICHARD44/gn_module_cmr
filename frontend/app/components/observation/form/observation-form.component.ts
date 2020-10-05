@@ -72,16 +72,34 @@ export class ObservationFormComponent implements OnInit {
                     id_site: this.visit.id_site,
                     name: this.visit.site_name
                 };
-                this.path = [{
+                this._cmrService.getOneSite(this.visit.id_site).subscribe((data) => {
+                  this.path = [{
                     "text": "Module: " + this.module.module_label, 
                     "link": ['module',this.module.module_code]
-                }, {
-                    "text": this.module.forms.site.label + ": " + this.site.name,
-                    "link": ['module',this.module.module_code, 'site', this._route.snapshot.paramMap.get('id_site')],
-                }, {
-                    "text": "Visite",
-                    "link": ['module',this.module.module_code, 'site', this._route.snapshot.paramMap.get('id_site'), 'visit', this._route.snapshot.paramMap.get('id_visit')],
-                }];
+                  }];
+                  if (data.id_sitegroup){
+                    this.path = this.path.concat([
+                      {
+                        "text": this.module.forms.sitegroup.label + ": " + data.sitegroup.name,
+                        "link":  ['module',this.module.module_code, 'sitegroup', data.id_sitegroup]
+                      },{
+                        "text": this.module.forms.site.label + ": " + this.site.name,
+                        "link": ['module',this.module.module_code, 'sitegroup', data.id_sitegroup, 'site', this._route.snapshot.paramMap.get('id_site')],
+                     }, {
+                        "text": "Visite",
+                        "link": ['module',this.module.module_code, 'sitegroup', data.id_sitegroup, 'site', this._route.snapshot.paramMap.get('id_site'), 'visit', this._route.snapshot.paramMap.get('id_visit')],
+                    }]);
+                  } else {
+                    this.path = this.path.concat([{
+                        "text": this.module.forms.site.label + ": " + this.site.name,
+                        "link": ['module',this.module.module_code, 'site', this._route.snapshot.paramMap.get('id_site')],
+                     }, {
+                        "text": "Visite",
+                        "link": ['module',this.module.module_code, 'site', this._route.snapshot.paramMap.get('id_site'), 'visit', this._route.snapshot.paramMap.get('id_visit')],
+                    }]);
+                  }
+                  this.path = [...this.path];
+                });
             });
             this._cmrService.getOneIndividual(this._route.snapshot.paramMap.get('id_individual')).subscribe((data) => {
                 this.individual = data;

@@ -123,6 +123,7 @@ class TSite(DB.Model):
     def to_dict(self):
         data = self.as_dict()
         data['nb_visits'] = self.nb_visits
+        data['sitegroup'] = self.sitegroup.to_dict() if self.id_sitegroup else None
         return data_to_json(data)
 
     @staticmethod

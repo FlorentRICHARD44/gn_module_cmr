@@ -45,15 +45,30 @@ export class VisitDetailsComponent implements OnInit {
                 this.observationFieldsDef = this.module.forms.observation.fields;
                 
                 this._cmrService.getOneVisit(params.id_visit).subscribe((data) => {
-                    this.visit = data
-                    this.path = [{
+                    this.visit = data;
+                    
+                    this._cmrService.getOneSite(this.visit.id_site).subscribe((data) => {
+                      this.path = [{
                         "text": "Module: " + this.module.module_label, 
                         "link": ['module',this.module.module_code]
-                    },{
-                        "text": this.module.forms.site.label + ": " + this.visit.site_name,
-                        "link": ['module',this.module.module_code, 'site', this._route.snapshot.paramMap.get('id_site')],
-                    }];
-                    this.path = [...this.path];
+                      }];
+                      if (data.id_sitegroup) {
+                        this.path.push({
+                          "text": this.module.forms.sitegroup.label + ": " + data.sitegroup.name,
+                          "link": ['module',this.module.module_code, 'sitegroup', data.id_sitegroup]
+                        });
+                        this.path.push({
+                          "text": this.module.forms.site.label + ": " + data.name,
+                          "link": ['module',this.module.module_code, 'sitegroup', data.id_sitegroup, 'site', this._route.snapshot.paramMap.get('id_site')],
+                        });
+                      } else {
+                        this.path.push({
+                          "text": this.module.forms.site.label + ": " + data.name,
+                          "link": ['module',this.module.module_code, 'site', this._route.snapshot.paramMap.get('id_site')],
+                        });
+                      }
+                      this.path = [...this.path];
+                    });
 
                     this._cmrService.getAllObservationsByVisit(this.visit.id_visit).subscribe((data) => this.observations = data);
                 });
