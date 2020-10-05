@@ -8,6 +8,8 @@ import { ModuleListComponent } from "./components/modules/list/module-list.compo
 import { ModuleHomeComponent } from "./components/modules/home/module-home.component";
 import { ModuleDisclaimerComponent } from "./components/modules/disclaimer/module-disclaimer.component";
 import { ModuleFormComponent } from "./components/modules/form/module-form.component";
+import { SiteGroupFormComponent } from "./components/sitegroups/form/sitegroups-form.component";
+import { SiteGroupDetailsComponent } from "./components/sitegroups/details/sitegroups-details.component";
 import { SiteFormComponent } from "./components/sites/form/site-form.component";
 import { SiteDetailsComponent } from "./components/sites/details/site-details.component";
 import { VisitFormComponent } from "./components/visits/form/visit-form.component";
@@ -24,6 +26,8 @@ const routes: Routes = [
   { path: "", component: ModuleListComponent },
   { path: "module/:module/module", component: ModuleFormComponent },
   { path: "module/:module", component: ModuleHomeComponent },
+  { path: "module/:module/sitegroup", component: SiteGroupFormComponent },
+  { path: "module/:module/sitegroup/:id_sitegroup", component: SiteGroupDetailsComponent },
   { path: "module/:module/site", component: SiteFormComponent },
   { path: "module/:module/site/:id_site", component: SiteDetailsComponent },
   { path: "module/:module/site/:id_site/visit", component: VisitFormComponent },
@@ -37,6 +41,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [BreadcrumbComponent,
     ModuleListComponent, ModuleHomeComponent, ModuleDisclaimerComponent, ModuleFormComponent,
+    SiteGroupFormComponent, SiteGroupDetailsComponent,
     SiteFormComponent, SiteDetailsComponent,
     VisitFormComponent, VisitDetailsComponent,
     IndividualFormObsComponent, IndividualFormComponent, IndividualDetailsComponent,

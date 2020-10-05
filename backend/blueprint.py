@@ -2,8 +2,8 @@ from flask import Blueprint, current_app, request
 from geonature.utils.env import DB
 from geonature.utils.utilssqlalchemy import json_resp
 from pypnusershub.db.models import User
-from .repositories import ModulesRepository, SitesRepository, VisitsRepository, IndividualsRepository, ObservationsRepository, ConfigRepository
-from .models import TModuleComplement, TSite, TVisit, TIndividual, TObservation
+from .repositories import ModulesRepository, SiteGroupsRepository, SitesRepository, VisitsRepository, IndividualsRepository, ObservationsRepository, ConfigRepository
+from .models import TModuleComplement, TSiteGroup, TSite, TVisit, TIndividual, TObservation
 from .utils.transform import data_to_json, json_to_data
 
 blueprint = Blueprint('cmr', __name__)
@@ -50,7 +50,38 @@ def get_specific_module(module_name):
 def update_module(module_name):
     data = request.json
     mod_repo = ModulesRepository()
-    return mod_repo.update_one(module_name, json_to_data(data, TModuleComplement))
+    return mod_repo.update_one(module_name, data)
+
+
+#############################
+# SITEGROUPS ROUTES
+#############################
+
+# Save a site group
+@blueprint.route('/sitegroup', methods=['PUT'])
+@json_resp
+def save_sitegroup():
+    data = request.json
+    sitegroup_repo = SiteGroupsRepository()
+    if data['id_sitegroup']:
+        return sitegroup_repo.update_one(data)
+    else:
+        return sitegroup_repo.create_one(data)
+
+
+# Get the list of site groups by module
+@blueprint.route('/module/<int:id_module>/sitegroups', methods=['GET'])
+@json_resp
+def get_all_sitegroups_by_module(id_module):
+    sitegroup_repo = SiteGroupsRepository()
+    return sitegroup_repo.get_all_filter_by(TSiteGroup.id_module, id_module)
+
+# Get one site group by its id
+@blueprint.route('/sitegroup/<int:id_sitegroup>', methods=['GET'])
+@json_resp
+def get_one_sitegroup(id_sitegroup):
+    sitegroup_repo = SiteGroupsRepository()
+    return sitegroup_repo.get_one(TSiteGroup.id_sitegroup, id_sitegroup)
 
 
 #############################
@@ -64,17 +95,23 @@ def save_site():
     data = request.json
     site_repo = SitesRepository()
     if data['id_site']:
-        return site_repo.update_one(json_to_data(data, TSite))
+        return site_repo.update_one(data)
     else:
-        return site_repo.create_one(json_to_data(data, TSite))
+        return site_repo.create_one(data)
 
 # Get the list of sites by module
 @blueprint.route('/module/<int:id_module>/sites', methods=['GET'])
 @json_resp
 def get_all_sites_by_module(id_module):
     site_repo = SitesRepository()
-    data = site_repo.get_all_filter_by_module(id_module)
-    return data
+    return site_repo.get_all_filter_by(TSite.id_module, id_module)
+
+# Get the list of sites by site group
+@blueprint.route('/sitegroup/<int:id_sitegroup>/sites', methods=['GET'])
+@json_resp
+def get_all_sites_by_sitegroup(id_sitegroup):
+    site_repo = SitesRepository()
+    return site_repo.get_all_filter_by(TSite.id_sitegroup, id_sitegroup)
 
 # Get one site
 @blueprint.route('/site/<int:id_site>', methods=['GET'])
@@ -119,9 +156,9 @@ def save_visit():
             observers_list.append(o)
     data['observers'] = observers_list
     if data['id_visit']:
-        return visit_repo.update_one(json_to_data(data, TVisit))
+        return visit_repo.update_one(data)
     else:
-        return visit_repo.create_one(json_to_data(data, TVisit))
+        return visit_repo.create_one(data)
 
 
 #############################
@@ -134,6 +171,13 @@ def save_visit():
 def get_all_individuals_by_module(id_module):
     ind_repo = IndividualsRepository()
     return ind_repo.get_all_filter_by(TSite.id_module, id_module)
+
+# Get list of individuals by site group
+@blueprint.route('/sitegroup/<int:id_sitegroup>/individuals', methods=['GET'])
+@json_resp
+def get_all_individuals_by_site(id_sitegroup):
+    ind_repo = IndividualsRepository()
+    return ind_repo.get_all_by_sitegroup(id_sitegroup)
 
 # Get list of individuals by site
 @blueprint.route('/site/<int:id_site>/individuals', methods=['GET'])
@@ -156,9 +200,9 @@ def save_individual():
     data = request.json
     ind_repo = IndividualsRepository()
     if data['id_individual']:
-        return ind_repo.update_one(json_to_data(data, TIndividual))
+        return ind_repo.update_one(data)
     else:
-        return ind_repo.create_one(json_to_data(data, TIndividual))
+        return ind_repo.create_one(data)
 
 
 #############################
@@ -193,6 +237,6 @@ def save_observation():
     data = request.json
     obs_repo = ObservationsRepository()
     if data['id_observation']:
-        return obs_repo.update_one(json_to_data(data, TObservation))
+        return obs_repo.update_one(data)
     else:
-        return obs_repo.create_one(json_to_data(data, TObservation))
+        return obs_repo.create_one(data)

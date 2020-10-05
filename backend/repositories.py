@@ -5,7 +5,7 @@ from sqlalchemy import distinct, func
 from sqlalchemy.orm import joinedload, subqueryload
 from sqlalchemy.inspection import inspect
 from sqlalchemy.ext.hybrid import hybrid_property
-from .models import TModuleComplement, TSite, TVisit, TIndividual, TObservation
+from .models import TModuleComplement, TSiteGroup, TSite, TVisit, TIndividual, TObservation
 from .utils.config_utils import get_json_config_from_file, get_config_path
 
 
@@ -39,7 +39,7 @@ class BaseRepository:
         """
         Create a new item.
         """
-        data = self.model(**data)
+        data = self.model.from_dict(data)
         DB.session.add(data)
         DB.session.commit()
         return data.to_dict()
@@ -48,7 +48,7 @@ class BaseRepository:
         """
         Update an existing item.
         """
-        data = self.model(**data)
+        data = self.model.from_dict(data)
         DB.session.merge(data)
         DB.session.commit()
         return data.to_dict()
@@ -72,6 +72,14 @@ class ModulesRepository(BaseRepository):
         return module_to_update.to_dict()
 
 
+class SiteGroupsRepository(BaseRepository):
+    """
+    Repository for the CMR SiteGroup. Access to database.
+    """
+    def __init__(self):
+        super().__init__(TSiteGroup)
+
+
 class SitesRepository(BaseRepository):
     """
     Repository for the CMR Sites. Access to database.
@@ -79,7 +87,7 @@ class SitesRepository(BaseRepository):
     def __init__(self):
         super().__init__(TSite)
 
-    def get_all_filter_by_module(self, id_module):
+    def get_all_filter_by(self, filter_attribute, value):
         result = []
         q = DB.session.query(TSite, 
                 func.count(distinct(TVisit.id_visit)),
@@ -87,7 +95,7 @@ class SitesRepository(BaseRepository):
                 func.count(distinct(TObservation.id_individual))).join(
                     TVisit, (TVisit.id_site == TSite.id_site), isouter=True).join(
                     TObservation, (TObservation.id_visit == TVisit.id_visit), isouter=True).filter(
-            TSite.id_module == id_module).group_by(TSite.id_site)
+            filter_attribute == value).group_by(TSite.id_site)
         data = q.all()
         for (item, count_visit, count_observation, count_individual) in data:
             r = item.to_dict()
@@ -112,6 +120,20 @@ class IndividualsRepository(BaseRepository):
     def __init__(self):
         super().__init__(TIndividual)
     
+    def get_all_by_sitegroup(self, id_sitegroup):
+        result = []
+        q = DB.session.query(self.model, func.count(TObservation.id_observation)).join(
+            TObservation, (TObservation.id_individual == TIndividual.id_individual), isouter=True).join(
+            TVisit, (TVisit.id_visit == TObservation.id_visit), isouter=True).join(
+            TSite, (TVisit.id_site == TSite.id_site), isouter=True).filter(
+                TSite.id_sitegroup == id_sitegroup).group_by(TIndividual.id_individual)
+        data = q.all()
+        for (item, count) in data:
+            r = item.to_dict()
+            r['nb_observations'] = count  # replace the overall nb_observations by nb observations on the site.
+            result.append(r)
+        return result
+
     def get_all_by_site(self, id_site):
         result = []
         q = DB.session.query(self.model, func.count(TObservation.id_observation)).join(
@@ -168,9 +190,6 @@ class ConfigRepository:
         """
         form_config = {}
         module_code = module_name if module_name else 'generic'
-        form_config['module'] = self._build_form_from_its_json(module_name, 'module')
-        form_config['site'] = self._build_form_from_its_json(module_name, 'site')
-        form_config['visit'] = self._build_form_from_its_json(module_name, 'visit')
-        form_config['individual'] = self._build_form_from_its_json(module_name, 'individual')
-        form_config['observation'] = self._build_form_from_its_json(module_name, 'observation')
+        for item in ['module','sitegroup','site','visit','individual','observation']:
+            form_config[item] = self._build_form_from_its_json(module_name, item)
         return form_config

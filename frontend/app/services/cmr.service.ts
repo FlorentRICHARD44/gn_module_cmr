@@ -51,9 +51,26 @@ export class CmrService {
         return this._modules[module_code];
     }
 
+    /* SITEGROUP QUERIES */
+    getAllSitegroupsByModule(id_module) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sitegroups`);
+    }
+
+    getOneSiteGroup(id_sitegroup) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/sitegroup/${id_sitegroup}`);
+    }
+
+    saveSiteGroup(data) {
+        return this._api.put<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/sitegroup`, data);
+    }
+
     /* SITE QUERIES */
     getAllSitesByModule(id_module) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sites`);
+    }
+
+    getAllSitesBySiteGroup(id_sitegroup) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/sitegroup/${id_sitegroup}/sites`);
     }
 
     getOneSite(id_site) {
@@ -82,6 +99,10 @@ export class CmrService {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/individuals`);
     }
 
+    getAllIndividualsBySiteGroup(id_sitegroup) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/sitegroup/${id_sitegroup}/individuals`);
+    }
+    
     getAllIndividualsBySite(id_site) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/site/${id_site}/individuals`);
     }

@@ -25,18 +25,33 @@ CREATE TABLE gn_cmr.t_module_complements (
     CONSTRAINT fk_gn_cmr_t_module_complements_id_module FOREIGN KEY (id_module) REFERENCES gn_commons.t_modules(id_module)
 );
 
+--TABLE t_sitegroup: contains a group of sites.
+CREATE TABLE gn_cmr.t_sitegroup (
+    id_sitegroup serial NOT NULL,
+    uuid_sitegroup uuid NOT NULL DEFAULT uuid_generate_v4(),
+    name character varying (100),
+    comments text,
+    data jsonb,
+    geom geometry(Geometry, 4326),
+    id_module integer NOT NULL,
+    CONSTRAINT pk_gn_cmr_t_sitegroup PRIMARY KEY (id_sitegroup),
+    CONSTRAINT fk_gn_cmr_t_sitegroup_id_module FOREIGN KEY (id_module) REFERENCES gn_commons.t_modules(id_module)
+);
+
 -- TABLE t_site: contains each geometry where a capture or recapture was made.
 CREATE TABLE gn_cmr.t_site (
     id_site serial NOT NULL,
     uuid_site uuid NOT NULL DEFAULT uuid_generate_v4(),
     id_module integer NOT NULL,
+    id_sitegroup integer,
     name character varying (100),
     comments text,
     data jsonb,
     geom geometry(Geometry,4326),
     recurrent boolean,
     CONSTRAINT pk_gn_cmr_t_site PRIMARY KEY (id_site),
-    CONSTRAINT fk_gn_cmr_t_site_id_module FOREIGN KEY (id_module) REFERENCES gn_commons.t_modules(id_module)
+    CONSTRAINT fk_gn_cmr_t_site_id_module FOREIGN KEY (id_module) REFERENCES gn_commons.t_modules(id_module),
+    CONSTRAINT fk_gn_cmr_t_site_id_sitegroup FOREIGN KEY (id_sitegroup) REFERENCES gn_cmr.t_sitegroup(id_sitegroup)
 );
 
 CREATE TABLE gn_cmr.cor_site_module(

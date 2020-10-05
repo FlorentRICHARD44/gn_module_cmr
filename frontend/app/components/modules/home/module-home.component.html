@@ -15,8 +15,10 @@
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" data-toggle="tab" role="tab" aria-selected="true" id="nav-module-tab" href="#module-tab">Module</a>
+                    <a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-sitegroups-tab" href="#sitegroups-tab">{{module.forms.sitegroup.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ sitegroups.length }}</span></a>
                     <a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-sites-tab" href="#sites-tab">{{module.forms.site.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ sites.length }}</span></a>
                     <a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-individuals-tab" href="#individuals-tab">Individus<span class="badge badge-pill badge-primary ml-2">{{ individuals.length }}</span></a>
+                    <a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-stats-tab" href="#stats-tab">Statistiques</a>
                 </div>
                 <div class="tab-content" id="nav-tabContent">
                     <!-- TAB "Module" -->
@@ -42,6 +44,38 @@
                             <div class="">
                                 <h5>Médias</h5>
                             </div>
+                    </div>
+
+                    <!-- TAB "Site Group" -->
+                    <div class="tab-pane fade" id="sitegroups-tab" role="tabpanel" attr.aria-labelledby="nav-sitegroups-tab">
+                        <div class="toolbar clearfix"><!-- TODO add cruved -->
+                            <button class="btn btn-success float-left" [routerLink]="['sitegroup']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.sitegroup.label}}</button>
+                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export CSV</button>
+                            <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
+                        </div>
+                        <ngx-datatable #table
+                            class="material striped margin-top-xs"
+                            [rows]="sitegroups"
+                            [rowHeight]="40"
+                            [draggable]="false"
+                            [count]="sitegroups.length"
+                            [limit]="15"
+                            [headerHeight]="50"
+                            [footerHeight]="50">
+
+                            <ngx-datatable-column width="60">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['sitegroup', row.id_sitegroup]">
+                                        <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations ' + module.forms.sitegroup.label + ' ' + row.name"></i>
+                                    </a>
+                                    <a class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['sitegroup', {edit: row.id_sitegroup}]">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true" [matTooltip]="'Editer ' + module.forms.sitegroup.label + ' ' + row.name"></i>
+                                    </a>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column width="150" *ngFor="let prop of sitegroupListProperties" [name]="sitegroupFieldsDef[prop].attribut_label" [prop]="prop" >
+                            </ngx-datatable-column>
+                        </ngx-datatable>
                     </div>
 
                     <!-- TAB "Site" -->
@@ -114,6 +148,10 @@
                             <ngx-datatable-column width="200" *ngFor="let prop of individualListProperties" [name]="individualFieldsDef[prop].attribut_label" [prop]="prop" >
                             </ngx-datatable-column>
                         </ngx-datatable>
+                    </div>
+
+                    <!-- TAB "Statistiques" -->
+                    <div class="tab-pane fade" id="stats-tab" role="tabpanel" attr.aria-labelledby="nav-stats-tab">
                     </div>
                 </div>
             </nav>

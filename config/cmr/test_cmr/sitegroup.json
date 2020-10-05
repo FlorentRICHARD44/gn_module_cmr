@@ -1,0 +1,15 @@
+{
+    "label": "Aire d'étude",
+    "label_plural": "Aires d'étude",
+    "geometry_types": ["Polygon"],
+    "display_properties": ["name","commune","comments"],
+    "display_list": ["name","commune","nb_sites","nb_observations","nb_individuals"],
+    "properties_to_keep_when_chaining": [],
+    "specific": {
+        "commune": {
+            "type_widget": "text",
+            "attribut_label": "Commune",
+            "required": true
+        }
+    }
+}

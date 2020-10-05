@@ -1,64 +1,67 @@
 import { Component, HostListener, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable, of, forkJoin } from '@librairies/rxjs';
-import { mergeMap, concatMap } from '@librairies/rxjs/operators';
 import { MapService } from "@geonature_common/map/map.service";
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { MatDialog, MatDialogConfig } from "@angular/material";
+import { IndividualFormObsComponent } from "./../../individuals/form-obs/individual-form-obs.component";
 
 /**
- * This component is the home page of a CMR Sub-module.
+ * This component is the home page of a CMR Site Group.
  */
 @Component({
-    selector : 'pnx-cmr-module-home',
-    templateUrl: './module-home.component.html',
-    styleUrls: ['./../../../../style.scss', './module-home.component.scss']
+    selector : 'pnx-cmr-sitegroup-details',
+    templateUrl: './sitegroups-details.component.html',
+    styleUrls: ['./../../../../style.scss', './sitegroups-details.component.scss']
 })
-export class ModuleHomeComponent implements OnInit {
-    public module: any = {config:{},forms:{sitegroup:{},site:{},module:{}}};
-    public properties: Array<any> = [];
-    public fields: any = {};
+export class SiteGroupDetailsComponent implements OnInit {
+    public path: Array<any> = [];
+    public module: any = {config:{},forms:{sitegroup:{},site:{}}};
     public cardContentHeight: any;
+    public sitegroup: any = {};
+    public properties: Array<any> = [];
+    public fields: Array<any> = [];
+ 
     public individuals: Array<any> = [];
     public individualListProperties: Array<any> = [];
     public individualFieldsDef: any = {};
-    public sitegroups: Array<any> = [];
-    public sitegroupListProperties: Array<any> = [];
-    public sitegroupFieldsDef: any = {};
     public sites: Array<any> = [];
     public siteListProperties: Array<any> = [];
     public siteFieldsDef: any = {};
 
     constructor(
         private _cmrService: CmrService,
-        private route: ActivatedRoute,
         private _router: Router,
+        private _route: ActivatedRoute,
         private _mapService: MapService,
         public dialog: MatDialog,
-        private _dataService: DataService
+        private _dataService: DataService // used in template
     ) {}
 
     ngOnInit() {
-        this._router.routeReuseStrategy.shouldReuseRoute = () => false;
-        this.route.params.subscribe(params => {
-            this._cmrService.loadOneModule(params.module).pipe(
-              mergeMap(() => {
+        this._route.params.subscribe(params => {
+            this._cmrService.loadOneModule(params.module).subscribe(() => {
                 this.module = this._cmrService.getModule(params.module);
-                this.properties = this.module.forms.module.display_properties;
-                this.fields = this.module.forms.module.fields;
-                this.sitegroupListProperties = this.module.forms.sitegroup.display_list;
-                this.sitegroupFieldsDef = this.module.forms.sitegroup.fields;
+                this.path = [{
+                    "text": "Module: " + this.module.module_label, 
+                    "link": ['module',this.module.module_code]
+                }];
+                this.path = [...this.path];
+
+                this.properties = this.module.forms.sitegroup.display_properties;
+                this.fields = this.module.forms.sitegroup.fields;
                 this.siteListProperties = this.module.forms.site.display_list;
                 this.siteFieldsDef = this.module.forms.site.fields;
-                this._cmrService.getAllSitegroupsByModule(this.module.id_module).subscribe((data) => this.sitegroups = data);
-                this._cmrService.getAllSitesByModule(this.module.id_module).subscribe((data) => this.sites = data);
                 this.individualListProperties = this.module.forms.individual.display_list;
                 this.individualFieldsDef = this.module.forms.individual.fields;
-                this._cmrService.getAllIndividualsByModule(this.module.id_module).subscribe((data) => this.individuals = data);
-                return of(true);
-              })
-            ).subscribe(() => {});
+                console.log(params.id_sitegroup);
+                this._cmrService.getOneSiteGroup(params.id_sitegroup).subscribe((data) => {
+                    this.sitegroup = data;
+
+                    this._cmrService.getAllSitesBySiteGroup(this.sitegroup.id_sitegroup).subscribe((data) => this.sites = data);
+                    this._cmrService.getAllIndividualsBySiteGroup(this.sitegroup.id_sitegroup).subscribe((data) => this.individuals = data);
+                })
+            })
         });
     }
      

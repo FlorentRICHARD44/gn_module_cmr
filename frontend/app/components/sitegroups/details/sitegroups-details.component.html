@@ -1,0 +1,106 @@
+<div class="main">
+    <div class="flex-container">
+        <div class="cadre" [style.min-height]="cardContentHeight + 'px'">
+            <div id="details">
+                <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.sitegroup.label + ': ' + sitegroup.name"></gn-cmr-breadcrumb>
+                <div class="toolbar clearfix">
+                    <h3 class="float-left">{{ module.forms.sitegroup.label + ': ' + sitegroup.name}}</h3>
+                    <button class="btn btn-primary float-right" [routerLink]="['..', {edit: sitegroup.id_sitegroup}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
+                </div>
+                <div class="">
+                    <nav>
+                        <table class="table table-striped table-sm scrollable">
+                            <tr *ngFor="let fieldName of properties">
+                                <th>{{ fields[fieldName].attribut_label }}</th>
+                                <td class="text-in-area">{{ _dataService.formatProperty(sitegroup[fieldName], fields[fieldName])}}</td>
+                            </tr>
+                        </table>
+                    </nav>
+                </div>
+            </div>
+            <pnx-map height="40vh" class="map-card">
+            </pnx-map>
+        </div>
+        <div class="cadre scroll" [style.max-height]="cardContentHeight + 'px'" style="overflow-y:auto">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" data-toggle="tab" role="tab" aria-selected="false" id="nav-sites-tab" href="#sites-tab">{{module.forms.site.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ sites.length }}</span></a>
+                    <a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-individuals-tab" href="#individuals-tab">Individus<span class="badge badge-pill badge-primary ml-2">{{ individuals.length }}</span></a>
+                </div>
+                <div class="tab-content" id="nav-tabContent">
+                    <!-- TAB "Site" -->
+                    <div
+                        class="tab-pane fade active show"
+                        id="sites-tab"
+                        role="tabpanel"
+                        attr.aria-labelledby="nav-sites-tab">
+                        <div class="toolbar clearfix"><!-- TODO add cruved -->
+                            <button class="btn btn-success float-left" [routerLink]="['site']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.site.label}}</button>
+                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export CSV</button>
+                            <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
+                        </div>
+                        <ngx-datatable #table
+                            class="material striped margin-top-xs"
+                            [rows]="sites"
+                            [rowHeight]="40"
+                            [draggable]="false"
+                            [count]="sites.length"
+                            [limit]="15"
+                            [headerHeight]="50"
+                            [footerHeight]="50">
+
+                            <ngx-datatable-column width="60">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['site', row.id_site]">
+                                        <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations ' + module.forms.site.label + ' ' + row.name"></i>
+                                    </a>
+                                    <a class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['site', {edit: row.id_site}]">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true" [matTooltip]="'Editer ' + module.forms.site.label + ' ' + row.name"></i>
+                                    </a>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column width="150" *ngFor="let prop of siteListProperties" [name]="siteFieldsDef[prop].attribut_label" [prop]="prop" >
+                            </ngx-datatable-column>
+                        </ngx-datatable>
+                    </div>
+
+                    <!-- TAB "Individuals -->
+                    <div
+                        class="tab-pane fade"
+                        id="individuals-tab"
+                        role="tabpanel"
+                        attr.aria-labelledby="nav-individuals-tab">
+                        <div class="toolbar clearfix"><!-- TODO add cruved -->
+                            <button class="btn btn-success float-left" [routerLink]="['individual']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter individu</button>
+                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export CSV</button>
+                            <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
+                        </div>
+                        <ngx-datatable #table
+                            class="material striped margin-top-xs"
+                            [rows]="individuals"
+                            [rowHeight]="40"
+                            [draggable]="false"
+                            [count]="individuals.length"
+                            [limit]="15"
+                            [headerHeight]="50"
+                            [footerHeight]="50">
+
+                            <ngx-datatable-column width="60">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['individual', row.id_individual]">
+                                        <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations Individu ' + row.identifier"></i>
+                                    </a>
+                                    <a class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['individual', {edit: row.id_individual}]">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true" [matTooltip]="'Editer Individu' + row.identifier"></i>
+                                    </a>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column width="200" *ngFor="let prop of individualListProperties" [name]="individualFieldsDef[prop].attribut_label" [prop]="prop" >
+                            </ngx-datatable-column>
+                        </ngx-datatable>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>

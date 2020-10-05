@@ -7,7 +7,7 @@ from geoalchemy2 import Geometry
 from geonature.core.gn_commons.models import TModules
 from pypnusershub.db.models import User
 
-from .utils.transform import data_to_json
+from .utils.transform import data_to_json, json_to_data
 
 SCHEMA_NAME = 'gn_cmr'
 
@@ -37,6 +37,10 @@ class TObservation(DB.Model):
         data["individual_identifier"] = self.individual.to_dict()['identifier'] if self.individual else None
         return data_to_json(data)
 
+    @staticmethod
+    def from_dict(data):
+        data = json_to_data(data, TObservation)
+        return TObservation(**data)
 
 corVisitObserver = DB.Table('cor_visit_observer', 
     DB.Column("id_visit",
@@ -86,6 +90,11 @@ class TVisit(DB.Model):
         data['nb_observations'] = self.nb_observations
         return data_to_json(data)
 
+    @staticmethod
+    def from_dict(data):
+        data = json_to_data(data, TVisit)
+        return TVisit(**data)
+
 
 @serializable
 class TSite(DB.Model):
@@ -102,6 +111,7 @@ class TSite(DB.Model):
     geom = DB.Column(Geometry("GEOMETRY", 4326))
     uuid_site = DB.Column(UUID(as_uuid=True), default=uuid4)
     id_module = DB.Column(DB.Integer)
+    id_sitegroup = DB.Column(DB.Integer)
     visits = DB.relationship(TVisit, 
             primaryjoin=(id_site == TVisit.id_site),
             foreign_keys=[TVisit.id_site])
@@ -115,9 +125,53 @@ class TSite(DB.Model):
         data['nb_visits'] = self.nb_visits
         return data_to_json(data)
 
+    @staticmethod
+    def from_dict(data):
+        data = json_to_data(data, TSite)
+        return TSite(**data)
+
 TVisit.site = DB.relationship(TSite,
         primaryjoin=(TVisit.id_site == TSite.id_site),
         foreign_keys=[TSite.id_site],
+        uselist=False)
+
+
+@serializable
+class TSiteGroup(DB.Model):
+    """
+    A group of TSite.
+    """
+    __tablename__ = 't_sitegroup'
+    __table_args__ = {'schema': SCHEMA_NAME}
+    id_sitegroup = DB.Column(DB.Integer, primary_key=True)
+    name = DB.Column(DB.Unicode)
+    comments = DB.Column(DB.Unicode)
+    data = DB.Column(JSONB)
+    geom = DB.Column(Geometry("GEOMETRY", 4326))
+    uuid_sitegroup = DB.Column(UUID(as_uuid=True), default=uuid4)
+    id_module = DB.Column(DB.Integer)
+    sites = DB.relationship(TSite,
+                primaryjoin=(id_sitegroup == TSite.id_sitegroup),
+                foreign_keys=[TSite.id_sitegroup])
+
+    @hybrid_property
+    def nb_sites(self):
+        return len(self.sites) if self.sites else 0
+
+    def to_dict(self):
+        data = self.as_dict()
+        data['nb_sites'] = self.nb_sites
+        return data_to_json(data)
+    
+    @staticmethod
+    def from_dict(data):
+        data = json_to_data(data, TSiteGroup)
+        return TSiteGroup(**data)
+
+
+TSite.sitegroup = DB.relationship(TSiteGroup,
+        primaryjoin=(TSiteGroup.id_sitegroup == TSite.id_sitegroup),
+        foreign_keys=[TSiteGroup.id_sitegroup],
         uselist=False)
 
 
@@ -149,6 +203,11 @@ class TIndividual(DB.Model):
         data['nb_observations'] = self.nb_observations
         return data_to_json(data)
 
+    @staticmethod
+    def from_dict(data):
+        data = json_to_data(data, TIndividual)
+        return TIndividual(**data)
+
 TObservation.individual = DB.relationship(TIndividual,
         primaryjoin=(TObservation.id_individual == TIndividual.id_individual),
         foreign_keys=[TIndividual.id_individual],
@@ -179,3 +238,8 @@ class TModuleComplement(TModules):
     
     def to_dict(self):
         return data_to_json(self.as_dict())
+    
+    @staticmethod
+    def from_dict(data):
+        data = json_to_data(data, TModuleComplement)
+        return TModuleComplement(**data)
