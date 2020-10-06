@@ -2,9 +2,9 @@
     <div class="flex-container">
         <div class="cadre" [style.min-height]="cardContentHeight + 'px'" [style.max-height]="cardContentHeight + 'px'">
             <div id="details">
-                <gn-cmr-breadcrumb [path]="path" [currentPage]="'Observation Individu'"></gn-cmr-breadcrumb>
+                <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.observation.label"></gn-cmr-breadcrumb>
                 <div class="toolbar clearfix">
-                    <h3 class="float-left">Observation d'un individu</h3>
+                    <h3 class="float-left">{{module.forms.observation.label}}</h3>
                     <button class="btn btn-primary float-right" [routerLink]="['../..','individual', observation.id_individual, 'observation',{edit: observation.id_observation}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
                 </div>
                 <div class="">
@@ -12,10 +12,10 @@
                         <span><strong>{{module.forms.site.label}}: </strong>{{site.name}}</span>
                     </div>
                     <div class="mb-2">
-                        <span><strong>Visite: </strong>{{_dataService.formatProperty(visit.date, module.forms.visit.fields['date'])}}</span>
+                        <span><strong>{{module.forms.visit.label}}: </strong>{{_dataService.formatProperty(visit.date, module.forms.visit.fields['date'])}}</span>
                     </div>
                     <div class="mb-2">
-                        <strong>Individu:</strong>
+                        <strong>{{module.forms.individual.label}}:</strong>
                         <table class="table table-striped table-sm scrollable">
                             <tr *ngFor="let fieldName of individualProperties">
                                 <th>{{ individualFields[fieldName].attribut_label }}</th>
@@ -30,7 +30,7 @@
         </div>
         <div class="cadre scroll">
             <div class="">
-                <h3>Détails de l'observation</h3>
+                <h3>Détails</h3>
                 <table class="table table-striped table-sm scrollable">
                     <tr *ngFor="let fieldName of properties">
                         <th>{{ fields[fieldName].attribut_label }}</th>

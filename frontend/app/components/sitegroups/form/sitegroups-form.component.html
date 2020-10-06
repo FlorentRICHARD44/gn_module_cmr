@@ -36,7 +36,7 @@
               <div class="clearfix">
                 <button class="btn btn-primary float-left" [routerLink]="['..']" *ngIf="!bEdit">Annuler</button>
                 <button class="btn btn-primary float-left" [routerLink]="['..' , 'sitegroup', sitegroup.id_sitegroup]" *ngIf="bEdit">Annuler</button>
-                <button *ngIf="!bChainInput  && !bEdit" class="btn btn-success float-right" [disabled]="!sitegroupForm.valid" (click)="onSubmit(true)"><i class="fa fa-check"></i>&nbsp;Valider et ajouter un site</button>
+                <button *ngIf="!bChainInput  && !bEdit" class="btn btn-success float-right" [disabled]="!sitegroupForm.valid" (click)="onSubmit(true)"><i class="fa fa-check"></i>&nbsp;Valider et ajouter {{module.forms.site.label}}</button>
                 <button *ngIf="!bChainInput" class="btn btn-success float-right mr-2" [disabled]="!sitegroupForm.valid" (click)="onSubmit(false)"><i class="fa fa-check"></i>&nbsp;Valider</button>
                 <button *ngIf="bChainInput" class="btn btn-success float-right" [disabled]="!sitegroupForm.valid" (click)="onSubmit(false)"><i class="fa fa-check"></i>&nbsp;Valider et enchainer les saisies</button>
               </div>

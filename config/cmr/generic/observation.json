@@ -1,4 +1,6 @@
 {
+    "label": "Observation",
+    "label_plural": "Observations",
     "display_properties": ["type","visit_date","comments"],
     "display_list": ["individual_identifier","type"],
     "properties_to_keep_when_chaining": [],

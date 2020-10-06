@@ -79,7 +79,7 @@ export class ObservationDetailsComponent implements OnInit {
                               "text": this.module.forms.site.label + ": " + this.site.name,
                               "link": ['module',this.module.module_code, 'sitegroup', data.id_sitegroup, 'site', this._route.snapshot.paramMap.get('id_site')],
                            }, {
-                              "text": "Visite",
+                              "text": this.module.forms.visite.label,
                               "link": ['module',this.module.module_code, 'sitegroup', data.id_sitegroup, 'site', this._route.snapshot.paramMap.get('id_site'), 'visit', this._route.snapshot.paramMap.get('id_visit')],
                           }]);
                         } else {
@@ -87,7 +87,7 @@ export class ObservationDetailsComponent implements OnInit {
                               "text": this.module.forms.site.label + ": " + this.site.name,
                               "link": ['module',this.module.module_code, 'site', this._route.snapshot.paramMap.get('id_site')],
                            }, {
-                              "text": "Visite",
+                              "text": this.module.forms.visite.label,
                               "link": ['module',this.module.module_code, 'site', this._route.snapshot.paramMap.get('id_site'), 'visit', this._route.snapshot.paramMap.get('id_visit')],
                           }]);
                         }

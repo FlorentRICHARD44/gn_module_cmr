@@ -2,19 +2,19 @@
     <div class="flex-container">
         <div class="cadre" [style.min-height]="cardContentHeight + 'px'" [style.max-height]="cardContentHeight + 'px'">
             <div id="details">
-                <gn-cmr-breadcrumb [path]="path" [currentPage]="(bEdit ? 'Edition ' : 'Création ') +'Observation Individu'"></gn-cmr-breadcrumb>
+                <gn-cmr-breadcrumb [path]="path" [currentPage]="(bEdit ? 'Edition ' : 'Création ') + module.forms.observation.label"></gn-cmr-breadcrumb>
                 <div class="">
-                    <h3>{{ bEdit ? 'Edition ' : 'Création '}}Observation d'un individu</h3>
+                    <h3>{{ (bEdit ? 'Edition ' : 'Création ') + module.forms.observation.label}}</h3>
                 </div>
                 <div class="">
                     <div class="mb-2">
                         <span><strong>{{module.forms.site.label}}: </strong>{{site.name}}</span>
                     </div>
                     <div class="mb-2">
-                        <span><strong>Visite: </strong>{{_dataService.formatProperty(visit.date, module.forms.visit.fields['date'])}}</span>
+                        <span><strong>{{module.forms.visit.label}}: </strong>{{_dataService.formatProperty(visit.date, module.forms.visit.fields['date'])}}</span>
                     </div>
                     <div class="mb-2">
-                        <strong>Individu:</strong>
+                        <strong>{{module.forms.individual.label}}:</strong>
                         <table class="table table-striped table-sm scrollable">
                             <tr *ngFor="let fieldName of individualProperties">
                                 <th>{{ individualFields[fieldName].attribut_label }}</th>
@@ -29,7 +29,7 @@
         </div>
         <div class="cadre scroll">
             <div class="">
-                <h3>Détails de l'observation</h3>
+                <h3>Détails</h3>
             </div>
             <form [formGroup]="allForm">
                 <pnx-dynamic-form-generator

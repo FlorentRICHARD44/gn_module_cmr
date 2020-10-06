@@ -1,4 +1,6 @@
 {
+    "label": "Individu",
+    "label_plural": "Individus",
     "display_properties": ["identifier","rfid","marker","comments"],
     "display_list": ["identifier","rfid","marker", "nb_observations"],
     "properties_to_keep_when_chaining": [],

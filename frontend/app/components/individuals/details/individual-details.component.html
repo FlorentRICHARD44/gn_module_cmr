@@ -1,10 +1,10 @@
 <div class="main">
     <div class="cadre">
-        <gn-cmr-breadcrumb [path]="path" [currentPage]="'Individu: ' + individual.identifier"></gn-cmr-breadcrumb>
+        <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.individual.label + ': ' + individual.identifier"></gn-cmr-breadcrumb>
         <div class="toolbar clearfix">
-            <h3 class="float-left">Individu: {{individual.identifier}}</h3>
-            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Télécharger la fiche individu</button>
-            <button disabled class="btn btn-success float-right ml-2"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter une visite</button>
+            <h3 class="float-left">{{module.forms.individual.label}}: {{individual.identifier}}</h3>
+            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Télécharger la fiche</button>
+            <button disabled class="btn btn-success float-right ml-2"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.visit.label}}</button>
             <button class="btn btn-primary float-right ml-2" [routerLink]="['..', {edit: individual.id_individual}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
         </div>
         <div class="">
@@ -26,7 +26,7 @@
                     <div class="tab-pane fade active show" id="info-tab" role="tabpanel" attr.aria-labelledby="nav-info-tab">
                         <div class="flex-container">
                             <div class="">
-                                <h5>Détails individu</h5>
+                                <h5>Détails</h5>
                                 <table class="table table-striped table-sm scrollable">
                                     <tr *ngFor="let fieldName of properties">
                                         <th>{{ fields[fieldName].attribut_label }}</th>
@@ -60,7 +60,7 @@
                                     <ngx-datatable-column width="15">
                                         <ng-template let-row="row" ngx-datatable-cell-template>
                                             <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['../..','site', row.site_id, 'visit', row.id_visit, 'observation', row.id_observation]">
-                                                <i class="fa fa-info-circle" aria-hidden="true" matTooltip="Détails de l'Observation"></i>
+                                                <i class="fa fa-info-circle" aria-hidden="true" matTooltip="Détails {{module.forms.observation.label}}"></i>
                                             </a>
                                         </ng-template>
                                     </ngx-datatable-column>
@@ -74,7 +74,7 @@
                                 </pnx-map>-->
                             </div>
                             <div class="">
-                                <h5>Détail de l'observation sélectionnée</h5>
+                                <h5>Détails</h5>
                             </div>
                         </div>
                     </div>

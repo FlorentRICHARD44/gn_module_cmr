@@ -1,7 +1,7 @@
 <div class="main">
     <div class="cadre">
-        <gn-cmr-breadcrumb [path]="path" [currentPage]="(bEdit ? 'Edition' : 'Création') + ' Individu' + (bEdit ? ': ' + individual.identifier : '')"></gn-cmr-breadcrumb>
-        <h3 class="">{{ (bEdit ? 'Edition ' : 'Création ') + 'Individu' + ( bEdit ? ': ' + individual.identifier : '')}}</h3>
+        <gn-cmr-breadcrumb [path]="path" [currentPage]="(bEdit ? 'Edition' : 'Création') + ' ' + module.forms.individual.label + (bEdit ? ': ' + individual.identifier : '')"></gn-cmr-breadcrumb>
+        <h3 class="">{{ (bEdit ? 'Edition ' : 'Création ') + module.forms.individual.label + ( bEdit ? ': ' + individual.identifier : '')}}</h3>
         <div class="flex-container">
             <div class="">
                 <form [formGroup]="individualForm">

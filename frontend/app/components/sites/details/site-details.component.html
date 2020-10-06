@@ -41,13 +41,13 @@
         <div class="cadre scroll">
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a class="nav-item nav-link active" data-toggle="tab" aria-selected="true" id="nav-visit-tab" href="#visit-tab">Visites<span class="badge badge-pill badge-primary ml-2">{{visits.length}}</span></a>
+                    <a class="nav-item nav-link active" data-toggle="tab" aria-selected="true" id="nav-visit-tab" href="#visit-tab">{{module.forms.visit.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{visits.length}}</span></a>
                     <a class="nav-item nav-link" data-toggle="tab" aria-selected="false" id="nav-individuals-tab" href="#individuals-tab">Individus<span class="badge badge-pill badge-primary ml-2">{{individuals.length}}</span></a>
                 </div>
                 <div class="tab-content" id="nav-tabContentRight">
                     <div class="tab-pane fade active show" id="visit-tab" role="tabpanel" attr.aria-labelledby="nav-visit-tab">
                         <div class="toolbar clearfix"><!-- TODO add cruved-->
-                            <button class="btn btn-success float-left" [routerLink]="['visit']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter une visite</button>
+                            <button class="btn btn-success float-left" [routerLink]="['visit']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.visit.label}}</button>
                             <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
                         </div>
                         <ngx-datatable #table
@@ -64,10 +64,10 @@
                             <ngx-datatable-column width="60">
                                 <ng-template let-row="row" ngx-datatable-cell-template>
                                     <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['visit', row.id_visit]">
-                                        <i class="fa fa-info-circle" aria-hidden="true" matTooltip="Informations Visite"></i>
+                                        <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations ' + module.forms.visit.label"></i>
                                     </a>
                                     <a class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['visit', {edit: row.id_visit}]">
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true" matTooltip="Editer la Visite"></i>
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true" [matTooltip]="'Editer ' + module.forms.visit.label"></i>
                                     </a>
                                 </ng-template>
                             </ngx-datatable-column>
@@ -94,11 +94,11 @@
 
                             <ngx-datatable-column width="60">
                                 <ng-template let-row="row" ngx-datatable-cell-template>
-                                    <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['../..','individual', row.id_individual]">
-                                        <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations Individu ' + row.identifier"></i>
+                                    <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="[(site.id_sitegroup? '../../../..' : '../..'),'individual', row.id_individual]">
+                                        <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations ' + module.forms.individual.label + ' ' + row.identifier"></i>
                                     </a>
                                     <a class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['../..', 'individual', {edit: row.id_individual}]">
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true" matTooltip="'Editer Individu ' + row.identifier"></i>
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true" matTooltip="'Editer ' + module.forms.individual.label + ' ' + row.identifier"></i>
                                     </a>
                                 </ng-template>
                             </ngx-datatable-column>

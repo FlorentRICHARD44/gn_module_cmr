@@ -1,4 +1,6 @@
 {
+    "label": "Visite",
+    "label_plural": "Visites",
     "display_properties": ["site_name","date","observation","observers","nb_observations","comments"],
     "display_list": ["date","observation","observers","nb_observations"],
     "properties_to_keep_when_chaining": [],
