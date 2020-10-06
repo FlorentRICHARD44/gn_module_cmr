@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, ValidatorFn } from '@angular/forms';
 import { MapService } from "@geonature_common/map/map.service";
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
+import { Module } from '../../../class/module';
 
 @Component({
     selector : 'pnx-cmr-observation-form',
@@ -12,7 +13,7 @@ import { DataService } from './../../../services/data.service';
 })
 export class ObservationFormComponent implements OnInit {
     public path = [];
-    public module: any = {config:{},forms:{observation:{},site:{},visit:{fields:{}}}};
+    public module: Module = new Module();
     public observation: any = {};
     public site: any = {};
     public visit: any = {};
@@ -86,7 +87,7 @@ export class ObservationFormComponent implements OnInit {
                         "text": this.module.forms.site.label + ": " + this.site.name,
                         "link": ['module',this.module.module_code, 'sitegroup', data.id_sitegroup, 'site', this._route.snapshot.paramMap.get('id_site')],
                      }, {
-                        "text": this.module.forms.visite.label,
+                        "text": this.module.forms.visit.label,
                         "link": ['module',this.module.module_code, 'sitegroup', data.id_sitegroup, 'site', this._route.snapshot.paramMap.get('id_site'), 'visit', this._route.snapshot.paramMap.get('id_visit')],
                     }]);
                   } else {
@@ -94,7 +95,7 @@ export class ObservationFormComponent implements OnInit {
                         "text": this.module.forms.site.label + ": " + this.site.name,
                         "link": ['module',this.module.module_code, 'site', this._route.snapshot.paramMap.get('id_site')],
                      }, {
-                        "text": this.module.forms.visite.label,
+                        "text": this.module.forms.visit.label,
                         "link": ['module',this.module.module_code, 'site', this._route.snapshot.paramMap.get('id_site'), 'visit', this._route.snapshot.paramMap.get('id_visit')],
                     }]);
                   }

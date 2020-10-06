@@ -6,6 +6,7 @@ import { CommonService } from "@geonature_common/service/common.service";
 import { CmrService } from './../../../services/cmr.service';
 import { CmrMapService } from './../../../services/cmr-map.service';
 import { DataService } from './../../../services/data.service';
+import { Module } from '../../../class/module';
 
 @Component({
     selector : 'pnx-cmr-visit-form',
@@ -14,7 +15,7 @@ import { DataService } from './../../../services/data.service';
 })
 export class VisitFormComponent implements OnInit {
     public path = [];
-    public module: any = {config:{},forms:{site:{}}};
+    public module: Module = new Module();
     public site: any = {};
     public cardContentHeight: any;
     public visit: any = {};
@@ -31,7 +32,6 @@ export class VisitFormComponent implements OnInit {
         private _router: Router,
         private _route: ActivatedRoute,
         private _mapService: MapService,
-        private _cmrMapService: CmrMapService,
         private _formBuilder: FormBuilder,
         private _commonService: CommonService
     ) {

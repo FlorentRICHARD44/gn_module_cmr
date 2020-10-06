@@ -5,6 +5,7 @@ import { mergeMap, concatMap } from '@librairies/rxjs/operators';
 import { MapService } from "@geonature_common/map/map.service";
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
+import { Module } from '../../../class/module';
 
 /**
  * This component is the home page of a CMR Site.
@@ -16,7 +17,7 @@ import { DataService } from './../../../services/data.service';
 })
 export class SiteDetailsComponent implements OnInit {
     public path: Array<any> = [];
-    public module: any = {config:{},forms:{site:{}}};
+    public module: Module = new Module();
     public cardContentHeight: any;
     public site: any = {};
     public medias: Array<any> = [];

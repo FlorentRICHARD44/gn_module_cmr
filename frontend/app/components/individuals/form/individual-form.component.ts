@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
+import { Module } from '../../../class/module';
 
 @Component({
     selector : 'pnx-cmr-individual-form',
@@ -11,7 +12,7 @@ import { DataService } from './../../../services/data.service';
 })
 export class IndividualFormComponent implements OnInit {
     public path = [];
-    public module: any = {config:{},forms:{individual:{}}};
+    public module: Module = new Module();
     public individual: any = {};
     public fields: any = {};
     public individualForm: FormGroup;

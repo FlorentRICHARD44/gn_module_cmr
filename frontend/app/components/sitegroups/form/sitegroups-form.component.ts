@@ -6,6 +6,7 @@ import { CommonService } from "@geonature_common/service/common.service";
 import { CmrService } from '../../../services/cmr.service';
 import { CmrMapService } from '../../../services/cmr-map.service';
 import { DataService } from '../../../services/data.service';
+import { Module } from '../../../class/module';
 
 @Component({
     selector : 'pnx-cmr-sitegroup-form',
@@ -14,7 +15,7 @@ import { DataService } from '../../../services/data.service';
 })
 export class SiteGroupFormComponent implements OnInit {
     public path = [];
-    public module: any = {config:{},forms:{sitegroup:{}}};
+    public module: Module = new Module();
     public cardContentHeight: any;
     public leafletDrawOptions: any = {};
     public sitegroupForm: FormGroup;

@@ -3,6 +3,7 @@ import { CmrService } from './../../../services/cmr.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { ModuleDisclaimerComponent } from "./../disclaimer/module-disclaimer.component";
+import { Module } from '../../../class/module';
 
 /**
  * This component is the Home page of the CMR module.
@@ -14,7 +15,7 @@ import { ModuleDisclaimerComponent } from "./../disclaimer/module-disclaimer.com
     styleUrls: ['./../../../../style.scss', './module-list.component.scss']
 })
 export class ModuleListComponent implements OnInit {
-    public modules: Array<any> = [];
+    public modules: Array<Module> = [];
     public externalAssetsPath;
 
     constructor(

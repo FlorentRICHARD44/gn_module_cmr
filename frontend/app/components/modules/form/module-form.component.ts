@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit} from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MapService } from "@geonature_common/map/map.service";
+import { Module } from '../../../class/module';
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 
@@ -14,7 +15,7 @@ import { DataService } from './../../../services/data.service';
     styleUrls: ['./../../../../style.scss']
 })
 export class ModuleFormComponent implements OnInit {
-    public module: any = {config:{},forms:{site:{},module:{}}};
+    public module: Module = new Module();
     public fields: any = {};
     public moduleForm: FormGroup;
     public moduleFormDefinitions: Array<any> = [];

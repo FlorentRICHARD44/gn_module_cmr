@@ -5,6 +5,7 @@ import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { IndividualFormObsComponent } from "./../../individuals/form-obs/individual-form-obs.component";
+import { Module } from '../../../class/module';
 
 /**
  * This component is the home page of a CMR Site Group.
@@ -16,7 +17,7 @@ import { IndividualFormObsComponent } from "./../../individuals/form-obs/individ
 })
 export class SiteGroupDetailsComponent implements OnInit {
     public path: Array<any> = [];
-    public module: any = {config:{},forms:{sitegroup:{},site:{}}};
+    public module: Module = new Module();
     public cardContentHeight: any;
     public sitegroup: any = {};
     public properties: Array<any> = [];

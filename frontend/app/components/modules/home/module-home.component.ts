@@ -6,6 +6,7 @@ import { MapService } from "@geonature_common/map/map.service";
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { MatDialog, MatDialogConfig } from "@angular/material";
+import { Module } from '../../../class/module';
 
 /**
  * This component is the home page of a CMR Sub-module.
@@ -16,7 +17,7 @@ import { MatDialog, MatDialogConfig } from "@angular/material";
     styleUrls: ['./../../../../style.scss', './module-home.component.scss']
 })
 export class ModuleHomeComponent implements OnInit {
-    public module: any = {config:{},forms:{sitegroup:{},site:{},module:{}}};
+    public module: Module = new Module();
     public properties: Array<any> = [];
     public fields: any = {};
     public cardContentHeight: any;

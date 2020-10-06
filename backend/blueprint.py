@@ -50,7 +50,7 @@ def get_specific_module(module_name):
 def update_module(module_name):
     data = request.json
     mod_repo = ModulesRepository()
-    return mod_repo.update_one(module_name, data)
+    return mod_repo.update_one(module_name, json_to_data(data, TModuleComplement))
 
 
 #############################

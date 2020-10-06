@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MapService } from "@geonature_common/map/map.service";
+import { Module } from '../../../class/module';
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 
@@ -14,7 +15,7 @@ import { DataService } from './../../../services/data.service';
 })
 export class IndividualDetailsComponent implements OnInit {
     public path: Array<any> = [];
-    public module: any = {config:{}, forms:{individual:{},observation:{}}};
+    public module: Module = new Module();
     public cardContentHeight: any;
     public individual: any = {};
     public properties: Array<any> = [];
