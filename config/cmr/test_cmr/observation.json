@@ -9,6 +9,12 @@
             "required": true,
             "values": ["Vivant","Mort"]
         },
+        "etat_femelle": {
+            "attribut_label": "Etat femelle",
+            "type_widget": "select",
+            "values": ["Non Gravide","Gravide"],
+            "required": false
+        },
         "development_step": {
             "type_widget": "select",
             "attribut_label": "Type",
@@ -167,6 +173,29 @@
                 "type_widget": "textarea",
                 "required": true
             }
+        }
+    }, {
+        "label": "Photographies",
+        "defaults": {
+            "opened": false
+        },
+        "fields": {
+            "photos_plastron": {
+                "type_widget": "text",
+                "attribut_label": "Photos du plastron",
+                "required": false
+            },
+            "photos_dossière": {
+                "type_widget": "text",
+                "attribut_label": "Photos de la dossière",
+                "required": false
+            },
+            "photos_autres": {
+                "type_widget": "text",
+                "attribut_label": "Autres photos",
+                "required": false
+            }
+
         }
     }]
 }

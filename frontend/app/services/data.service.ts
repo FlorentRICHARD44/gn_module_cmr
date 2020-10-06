@@ -46,8 +46,6 @@ export class DataService {
             } else if (fieldDef[def].type_widget == 'checkbox') {
                 if (formValues[def] == null || formValues[def].length == 0) {
                     formValues[def] = false;
-                } else if (formValues[def].length == 1) {
-                    formValues[def] = formValues[def][0] == 'true' ? true : false;
                 }
             }
         }

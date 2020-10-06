@@ -55,7 +55,6 @@ export class SiteGroupDetailsComponent implements OnInit {
                 this.siteFieldsDef = this.module.forms.site.fields;
                 this.individualListProperties = this.module.forms.individual.display_list;
                 this.individualFieldsDef = this.module.forms.individual.fields;
-                console.log(params.id_sitegroup);
                 this._cmrService.getOneSiteGroup(params.id_sitegroup).subscribe((data) => {
                     this.sitegroup = data;
 
