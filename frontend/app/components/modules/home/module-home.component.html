@@ -15,8 +15,8 @@
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" data-toggle="tab" role="tab" aria-selected="true" id="nav-module-tab" href="#module-tab">Module</a>
-                    <a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-sitegroups-tab" href="#sitegroups-tab">{{module.forms.sitegroup.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ sitegroups.length }}</span></a>
-                    <a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-sites-tab" href="#sites-tab">{{module.forms.site.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ sites.length }}</span></a>
+                    <a *ngIf="module.config.use_sitegroup" class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-sitegroups-tab" href="#sitegroups-tab">{{module.forms.sitegroup.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ sitegroups.length }}</span></a>
+                    <a *ngIf="!module.config.use_sitegroup" class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-sites-tab" href="#sites-tab">{{module.forms.site.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ sites.length }}</span></a>
                     <a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-individuals-tab" href="#individuals-tab">{{module.forms.individual.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ individuals.length }}</span></a>
                     <a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-stats-tab" href="#stats-tab">Statistiques</a>
                 </div>
@@ -47,7 +47,7 @@
                     </div>
 
                     <!-- TAB "Site Group" -->
-                    <div class="tab-pane fade" id="sitegroups-tab" role="tabpanel" attr.aria-labelledby="nav-sitegroups-tab">
+                    <div class="tab-pane fade" id="sitegroups-tab" role="tabpanel" attr.aria-labelledby="nav-sitegroups-tab" *ngIf="module.config.use_sitegroup">
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button class="btn btn-success float-left" [routerLink]="['sitegroup']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.sitegroup.label}}</button>
                             <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export CSV</button>
@@ -83,7 +83,7 @@
                         class="tab-pane fade"
                         id="sites-tab"
                         role="tabpanel"
-                        attr.aria-labelledby="nav-sites-tab">
+                        attr.aria-labelledby="nav-sites-tab" *ngIf="!module.config.use_sitegroup">
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button class="btn btn-success float-left" [routerLink]="['site']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.site.label}}</button>
                             <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export CSV</button>

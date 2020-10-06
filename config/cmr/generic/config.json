@@ -1,5 +1,6 @@
 {
     "disclaimer" : false,
     "disclaimer_text": [],
-    "welcome": ""
+    "welcome": "",
+    "use_sitegroup": false
 }

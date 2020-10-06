@@ -5,6 +5,7 @@ export class Module {
     public id_module;
     public module_label = "";
     public module_code = "";
+    public use_sitegroup = false;
     public config = {
         disclaimer: false,
         disclaimer_text: [],
