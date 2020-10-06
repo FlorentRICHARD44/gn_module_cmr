@@ -1,7 +1,7 @@
 {
     "label": "Visite",
     "label_plural": "Visites",
-    "display_properties": ["site_name","date","observation","observers","nb_observations","comments"],
+    "display_properties": ["site_name","date","dataset_name","observation","observers","nb_observations","comments"],
     "display_list": ["date","observation","observers","nb_observations"],
     "properties_to_keep_when_chaining": [],
     "generic": {
@@ -13,6 +13,13 @@
         "date": {
             "type_widget": "date",
             "attribut_label": "Date",
+            "required": true
+        },
+        "id_dataset": {
+            "type_widget": "dataset",
+            "attribut_label": "Jeu de données",
+            "module_code": "test_cmr",
+            "type_util": "dataset",
             "required": true
         },
         "observers": {
@@ -36,6 +43,9 @@
         },
         "nb_observations": {
             "attribut_label": "Nb Observations"
+        },
+        "dataset_name": {
+            "attribut_label": "Jeu de données"
         }
     }
 }

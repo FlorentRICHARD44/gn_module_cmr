@@ -96,8 +96,10 @@ CREATE TABLE gn_cmr.t_visit(
     comments text,
     date timestamp,
     no_observation boolean,
+    id_dataset integer,
     CONSTRAINT pk_gn_cmr_t_visit PRIMARY KEY (id_visit),
-    CONSTRAINT fk_gn_cmr_t_visit_id_site FOREIGN KEY (id_site) REFERENCES gn_cmr.t_site(id_site)
+    CONSTRAINT fk_gn_cmr_t_visit_id_site FOREIGN KEY (id_site) REFERENCES gn_cmr.t_site(id_site),
+    CONSTRAINT fk_gn_cmr_t_visit_id_dataset FOREIGN KEY (id_dataset) REFERENCES gn_meta.t_datasets(id_dataset)
 );
 
 CREATE TABLE gn_cmr.cor_visit_observer(

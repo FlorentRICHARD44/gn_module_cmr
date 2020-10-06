@@ -1,5 +1,5 @@
 {
-    "display_properties": ["site_name","date","observers","observation","nb_observations","comments"],
+    "display_properties": ["site_name","date","dataset_name","observers","observation","nb_observations","comments"],
     "display_list": ["date","observers","observation","nb_observations"],
     "properties_to_keep_when_chaining": [],
     "specific": {}

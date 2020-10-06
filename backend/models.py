@@ -1,3 +1,4 @@
+from geonature.core.gn_meta.models import TDatasets
 from geonature.utils.utilssqlalchemy import serializable
 from geonature.utils.env import DB
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -76,6 +77,8 @@ class TVisit(DB.Model):
         foreign_keys=[corVisitObserver.c.id_visit,
                       corVisitObserver.c.id_observer],
     )
+    id_dataset = DB.Column(DB.Integer)
+    dataset = DB.relationship(TDatasets, primaryjoin=(TDatasets.id_dataset == id_dataset), foreign_keys=[TDatasets.id_dataset],uselist=False)
     id_site = DB.Column(DB.Integer, foreign_key="TSite.id_site")
     observations = DB.relationship(TObservation, primaryjoin=(id_visit == TObservation.id_visit), foreign_keys=[TObservation.id_visit])
 
@@ -88,6 +91,7 @@ class TVisit(DB.Model):
         data['site_name'] = self.site.name if self.site else None
         data['observers'] = [o.as_dict() for o in self.observers]
         data['nb_observations'] = self.nb_observations
+        data['dataset_name'] = self.dataset.dataset_name if self.dataset else None
         return data_to_json(data)
 
     @staticmethod
