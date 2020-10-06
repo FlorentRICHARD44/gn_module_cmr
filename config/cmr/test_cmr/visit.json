@@ -1,6 +1,13 @@
 {
-    "display_properties": ["site_name","date","dataset_name","observers","observation","nb_observations","comments"],
-    "display_list": ["date","observers","observation","nb_observations"],
+    "display_properties": ["site_name","date","dataset_name","session","observers","observation","nb_observations","comments"],
+    "display_list": ["date","observers","session","observation","nb_observations"],
     "properties_to_keep_when_chaining": [],
-    "specific": {}
+    "specific": {
+        "session": {
+            "type_widget": "select",
+            "attribut_label": "Session",
+            "values": ["2020-01","2020-02"],
+            "required": true
+        }
+    }
 }
