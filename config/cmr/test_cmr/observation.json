@@ -107,7 +107,15 @@
         "defaults": {
             "opened": false
         },
+        "yesno_field": "typage_gen_ouinon",
+        "yesno_yesvalue": "Oui",
         "fields": {
+            "typage_gen_ouinon": {
+                "type_widget": "radio",
+                "attribut_label": "",
+                "values": ["Non", "Oui"],
+                "required": true
+            },
             "typage_gen_date_prelevement": {
                 "attribut_label": "Date de prélèvement",
                 "type_widget": "date",
@@ -136,7 +144,15 @@
         "defaults" : {
             "opened": false
         },
+        "yesno_field": "analyse_comp_ouinon",
+        "yesno_yesvalue": "Oui",
         "fields": {
+            "analyse_comp_ouinon": {
+                "type_widget": "radio",
+                "attribut_label": "",
+                "values": ["Non", "Oui"],
+                "required": true
+            },
             "analyse_comp_date_prelevement": {
                 "attribut_label": "Date de prélèvement",
                 "type_widget": "date",
