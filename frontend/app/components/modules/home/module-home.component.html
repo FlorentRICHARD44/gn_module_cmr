@@ -18,7 +18,7 @@
                     <a *ngIf="module.config.use_sitegroup" class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-sitegroups-tab" href="#sitegroups-tab">{{module.forms.sitegroup.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ sitegroups.length }}</span></a>
                     <a *ngIf="!module.config.use_sitegroup" class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-sites-tab" href="#sites-tab">{{module.forms.site.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ sites.length }}</span></a>
                     <a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-individuals-tab" href="#individuals-tab">{{module.forms.individual.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ individuals.length }}</span></a>
-                    <a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-stats-tab" href="#stats-tab">Statistiques</a>
+                    <!--<a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-stats-tab" href="#stats-tab">Statistiques</a>-->
                 </div>
                 <div class="tab-content" id="nav-tabContent">
                     <!-- TAB "Module" -->
@@ -51,7 +51,7 @@
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button class="btn btn-success float-left" [routerLink]="['sitegroup']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.sitegroup.label}}</button>
                             <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export CSV</button>
-                            <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
+                            <button disabled class="btn btn-primary float-right"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <ngx-datatable #table
                             class="material striped margin-top-xs"
@@ -87,7 +87,7 @@
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button class="btn btn-success float-left" [routerLink]="['site']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.site.label}}</button>
                             <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export CSV</button>
-                            <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
+                            <button disabled class="btn btn-primary float-right"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <ngx-datatable #table
                             class="material striped margin-top-xs"
@@ -123,7 +123,7 @@
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button class="btn btn-success float-left" [routerLink]="['individual']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.individual.label}}</button>
                             <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export CSV</button>
-                            <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
+                            <button disabled class="btn btn-primary float-right"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <ngx-datatable #table
                             class="material striped margin-top-xs"
@@ -151,8 +151,8 @@
                     </div>
 
                     <!-- TAB "Statistiques" -->
-                    <div class="tab-pane fade" id="stats-tab" role="tabpanel" attr.aria-labelledby="nav-stats-tab">
-                    </div>
+                    <!--<div class="tab-pane fade" id="stats-tab" role="tabpanel" attr.aria-labelledby="nav-stats-tab">
+                    </div>-->
                 </div>
             </nav>
         </div>

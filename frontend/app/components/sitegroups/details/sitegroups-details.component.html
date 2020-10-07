@@ -37,7 +37,7 @@
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button class="btn btn-success float-left" [routerLink]="['site']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.site.label}}</button>
                             <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export CSV</button>
-                            <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
+                            <button disabled class="btn btn-primary float-right"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <ngx-datatable #table
                             class="material striped margin-top-xs"
@@ -72,7 +72,7 @@
                         attr.aria-labelledby="nav-individuals-tab">
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export CSV</button>
-                            <button disabled class="btn btn-primary float-right"><i class="fa fa-filter"></i>&nbsp;Filtrer</button>
+                            <button disabled class="btn btn-primary float-right"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <ngx-datatable #table
                             class="material striped margin-top-xs"
@@ -94,7 +94,7 @@
                                     </a>
                                 </ng-template>
                             </ngx-datatable-column>
-                            <ngx-datatable-column width="200" *ngFor="let prop of individualListProperties" [name]="individualFieldsDef[prop].attribut_label" [prop]="prop" >
+                            <ngx-datatable-column width="150" *ngFor="let prop of individualListProperties" [name]="individualFieldsDef[prop].attribut_label" [prop]="prop" >
                             </ngx-datatable-column>
                         </ngx-datatable>
                     </div>

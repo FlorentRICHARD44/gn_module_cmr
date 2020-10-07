@@ -11,7 +11,7 @@
               <h4 class="float-left">{{ (bEdit ? 'Edition ' : 'Création ') + module.forms.visit.label}}</h4>
               <span class="float-right" *ngIf="!bEdit">
                 <i class="fa fa-repeat fa-lg"></i>
-                <mat-slide-toggle id="repeat" color="primary" [(ngModel)]="bChainInput"></mat-slide-toggle>
+                <mat-slide-toggle id="repeat" color="primary" [(ngModel)]="bChainInput" matTooltip="Enchainer les saisies"></mat-slide-toggle>
               </span>
             </div>
             <form [formGroup]="visitForm">
@@ -36,9 +36,9 @@
               <div class="clearfix">
                 <button class="btn btn-primary float-left" [routerLink]="['..']" *ngIf="!bEdit">Annuler</button>
                 <button class="btn btn-primary float-left" [routerLink]="[visit.id_visit]" *ngIf="bEdit">Annuler</button>
+                <button *ngIf="!bChainInput  && !bEdit" class="btn btn-success float-right ml-2" [disabled]="!visitForm.valid || !genericVisitForm.valid || !visitForm.get('observation').value" (click)="onSubmit(true)"><i class="fa fa-check"></i>&nbsp;Valider et ajouter {{module.forms.observation.label}}</button>
                 <button *ngIf="!bChainInput" class="btn btn-success float-right" [disabled]="!visitForm.valid || !genericVisitForm.valid" (click)="onSubmit()"><i class="fa fa-check"></i>&nbsp;Valider</button>
                 <button *ngIf="bChainInput && !bEdit" class="btn btn-success float-right" [disabled]="!visitForm.valid || !genericVisitForm.valid" (click)="onSubmit()"><i class="fa fa-check"></i>&nbsp;Valider et enchainer les saisies</button>
-                <!-- TODO button valider et ajouter observation (si formValid & !edit & !chainInput & observation=true -->
               </div>
             </form>
         </div> 

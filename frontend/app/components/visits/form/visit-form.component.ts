@@ -4,9 +4,10 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MapService } from "@geonature_common/map/map.service";
 import { CommonService } from "@geonature_common/service/common.service";
 import { CmrService } from './../../../services/cmr.service';
-import { CmrMapService } from './../../../services/cmr-map.service';
 import { DataService } from './../../../services/data.service';
 import { Module } from '../../../class/module';
+import { MatDialog, MatDialogConfig } from "@angular/material";
+import { IndividualFormObsComponent } from "./../../individuals/form-obs/individual-form-obs.component";
 
 @Component({
     selector : 'pnx-cmr-visit-form',
@@ -33,6 +34,7 @@ export class VisitFormComponent implements OnInit {
         private _route: ActivatedRoute,
         private _mapService: MapService,
         private _formBuilder: FormBuilder,
+        public dialog: MatDialog,
         private _commonService: CommonService
     ) {
         
@@ -121,7 +123,7 @@ export class VisitFormComponent implements OnInit {
       }
     }
 
-    onSubmit() {
+    onSubmit(addObservation) {
       var formValues = this.genericVisitForm.value;
       formValues['observation'] = this.visitForm.get('observation').value;
       var formData = this._dataService.formatPropertiesBeforeSave(formValues, this.module.forms.visit.fields);
@@ -142,6 +144,22 @@ export class VisitFormComponent implements OnInit {
             "info",
             "Formulaire enregistré!"
           );
+        } else if (addObservation) {  // go the details page
+          let idVisit = result.id_visit;
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.data = {
+            module: this.module,
+            visit: this.visit
+          };
+          dialogConfig.maxHeight = window.innerHeight - 10 + "px";
+          dialogConfig.width = '500px';
+          dialogConfig.position = { top: "30px" };
+          var dialogRef = this.dialog.open(IndividualFormObsComponent, dialogConfig);
+          dialogRef.afterClosed().subscribe((result) => {
+              if (result) {
+                this._router.navigate(['..', 'visit', idVisit,'individual',result, 'observation'],{relativeTo: this._route});
+              }
+          });
         } else {  // go the details page
           this._router.navigate(['..', 'visit', result.id_visit],{relativeTo: this._route});
         }

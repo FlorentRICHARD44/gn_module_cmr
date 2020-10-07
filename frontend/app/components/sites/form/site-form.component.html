@@ -18,7 +18,7 @@
               <h4 class="float-left">{{ bEdit ? 'Edition' : 'Création'}} {{module.forms.site.label}} {{bEdit ? ': ' + site.name : ''}}</h4>
               <span class="float-right" *ngIf="!bEdit">
                 <i class="fa fa-repeat fa-lg"></i>
-                <mat-slide-toggle id="repeat" color="primary" [(ngModel)]="bChainInput"></mat-slide-toggle>
+                <mat-slide-toggle id="repeat" color="primary" [(ngModel)]="bChainInput" matTooltip="Enchainer les saisies"></mat-slide-toggle>
               </span>
             </div>
             <form [formGroup]="siteForm">
