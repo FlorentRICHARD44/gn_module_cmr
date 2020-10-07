@@ -2,10 +2,15 @@
     height: calc(100% - 40vh);
 }
 
-:host ::ng-deep .card-header [aria-expanded=true] .fa-chevron-down {
-    display: none;
-}
-
-:host ::ng-deep .card-header [aria-expanded=false] .fa-chevron-up {
-    display: none;
+:host ::ng-deep .card-header {
+    padding: 6px 12px;
+    
+    h5 {
+        font-weight: normal;
+    }
+    
+    [aria-expanded=false] .fa-chevron-up,
+    [aria-expanded=true] .fa-chevron-down {
+        display: none;
+    }
 }
