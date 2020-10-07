@@ -50,7 +50,7 @@
                     <div class="tab-pane fade" id="sitegroups-tab" role="tabpanel" attr.aria-labelledby="nav-sitegroups-tab" *ngIf="module.config.use_sitegroup">
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button class="btn btn-success float-left" [routerLink]="['sitegroup']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.sitegroup.label}}</button>
-                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export CSV</button>
+                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export</button>
                             <button disabled class="btn btn-primary float-right"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <ngx-datatable #table
@@ -86,7 +86,7 @@
                         attr.aria-labelledby="nav-sites-tab" *ngIf="!module.config.use_sitegroup">
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button class="btn btn-success float-left" [routerLink]="['site']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.site.label}}</button>
-                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export CSV</button>
+                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export</button>
                             <button disabled class="btn btn-primary float-right"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <ngx-datatable #table
@@ -122,7 +122,7 @@
                         attr.aria-labelledby="nav-individuals-tab">
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button class="btn btn-success float-left" [routerLink]="['individual']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.individual.label}}</button>
-                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export CSV</button>
+                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export</button>
                             <button disabled class="btn btn-primary float-right"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <ngx-datatable #table

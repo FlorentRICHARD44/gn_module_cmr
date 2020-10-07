@@ -9,12 +9,29 @@
                 </div>
                 <div class="">
                     <nav>
-                        <table class="table table-striped table-sm scrollable">
-                            <tr *ngFor="let fieldName of properties">
-                                <th>{{ fields[fieldName].attribut_label }}</th>
-                                <td class="text-in-area">{{ _dataService.formatProperty(sitegroup[fieldName], fields[fieldName])}}</td>
-                            </tr>
-                        </table>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" data-toggle="tab" aria-selected="true" id="nav-sitegroup-tab" href="#sitegroup-tab">{{module.forms.sitegroup.label}}</a>
+                            <a class="nav-item nav-link" data-toggle="tab" aria-selected="false" id="nav-media-tab" href="#media-tab">Medias<span class="badge badge-pill badge-primary ml-2">{{medias.length}}</span></a>
+                        </div>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade active show"
+                                id="sitegroup-tab"
+                                role="tabpanel"
+                                attr.aria-labelledby="nav-sitegroup-tab">
+                                 <table class="table table-striped table-sm scrollable">
+                                    <tr *ngFor="let fieldName of properties">
+                                        <th>{{ fields[fieldName].attribut_label }}</th>
+                                        <td class="text-in-area">{{ _dataService.formatProperty(sitegroup[fieldName], fields[fieldName])}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade"
+                                id="media-tab"
+                                role="tabpanel"
+                                attr.aria-labelledby="nav-media-tab">
+                                <h3>Medias</h3>
+                            </div>
+                        </div>
                     </nav>
                 </div>
             </div>
@@ -36,7 +53,7 @@
                         attr.aria-labelledby="nav-sites-tab">
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button class="btn btn-success float-left" [routerLink]="['site']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.site.label}}</button>
-                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export CSV</button>
+                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export</button>
                             <button disabled class="btn btn-primary float-right"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <ngx-datatable #table
@@ -71,7 +88,7 @@
                         role="tabpanel"
                         attr.aria-labelledby="nav-individuals-tab">
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
-                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export CSV</button>
+                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export</button>
                             <button disabled class="btn btn-primary float-right"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <ngx-datatable #table

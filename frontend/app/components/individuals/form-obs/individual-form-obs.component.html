@@ -27,6 +27,6 @@
 </mat-dialog-content>
 <div mat-dialog-actions class="button-container">
     <button mat-raised-button *ngIf="selectionType == 'select'" class="btn btn-success" (click)="onCreateObservation()" [disabled]="selectedIndividual == undefined">Valider</button>
-    <button mat-raised-button *ngIf="selectionType == 'create'" class="btn btn-success" (click)="onSubmitNewIndividual()" [disabled]="!individualForm.valid">Valider et ajouter 1 {{module.forms.observation.label}}</button>
+    <button mat-raised-button *ngIf="selectionType == 'create'" class="btn btn-success" (click)="onSubmitNewIndividual()" [disabled]="!individualForm.valid">Valider et ajouter {{module.forms.observation.label}}</button>
     <button mat-raised-button class="btn btn-warning" (click)="dialogRef.close()">Annuler</button>
 </div>

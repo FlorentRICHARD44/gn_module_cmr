@@ -1,9 +1,9 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
 import { CmrService } from "./../../../services/cmr.service";
 import { DataService } from "./../../../services/data.service";
+import { Module } from '../../../class/module';
 
 /**
  * A disclaimer popup that ask the user if they want to continue "Yes" or not "No".
@@ -16,6 +16,7 @@ import { DataService } from "./../../../services/data.service";
     styleUrls: ['./../../../../style.scss'],
 })
 export class IndividualFormObsComponent implements OnInit {
+    public module: Module = new Module();
     public selectionType = 'select';
     data: any;
     public selectedIndividual = undefined;
@@ -28,10 +29,9 @@ export class IndividualFormObsComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public options: any,
         private _cmrService: CmrService,
         private _dataService: DataService,
-        private _formBuilder: FormBuilder,
-        private _router: Router,
-        private _route: ActivatedRoute) {
+        private _formBuilder: FormBuilder) {
             this.data = options;
+            this.module = this.data.module;
     }
 
     ngOnInit() {
@@ -53,9 +53,11 @@ export class IndividualFormObsComponent implements OnInit {
             this.individualForm.disable();
         }
     }
+
     onCreateObservation() {
         this.dialogRef.close(this.selectedIndividual);
     }
+    
     onSubmitNewIndividual() {
         var formData = this._dataService.formatPropertiesBeforeSave(this.individualForm.value, this.data.module.forms.individual.fields);
         formData['id_module'] = this.data.module.id_module;

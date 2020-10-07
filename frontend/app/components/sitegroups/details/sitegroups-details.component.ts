@@ -22,6 +22,7 @@ export class SiteGroupDetailsComponent implements OnInit {
     public sitegroup: any = {};
     public properties: Array<any> = [];
     public fields: Array<any> = [];
+    public medias: Array<any> = [];
  
     public individuals: Array<any> = [];
     public individualListProperties: Array<any> = [];
