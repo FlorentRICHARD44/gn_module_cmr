@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { CmrService } from "./cmr.service";
 
 /**
  * Service with generic methods to handle data.
@@ -7,6 +8,8 @@ import { Injectable } from "@angular/core";
     providedIn: "root"
 })
 export class DataService {
+    constructor(private _cmrService: CmrService){}
+
     /**
      * Format the value as text according its definition.
      * @param value 
@@ -87,6 +90,9 @@ export class DataService {
               .filter((attribut_name) => schema[attribut_name].type_widget)
               .map((attribut_name) => {
                   const elem = schema[attribut_name];
+                  if (elem["type_widget"] == "html") {
+                      elem["html"] = elem["html"].replace(/\{\{basepath\}\}/g, this._cmrService.getExternalAssetsPath());
+                  }
                   elem["attribut_name"] = attribut_name;
                   return elem;
               });

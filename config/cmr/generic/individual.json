@@ -25,6 +25,11 @@
             "attribut_label": "Marquage",
             "required": true
         },
+        "marker_media": {
+            "type_widget": "text",
+            "attribut_label": "Photo du marquage",
+            "required": false
+        },
         "comments": {
             "type_widget": "textarea",
             "attribut_label": "Commentaires",

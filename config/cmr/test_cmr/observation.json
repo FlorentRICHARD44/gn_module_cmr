@@ -15,11 +15,15 @@
             "values": ["Non Gravide","Gravide"],
             "required": false
         },
-        "development_step": {
+        "developpement_stade": {
             "type_widget": "select",
-            "attribut_label": "Type",
+            "attribut_label": "Stade de développement",
             "required": true,
             "values": ["Emergent de l'année","Juvénile en croissance","Adulte avec stries encore visibles","Vieil adulte sans strie de croissance","Inconnu"]
+        },
+        "aide_developpement_stade":{
+            "type_widget":"html",
+            "html": "<div class=\"mb-3\"><a data-toggle=\"collapse\" href=\"#help_devstade\" role=\"button\" aria-expanded=\"false\" aria-controls=\"help_devstade\"><i class=\"fa fa-question-circle\"></i>&nbsp;Aide</a><div class=\"collapse\" id=\"help_devstade\"><p>Stades de développement</p><table><tr><th>Emergent de l'année</th><th>Juvénile en croissance</th></tr><tr><td><img src=\"{{basepath}}/img_cmr_cistude_aide_stade_emergent.png\" alt=\"\" width=\"300\" height=\"150\"></img></td><td><img src=\"{{basepath}}/img_cmr_cistude_aide_stade_juvenile.png\" alt=\"\" width=\"300\" height=\"150\"></img></td></tr><tr><th>Adulte avec stries encore visible</th><th>Vieil adulte sans stries de croissance</th></tr><tr><td><img src=\"{{basepath}}/img_cmr_cistude_aide_stade_adulte.png\" alt=\"\" width=\"300\" height=\"150\"></img></td><td><img src=\"{{basepath}}/img_cmr_cistude_aide_stade_vieiladulte.png\" alt=\"\" width=\"300\" height=\"150\"></img></td></tr></table></div></div>"
         },
         "age": {
             "type_widget": "number",
@@ -27,6 +31,10 @@
             "min": 0,
             "max": 20,
             "required": false
+        },
+        "aide_age":{
+            "type_widget":"html",
+            "html": "<div class=\"mb-3\"><a data-toggle=\"collapse\" href=\"#help_age\" role=\"button\" aria-expanded=\"false\" aria-controls=\"help_age\"><i class=\"fa fa-question-circle\"></i>&nbsp;Aide</a><div class=\"collapse\" id=\"help_age\"><p>Lecture des stries sur la 4ème écaille abdominale</p><img src=\"{{basepath}}/img_cmr_cistude_aide_estimation_age.png\" alt=\"\" width=\"370\" height=\"235\"></img></div></div>"
         },
         "particular_signs": {
             "type_widget": "textarea",
@@ -43,6 +51,10 @@
             "opened": true
         },
         "fields": {
+            "aide_mesures":{
+                "type_widget":"html",
+                "html": "<div class=\"mb-3\"><a data-toggle=\"collapse\" href=\"#help_mesure\" role=\"button\" aria-expanded=\"false\" aria-controls=\"help_mesure\"><i class=\"fa fa-question-circle\"></i>&nbsp;Aide</a><div class=\"collapse\" id=\"help_mesure\"><img src=\"{{basepath}}/img_cmr_cistude_aide_mesures.png\" alt=\"\" width=\"750\" height=\"240\"></img></div></div>"
+            },
             "poids_g": {
                 "attribut_label": "Poids (g)",
                 "type_widget": "number",
@@ -51,30 +63,35 @@
             },
             "longueur_dossiere_mm": {
                 "attribut_label": "Longueur dossière (mm)",
+                "definition": "LOD",
                 "type_widget": "number",
                 "min": 1,
                 "required": true
             },
             "largeur_dossiere_mm": {
                 "attribut_label": "Largeur dossière (mm)",
+                "definition": "LAD",
                 "type_widget": "number",
                 "min": 1,
                 "required": true
             },
             "longueur_plastron_mm": {
                 "attribut_label": "Longueur plastron (mm)",
+                "definition": "LOP",
                 "type_widget": "number",
                 "min": 1,
                 "required": true
             },
             "largeur_avant_plastron_mm": {
                 "attribut_label": "Largeur avant du plastron (mm)",
+                "definition": "LAAVP",
                 "type_widget": "number",
                 "min": 1,
                 "required": true
             },
             "largeur_arriere_plastron_mm": {
                 "attribut_label": "Largeur arrière du plastron (mm)",
+                "definition": "LAARP",
                 "type_widget": "number",
                 "min": 1,
                 "required": true

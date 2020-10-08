@@ -24,6 +24,7 @@ export class ObservationFormComponent implements OnInit {
     public allForm: FormGroup;
     public observationForm: FormGroup;
     public observationFormDefinitions = [];
+    public externalAssetsPath;
 
     // Management of additional form groups
     public formGroups: Array<any> = [];
@@ -42,6 +43,7 @@ export class ObservationFormComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.externalAssetsPath = this._cmrService.getExternalAssetsPath();
         this.allForm = this._formBuilder.group({});
         this.observationForm = this._formBuilder.group({});
         this.allForm.addControl('child0',this.observationForm);
