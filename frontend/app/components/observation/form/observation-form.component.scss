@@ -1,6 +1,9 @@
 #details {
     height: calc(100% - 40vh);
 }
+#detail-form {
+    overflow-y: auto;
+}
 
 :host ::ng-deep .card-header {
     padding: 6px 12px;

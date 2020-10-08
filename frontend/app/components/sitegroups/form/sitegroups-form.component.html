@@ -33,7 +33,7 @@
                 [formsDefinition]="sitegroupFormDefinitions"
               ></pnx-dynamic-form-generator>
 
-              <div class="clearfix">
+              <div class="clearfix mt-3">
                 <button class="btn btn-primary float-left" [routerLink]="['..']" *ngIf="!bEdit">Annuler</button>
                 <button class="btn btn-primary float-left" [routerLink]="['..' , 'sitegroup', sitegroup.id_sitegroup]" *ngIf="bEdit">Annuler</button>
                 <button *ngIf="!bChainInput  && !bEdit" class="btn btn-success float-right" [disabled]="!sitegroupForm.valid" (click)="onSubmit(true)"><i class="fa fa-check"></i>&nbsp;Valider et ajouter {{module.forms.site.label}}</button>

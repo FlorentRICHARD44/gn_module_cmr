@@ -1,7 +1,7 @@
 .main {
     padding: 5px 10px;
     position: absolute;
-    top: 0px;
+    top: 64px;
     bottom: 0px;
     left: 0px;
     right: 0px;
@@ -38,18 +38,6 @@
 }
 
 /** forms **/
-:host ::ng-deep .obj-form {
-    margin: 0;
-    margin-bottom: 10px;
-    padding: 0;
-    line-height: 0.5rem;
-}
-
-:host ::ng-deep .obj-form small {
-    position: relative;
-    top: -6px;
-  }
-
 :host ::ng-deep pnx-observers .input-group {
     height: 31px;
 }

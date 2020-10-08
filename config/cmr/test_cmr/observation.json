@@ -160,7 +160,7 @@
             },
             "analyse_comp_type_prelevement": {
                 "attribut_label": "Type de Prélèvement",
-                "type_widget": "checkbox",
+                "type_widget": "select",
                 "values": ["Prélèvement sanguin","Frottis carapace","Echantillon de griffe","Fèces","Autre"],
                 "required": true
             },

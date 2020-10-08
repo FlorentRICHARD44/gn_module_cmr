@@ -111,63 +111,51 @@ export class ObservationFormComponent implements OnInit {
                 this._cmrService.getOneObservation(editId).subscribe((data) => {
                     this.observation = data;
                     this.observationForm.patchValue(this._dataService.formatDataForBeforeEdition(data, this.module.forms.observation.fields));
-                    for (var grp of this.formGroups) {
+                    for (let grp of this.formGroups) {
                       grp['form'].patchValue(this._dataService.formatDataForBeforeEdition(data, grp['fields']));
-                      for (var field of Object.keys(grp['fields'])) {
-                        if (grp['fields'][field].type_widget == "checkbox") {
-                          for (var i = 0; i < data[field].length; i++) {
-                            var input = <HTMLInputElement>(document.getElementById(data[field][i]));
-                            input.checked = true;
-                        }
+                      if (grp['yesno_field']) {
+                        let yesno_field = grp['form'].get(grp['yesno_field']);
+                        setTimeout(() => this.updateStatus(grp, yesno_field), 500);
                       }
                     }
-                  }
                 });
             }
         }
     }
 
     ngAfterViewInit() {
-      /* Manage Yes/No updates in the form groups.
-       * If Yes is selected, the other fields are enabled and their required value is applied.
-       * If No is selected, the other fields are disabled and doesn't matter for the form validation.
-       * Disabled fieds are not pushed when saved and so their previous value are lost if previously saved.
-       */
       for (let grp of this.formGroups) {
         if (grp['yesno_field']) {
           let yesno_field = grp['form'].get(grp['yesno_field']);
           if (yesno_field) {
-            var updateStatus = function() {
-              for (let field of Object.keys(grp['fields'])) {
-                if (field != grp['yesno_field']) {
-                  if (yesno_field.value == grp['yesno_yesvalue']) {
-                    grp['form'].get(field).enable();
-                    if (grp['fields'][field].type_widget == "checkbox") {
-                      for (var i = 0; i < grp['fields'][field].values.length; i++) {
-                        var input = <HTMLInputElement>(document.getElementById(grp['fields'][field].values[i]));
-                        input.disabled = false;
-                      }
-                    }
-                  } else {
-                    grp['form'].get(field).disable();
-                    if (grp['fields'][field].type_widget == "checkbox") {
-                      for (var i = 0; i < grp['fields'][field].values.length; i++) {
-                        var input = <HTMLInputElement>(document.getElementById(grp['fields'][field].values[i]));
-                        input.disabled = true;
-                      }
-                    }
-                  }
-                  
-                }
-              }
-            };
-            yesno_field.registerOnChange(updateStatus);
-            updateStatus(); // Execute once
+            yesno_field.registerOnChange(() => this.updateStatus(grp, yesno_field));
+            this.updateStatus(grp, yesno_field); // Execute once
           }
         }
       }
-        setTimeout(() => this.calcCardContentHeight(), 300);
+      setTimeout(() => this.calcCardContentHeight(), 300);
     }
+
+    /* Manage Yes/No updates in the form groups.
+       * If Yes is selected, the other fields are enabled and their required value is applied.
+       * If No is selected, the other fields are disabled and doesn't matter for the form validation.
+       * Disabled fieds are not pushed when saved and so their previous value are lost if previously saved.
+       */
+    updateStatus(grp, yesno_field) {
+      for (let field of Object.keys(grp['fields'])) {
+        if (field != grp['yesno_field']) {
+          if (yesno_field.value == grp['yesno_yesvalue']) {
+            grp['form'].get(field).enable();
+          } else {
+            /* Strange behaviour, need to enable then disable in short time
+             * Otherwise the disable is not taken into account.
+             */
+            grp['form'].get(field).enable();
+            setTimeout(() => grp['form'].get(field).disable(), 100);
+          }
+        }
+      }
+    };
     
     @HostListener("window:resize", ["$event"])
     onResize(event) {

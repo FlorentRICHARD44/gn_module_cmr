@@ -95,7 +95,7 @@ CREATE TABLE gn_cmr.t_visit(
     data jsonb,
     comments text,
     date timestamp,
-    no_observation boolean,
+    observation boolean,
     id_dataset integer,
     CONSTRAINT pk_gn_cmr_t_visit PRIMARY KEY (id_visit),
     CONSTRAINT fk_gn_cmr_t_visit_id_site FOREIGN KEY (id_site) REFERENCES gn_cmr.t_site(id_site),
@@ -115,12 +115,10 @@ CREATE TABLE gn_cmr.t_observation(
     id_observation serial NOT NULL,
     id_individual integer NOT NULL,
     id_visit integer NOT NULL,
-    type_observation integer NOT NULL,
     data jsonb,
     comments text,
     CONSTRAINT pk_gn_cmr_t_observation PRIMARY KEY (id_observation),
     CONSTRAINT fk_gn_cmr_t_observation_id_individual FOREIGN KEY (id_individual) REFERENCES gn_cmr.t_individual(id_individual),
     CONSTRAINT fk_gn_cmr_t_observation_id_visite FOREIGN KEY (id_visit) REFERENCES gn_cmr.t_visit(id_visit),
-    CONSTRAINT fk_gn_cmr_t_observation_type_observation FOREIGN KEY (type_observation) REFERENCES ref_nomenclatures.t_nomenclatures(id_nomenclature),
     CONSTRAINT check_gn_cmr_t_observation_type_observation_nomenclature CHECK (ref_nomenclatures.check_nomenclature_type_by_mnemonique(type_observation,'CMR_OBSERVATION_TYPE')) NOT VALID
 );

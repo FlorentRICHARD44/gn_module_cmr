@@ -24,7 +24,6 @@ class TObservation(DB.Model):
     id_observation = DB.Column(DB.Integer, primary_key=True)
     id_individual = DB.Column(DB.Integer)
     id_visit = DB.Column(DB.Integer)
-    type_observation = DB.Column(DB.Integer)
     data = DB.Column(JSONB)
     comments = DB.Column(DB.Unicode)
 
