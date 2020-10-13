@@ -1,7 +1,26 @@
 {
-    "display_properties": ["type","comments","individual_state","development_step","age","particular_signs"],
+    "display_properties": ["type","comments","individual_state","developpement_stade","age","particular_signs"],
     "display_list": ["individual_identifier","type"],
     "properties_to_keep_when_chaining": [],
+    "individual_histogram_items": [{
+        "field":"poids_g",
+        "color": "rgba(255,0,0,0.5)"
+    },{
+        "field":"longueur_dossiere_mm",
+        "color": "rgba(0,50,255,0.5)"
+    },{
+        "field":"largeur_dossiere_mm",
+        "color": "rgba(50,0,255,0.5)"
+    },{
+        "field":"longueur_plastron_mm",
+        "color": "rgba(0,50,255,0.5)"
+    },{
+        "field":"largeur_avant_plastron_mm",
+        "color": "rgba(50,0,255,0.5)"
+    },{
+        "field":"largeur_arriere_plastron_mm",
+        "color": "rgba(50,0,255,0.5)"
+    }],
     "specific": {
         "individual_state": {
             "type_widget": "select",

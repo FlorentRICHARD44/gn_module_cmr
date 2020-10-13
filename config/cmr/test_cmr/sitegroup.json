@@ -15,6 +15,7 @@
             "type_widget": "text",
             "attribut_label": "Code Postal",
             "pattern": "^[0-9]{5}$",
+            "pattern_message": "Code postal sur 5 chiffres",
             "required": true
         }
     }

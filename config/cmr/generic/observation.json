@@ -5,6 +5,7 @@
     "display_list": ["individual_identifier","type"],
     "properties_to_keep_when_chaining": [],
     "individual_historic_display_list": ["type","visit_date","site_name"],
+    "individual_histogram_items": [],
     "generic": {
         "id_observation": {
             "type_widget": "text",

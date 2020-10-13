@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from "@angular/router";
 import { MatSlideToggleModule } from "@angular/material";
 import { MatDialogModule } from '@angular/material/dialog';
+import { ChartsModule } from "ng2-charts";
 import { GN2CommonModule } from "@geonature_common/GN2Common.module";
 import { ModuleListComponent } from "./components/modules/list/module-list.component";
 import { ModuleHomeComponent } from "./components/modules/home/module-home.component";
@@ -20,6 +21,7 @@ import { IndividualFormComponent } from "./components/individuals/form/individua
 import { ObservationFormComponent } from "./components/observation/form/observation-form.component";
 import { ObservationDetailsComponent } from "./components/observation/details/observation-details.component";
 import { BreadcrumbComponent } from './components/common/breadcrumb/breadcrumb.component';
+import { GraphComponent } from './components/common/graph/graph.component';
 
 // my module routing
 const routes: Routes = [
@@ -53,7 +55,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [BreadcrumbComponent,
+  declarations: [BreadcrumbComponent, GraphComponent,
     ModuleListComponent, ModuleHomeComponent, ModuleDisclaimerComponent, ModuleFormComponent,
     SiteGroupFormComponent, SiteGroupDetailsComponent,
     SiteFormComponent, SiteDetailsComponent,
@@ -61,7 +63,7 @@ const routes: Routes = [
     IndividualFormObsComponent, IndividualFormComponent, IndividualDetailsComponent,
     ObservationFormComponent, ObservationDetailsComponent
   ],
-  imports: [GN2CommonModule, CommonModule, RouterModule.forChild(routes), MatDialogModule, MatSlideToggleModule],
+  imports: [GN2CommonModule, CommonModule, RouterModule.forChild(routes), MatDialogModule, MatSlideToggleModule, ChartsModule],
   entryComponents: [ModuleDisclaimerComponent, IndividualFormObsComponent],
   providers: [],
   bootstrap: []

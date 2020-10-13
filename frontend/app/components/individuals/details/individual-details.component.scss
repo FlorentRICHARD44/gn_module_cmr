@@ -1,3 +1,5 @@
 .cadre {
     height: calc(100% - 10px);
+    max-height: calc(100% - 10px);
+    overflow-y: auto;
 }

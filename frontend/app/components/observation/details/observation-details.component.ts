@@ -51,7 +51,7 @@ export class ObservationDetailsComponent implements OnInit {
                     var i = 1;
                     for (var grp of this.formGroups) {
                         grp['id'] = i;
-                        grp['properties'] = Object.keys(grp['fields']);
+                        grp['properties'] = Object.keys(grp['fields']).filter((attribut_name) => grp['fields'][attribut_name].type_widget != 'html');
                         i++;
                         grp['formDef'] = this._dataService.buildFormDefinitions(grp['fields']);
                     }

@@ -32,13 +32,15 @@
                                         <td class="text-in-area">{{ _dataService.formatProperty(individual[fieldName], fields[fieldName])}}</td>
                                     </tr>
                                 </table>
+                                <h5>Taxonomie</h5>
                             </div>
                             <div class="">
                                 <h5>Médias</h5>
                                 <!-- TODO voir à mettre dans un onglet à part -->
                             </div>
-                            <div class="">
-                                <h5>Taxonomie</h5>
+                            <div id="graph-list" class="">
+                                <h5>Courbes d'évolutions</h5>
+                                <gn-cmr-graph *ngFor="let graph of graphs" [options]="graph"></gn-cmr-graph>
                             </div>
                         </div>
                     </div>

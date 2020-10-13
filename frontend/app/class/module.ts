@@ -56,7 +56,8 @@ export class Module {
             groups: [],
             display_properties:[],
             display_list: [],
-            individual_historic_display_list:[]
+            individual_historic_display_list:[],
+            individual_histogram_items: []
         },
     }
     public constructor() {}

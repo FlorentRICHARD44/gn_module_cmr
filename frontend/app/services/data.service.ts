@@ -50,6 +50,8 @@ export class DataService {
                 if (formValues[def] == null || formValues[def].length == 0) {
                     formValues[def] = false;
                 }
+            } else if (fieldDef[def].type_widget == 'html') {
+                formValues[def] = undefined;
             }
         }
         return formValues;

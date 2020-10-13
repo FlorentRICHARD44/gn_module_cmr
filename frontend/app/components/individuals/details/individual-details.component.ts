@@ -24,6 +24,10 @@ export class IndividualDetailsComponent implements OnInit {
     public historicListProperties: Array<any>= [];
     public historicFieldsDef: any = {};
 
+    public graphs: Array<any> = [];
+
+    
+
     constructor(
         private _cmrService: CmrService,
         private route: ActivatedRoute,
@@ -45,8 +49,31 @@ export class IndividualDetailsComponent implements OnInit {
                 this._cmrService.getOneIndividual(params.id_individual).subscribe((data) => this.individual = data);
 
                 this.historicListProperties = this.module.forms.observation.individual_historic_display_list;
-                this.historicFieldsDef = this.module.forms.observation.fields;
-                this._cmrService.getAllObservationsByIndividual(params.id_individual).subscribe((data) => this.historic = data);
+                this.historicFieldsDef = Object.assign({},this.module.forms.observation.fields);
+                for (var grp of Object.keys(this.module.forms.observation.groups)) {
+                  this.historicFieldsDef = Object.assign(this.historicFieldsDef,this.module.forms.observation.groups[grp].fields);
+                }
+
+                this._cmrService.getAllObservationsByIndividual(params.id_individual).subscribe((data) => {
+                  this.historic = data;
+                  for (let item of this.module.forms.observation.individual_histogram_items) {
+                    let histoData = [];
+                    for (let obs of this.historic) {
+                      histoData.push({
+                        x: obs['visit_date'],
+                        y: obs[item.field]
+                      });
+                    }
+                      let graph = {
+                      label: this.historicFieldsDef[item.field].attribut_label,
+                      data: histoData,
+                      color: item.color
+                    }
+                    this.graphs.push(graph);
+                  }
+                  this.graphs = [...this.graphs];
+                  // Problem: only 1 line instead of N
+                });
             });
         });
     }
