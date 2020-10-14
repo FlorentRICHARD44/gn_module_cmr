@@ -55,7 +55,7 @@ export class CmrService {
     getAllSitegroupsByModule(id_module) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sitegroups`);
     }
-    
+
     getAllSitegroupsGeometriesByModule(id_module) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sitegroups/geometries`);
     }
@@ -76,13 +76,25 @@ export class CmrService {
     getAllSitesByModule(id_module) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sites`);
     }
+    
+    getAllSitesGeometriesByModule(id_module) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sites/geometries`);
+    }
 
     getAllSitesBySiteGroup(id_sitegroup) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/sitegroup/${id_sitegroup}/sites`);
     }
 
+    getAllSitesGeometriesBySiteGroup(id_sitegroup) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/sitegroup/${id_sitegroup}/sites/geometries`);
+    }
+
     getOneSite(id_site) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/site/${id_site}`);
+    }
+
+    getOneSiteGeometries(id_site) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/site/${id_site}/geometries`);
     }
 
     saveSite(data) {

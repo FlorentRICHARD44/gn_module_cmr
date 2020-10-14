@@ -132,6 +132,17 @@ class TSite(DB.Model):
         data['sitegroup'] = self.sitegroup.to_dict() if self.sitegroup else None
         return data_to_json(data)
 
+    def to_geojson(self, geom):
+        feature = {}
+        if geom is not None:
+            data = self.to_dict()
+            feature['type'] = 'Feature'
+            feature['geometry'] = json.loads(geom)
+            feature['object_type'] = 'site'
+            feature['id'] = data['id_site']
+            feature['properties'] = data
+        return feature
+
     @staticmethod
     def from_dict(data):
         data['geom'] = from_shape(asShape(data['geom']), srid=4326)

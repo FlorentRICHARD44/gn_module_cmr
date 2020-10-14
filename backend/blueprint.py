@@ -95,7 +95,10 @@ def get_one_sitegroup(id_sitegroup):
 @json_resp
 def get_one_sitegroup_geometries(id_sitegroup):
     sitegroup_repo = SiteGroupsRepository()
-    return sitegroup_repo.get_geometry(TSiteGroup.id_sitegroup == id_sitegroup)
+    features = sitegroup_repo.get_geometry(TSiteGroup.id_sitegroup == id_sitegroup)
+    site_repo = SitesRepository()
+    features.extend(site_repo.get_all_geometries_filter_by(TSite.id_sitegroup, id_sitegroup))
+    return features
 
 
 #############################
@@ -120,12 +123,26 @@ def get_all_sites_by_module(id_module):
     site_repo = SitesRepository()
     return site_repo.get_all_filter_by(TSite.id_module, id_module)
 
+# Get the list of geometries for sites by module
+@blueprint.route('/module/<int:id_module>/sites/geometries', methods=['GET'])
+@json_resp
+def get_all_sites_geometries_by_module(id_module):
+    site_repo = SitesRepository()
+    return site_repo.get_all_geometries_filter_by(TSite.id_module, id_module)
+
 # Get the list of sites by site group
 @blueprint.route('/sitegroup/<int:id_sitegroup>/sites', methods=['GET'])
 @json_resp
 def get_all_sites_by_sitegroup(id_sitegroup):
     site_repo = SitesRepository()
     return site_repo.get_all_filter_by(TSite.id_sitegroup, id_sitegroup)
+    
+# Get the list of sites geometries by site group
+@blueprint.route('/sitegroup/<int:id_sitegroup>/sites/geometries', methods=['GET'])
+@json_resp
+def get_all_sites_geometries_by_sitegroup(id_sitegroup):
+    site_repo = SitesRepository()
+    return site_repo.get_all_geometries_filter_by(TSite.id_sitegroup, id_sitegroup)
 
 # Get one site
 @blueprint.route('/site/<int:id_site>', methods=['GET'])
@@ -133,6 +150,13 @@ def get_all_sites_by_sitegroup(id_sitegroup):
 def get_one_site(id_site):
     site_repo = SitesRepository()
     return site_repo.get_one(TSite.id_site, id_site)
+
+# Get geometries for a site
+@blueprint.route('/site/<int:id_site>/geometries', methods=['GET'])
+@json_resp
+def get_one_site_geometries(id_site):
+    site_repo = SitesRepository()
+    return site_repo.get_geometry(TSite.id_site, id_site)
 
 
 #############################
