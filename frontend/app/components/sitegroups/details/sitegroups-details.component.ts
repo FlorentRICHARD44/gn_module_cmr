@@ -62,8 +62,12 @@ export class SiteGroupDetailsComponent implements OnInit {
                     this._cmrService.getAllSitesBySiteGroup(this.sitegroup.id_sitegroup).subscribe((data) => this.sites = data);
                     this._cmrService.getAllIndividualsBySiteGroup(this.sitegroup.id_sitegroup).subscribe((data) => this.individuals = data);
                 });
-                this._cmrService.getOneSiteGroupGeometries(params.id_sitegroup).subscribe((data) => {
+                this._cmrService.getOneSiteGroupGeometry(params.id_sitegroup).subscribe((data) => {
                   this.mapFeatures = {'features':data};
+                  this._cmrService.getAllSitesGeometriesBySiteGroup(params.id_sitegroup).subscribe((data) => {
+                    this.mapFeatures['features'] = this.mapFeatures['features'].concat(data);
+                    this.mapFeatures = {...this.mapFeatures};
+                  });
                 });
             });
         });

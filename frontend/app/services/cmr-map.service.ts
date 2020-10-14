@@ -12,6 +12,7 @@ export class CmrMapService {
 
     getLeafletDrawOptionReadOnly() {
         leafletDrawOption.draw.circle = false;
+        leafletDrawOption.draw.circlemarker = false;
         leafletDrawOption.draw.rectangle = false;
         leafletDrawOption.draw.marker = false;
         leafletDrawOption.draw.polyline = false;
@@ -28,6 +29,7 @@ export class CmrMapService {
     */
     getLeafletDrawOptionDrawAll(geometryTypes) {
         leafletDrawOption.draw.circle = false;
+        leafletDrawOption.draw.circlemarker = false;
         leafletDrawOption.draw.rectangle = false;
         leafletDrawOption.draw.marker = (!geometryTypes || geometryTypes.indexOf('Point') > -1);
         leafletDrawOption.draw.polyline = (!geometryTypes || geometryTypes.indexOf('LineString') > -1);
@@ -37,6 +39,7 @@ export class CmrMapService {
     }
     getLeafletDrawOptionDrawPolygon() {
         leafletDrawOption.draw.circle = false;
+        leafletDrawOption.draw.circlemarker = false;
         leafletDrawOption.draw.rectangle = false;
         leafletDrawOption.draw.marker = false;
         leafletDrawOption.draw.polyline = false;

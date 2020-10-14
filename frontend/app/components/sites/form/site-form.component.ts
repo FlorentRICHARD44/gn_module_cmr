@@ -21,6 +21,7 @@ export class SiteFormComponent implements OnInit {
     public siteForm: FormGroup;
     public siteFormDefinitions = [];
     public site: any = {};
+    public geometry;
 
     public bChainInput = false;
     public bEdit = false;
@@ -75,6 +76,10 @@ export class SiteFormComponent implements OnInit {
           this._cmrService.getOneSite(editId).subscribe((data) => {
             this.site = data;
             this.siteForm.patchValue(this._dataService.formatDataForBeforeEdition(data, this.module.forms.site.fields));
+            this._cmrService.getOneSiteGeometry(editId).subscribe((data) => {
+              this.siteForm.patchValue({'geom':data[0].geometry});
+                this.geometry = data[0].geometry;
+            });
           });
         }
     }

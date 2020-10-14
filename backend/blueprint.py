@@ -95,10 +95,7 @@ def get_one_sitegroup(id_sitegroup):
 @json_resp
 def get_one_sitegroup_geometries(id_sitegroup):
     sitegroup_repo = SiteGroupsRepository()
-    features = sitegroup_repo.get_geometry(TSiteGroup.id_sitegroup == id_sitegroup)
-    site_repo = SitesRepository()
-    features.extend(site_repo.get_all_geometries_filter_by(TSite.id_sitegroup, id_sitegroup))
-    return features
+    return sitegroup_repo.get_geometry(TSiteGroup.id_sitegroup == id_sitegroup)
 
 
 #############################
@@ -156,7 +153,7 @@ def get_one_site(id_site):
 @json_resp
 def get_one_site_geometries(id_site):
     site_repo = SitesRepository()
-    return site_repo.get_geometry(TSite.id_site, id_site)
+    return site_repo.get_geometry(TSite.id_site == id_site)
 
 
 #############################

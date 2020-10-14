@@ -21,6 +21,7 @@ export class SiteGroupFormComponent implements OnInit {
     public sitegroupForm: FormGroup;
     public sitegroupFormDefinitions = [];
     public sitegroup: any = {};
+    public geometry;
 
     public bChainInput = false;
     public bEdit = false;
@@ -64,6 +65,10 @@ export class SiteGroupFormComponent implements OnInit {
           this._cmrService.getOneSiteGroup(editId).subscribe((data) => {
             this.sitegroup = data;
             this.sitegroupForm.patchValue(this._dataService.formatDataForBeforeEdition(data, this.module.forms.sitegroup.fields));
+            this._cmrService.getOneSiteGroupGeometry(editId).subscribe((data) => {
+              this.sitegroupForm.patchValue({'geom':data[0].geometry});
+              this.geometry = data[0].geometry;
+            });
           });
         }
     }
