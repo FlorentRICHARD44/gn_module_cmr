@@ -21,9 +21,9 @@
               </span>
             </div>
             <form [formGroup]="siteForm">
-              <!--<p style="color:red" *ngIf="obj.config['geometry_type'] && !objForm.value.geometry">
-                Veuillez saisir une géométrie sur la carte
-              </p>-->
+              <div class="alert alert-danger" role="alert" *ngIf="!siteForm.value.geom">
+                <i class="fa fa-warning"></i>&nbsp;Veuillez saisir une géométrie sur la carte
+              </div>
               <pnx-dynamic-form-generator
                 class="obj-form"
                 #dynamicForm
