@@ -3,8 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MapService } from "@geonature_common/map/map.service";
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
-import { MatDialog, MatDialogConfig } from "@angular/material";
-import { IndividualFormObsComponent } from "./../../individuals/form-obs/individual-form-obs.component";
+import { MatDialog } from "@angular/material";
 import { Module } from '../../../class/module';
 
 /**
@@ -23,6 +22,7 @@ export class SiteGroupDetailsComponent implements OnInit {
     public properties: Array<any> = [];
     public fields: Array<any> = [];
     public medias: Array<any> = [];
+    public mapFeatures = {};
  
     public individuals: Array<any> = [];
     public individualListProperties: Array<any> = [];
@@ -61,8 +61,11 @@ export class SiteGroupDetailsComponent implements OnInit {
 
                     this._cmrService.getAllSitesBySiteGroup(this.sitegroup.id_sitegroup).subscribe((data) => this.sites = data);
                     this._cmrService.getAllIndividualsBySiteGroup(this.sitegroup.id_sitegroup).subscribe((data) => this.individuals = data);
-                })
-            })
+                });
+                this._cmrService.getOneSiteGroupGeometries(params.id_sitegroup).subscribe((data) => {
+                  this.mapFeatures = {'features':[data]};
+                });
+            });
         });
     }
      

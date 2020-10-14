@@ -53,6 +53,20 @@ class BaseRepository:
         DB.session.commit()
         return data.to_dict()
 
+class BaseGeomRepository(BaseRepository):
+    """
+    Second level of generic repository with geometries methods.
+    """
+    def get_geometry(self, filter):
+        feature = {}
+        q = DB.session.query(self.model, func.ST_AsGEOJSON(self.model.geom)).filter(filter)
+        (data,geom) = q.one()
+        return data.to_geojson(geom)
+
+    def get_all_geometries_filter_by(self, filter_column, value):
+        q = DB.session.query(self.model, func.ST_AsGEOJSON(self.model.geom)).filter(filter_column == value)
+        return [data.to_geojson(geom) for (data, geom) in q.all()]
+
 
 class ModulesRepository(BaseRepository):
     """
@@ -72,7 +86,7 @@ class ModulesRepository(BaseRepository):
         return module_to_update.to_dict()
 
 
-class SiteGroupsRepository(BaseRepository):
+class SiteGroupsRepository(BaseGeomRepository):
     """
     Repository for the CMR SiteGroup. Access to database.
     """

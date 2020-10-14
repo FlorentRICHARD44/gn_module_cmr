@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MapService } from "@geonature_common/map/map.service";
 import { CommonService } from "@geonature_common/service/common.service";
 import { CmrService } from './../../../services/cmr.service';
@@ -81,6 +81,10 @@ export class SiteFormComponent implements OnInit {
      
     ngAfterViewInit() {
         setTimeout(() => this.calcCardContentHeight(), 300);
+        this.siteForm.addControl(
+          "geom",
+          this._formBuilder.control("", Validators.required)
+        );
     }
     @HostListener("window:resize", ["$event"])
     onResize(event) {
@@ -108,7 +112,9 @@ export class SiteFormComponent implements OnInit {
     }
 
     setNewGeometry(geojson) {
-
+      this.siteForm.patchValue({
+        geom: geojson ? geojson.geometry : undefined
+      });
     }
 
     onSubmit(addVisit) {

@@ -30,6 +30,7 @@ export class ModuleHomeComponent implements OnInit {
     public sites: Array<any> = [];
     public siteListProperties: Array<any> = [];
     public siteFieldsDef: any = {};
+    public mapFeatures = {};
 
     constructor(
         private _cmrService: CmrService,
@@ -57,6 +58,10 @@ export class ModuleHomeComponent implements OnInit {
                 this.individualListProperties = this.module.forms.individual.display_list;
                 this.individualFieldsDef = this.module.forms.individual.fields;
                 this._cmrService.getAllIndividualsByModule(this.module.id_module).subscribe((data) => this.individuals = data);
+                
+                this._cmrService.getAllSitegroupsGeometriesByModule(this.module.id_module).subscribe((data) => {
+                  this.mapFeatures = {'features':data};
+                });
                 return of(true);
               })
             ).subscribe(() => {});

@@ -55,9 +55,17 @@ export class CmrService {
     getAllSitegroupsByModule(id_module) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sitegroups`);
     }
+    
+    getAllSitegroupsGeometriesByModule(id_module) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sitegroups/geometries`);
+    }
 
     getOneSiteGroup(id_sitegroup) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/sitegroup/${id_sitegroup}`);
+    }
+
+    getOneSiteGroupGeometries(id_sitegroup) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/sitegroup/${id_sitegroup}/geometries`);
     }
 
     saveSiteGroup(data) {

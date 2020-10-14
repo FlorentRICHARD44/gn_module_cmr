@@ -1,9 +1,12 @@
+import json
+from uuid import uuid4
 from geonature.core.gn_meta.models import TDatasets
 from geonature.utils.utilssqlalchemy import serializable
 from geonature.utils.env import DB
+from geoalchemy2.shape import from_shape
+from shapely.geometry import asShape
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.ext.hybrid import hybrid_property
-from uuid import uuid4
 from geoalchemy2 import Geometry
 from geonature.core.gn_commons.models import TModules
 from pypnusershub.db.models import User
@@ -131,6 +134,7 @@ class TSite(DB.Model):
 
     @staticmethod
     def from_dict(data):
+        data['geom'] = from_shape(asShape(data['geom']), srid=4326)
         data = json_to_data(data, TSite)
         return TSite(**data)
 
@@ -166,9 +170,21 @@ class TSiteGroup(DB.Model):
         data = self.as_dict()
         data['nb_sites'] = self.nb_sites
         return data_to_json(data)
-    
+
+    def to_geojson(self, geom):
+        feature = {}
+        if geom is not None:
+            data = self.to_dict()
+            feature['type'] = 'Feature'
+            feature['geometry'] = json.loads(geom)
+            feature['object_type'] = 'sitegroup'
+            feature['id'] = data['id_sitegroup']
+            feature['properties'] = data
+        return feature
+
     @staticmethod
     def from_dict(data):
+        data['geom'] = from_shape(asShape(data['geom']), srid=4326)
         data = json_to_data(data, TSiteGroup)
         return TSiteGroup(**data)
 

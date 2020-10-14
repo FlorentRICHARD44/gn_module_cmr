@@ -6,8 +6,7 @@
                     [geojson]="geometry" 
                     [options]="leafletDrawOptions" 
                     [zoomLevel]="14"
-                    (layerDrawed)="setNewGeometry($event)"
-                    (layerDeleted)="setNewGeometry(undefined)">
+                    (layerDrawed)="setNewGeometry($event)">
                 </pnx-leaflet-draw>
             </pnx-map>
         </div>
