@@ -6,6 +6,7 @@ import { DataService } from './../../../services/data.service';
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { IndividualFormObsComponent } from "./../../individuals/form-obs/individual-form-obs.component";
 import { Module } from '../../../class/module';
+import { BaseMapViewComponent } from '../../BaseMapViewComponent';
 
 /**
  * This component is the home page of a CMR Visit.
@@ -15,10 +16,9 @@ import { Module } from '../../../class/module';
     templateUrl: './visit-details.component.html',
     styleUrls: ['./../../../../style.scss', './visit-details.component.scss']
 })
-export class VisitDetailsComponent implements OnInit {
+export class VisitDetailsComponent extends BaseMapViewComponent implements OnInit {
     public path: Array<any> = [];
     public module: Module = new Module();
-    public cardContentHeight: any;
     public visit: any = {};
     public properties: Array<any> = [];
     public fields: Array<any> = [];
@@ -30,10 +30,12 @@ export class VisitDetailsComponent implements OnInit {
         private _cmrService: CmrService,
         private _router: Router,
         private _route: ActivatedRoute,
-        private _mapService: MapService,
+        protected _mapService: MapService,
         public dialog: MatDialog,
         private _dataService: DataService // used in template
-    ) {}
+    ) {
+      super(_mapService);
+    }
 
     ngOnInit() {
         this._route.params.subscribe(params => {
@@ -75,34 +77,6 @@ export class VisitDetailsComponent implements OnInit {
                 });
             })
         });
-    }
-     
-    ngAfterViewInit() {
-        setTimeout(() => this.calcCardContentHeight(), 300);
-    }
-    @HostListener("window:resize", ["$event"])
-    onResize(event) {
-      this.calcCardContentHeight();
-    }
-    calcCardContentHeightParent(minusHeight?) {
-      const windowHeight = window.innerHeight;
-      const tbH = document.getElementById("app-toolbar")
-        ? document.getElementById("app-toolbar").offsetHeight
-        : 0;
-      const height = windowHeight - tbH - (minusHeight || 0);
-      return height;
-    }
-    calcCardContentHeight() {
-      let minusHeight = 10;
-  
-      this.cardContentHeight = this.calcCardContentHeightParent(minusHeight + 20)
-  
-      // resize map after resize container
-      if (this._mapService.map) {
-        setTimeout(() => {
-          this._mapService.map.invalidateSize();
-        }, 10);
-      }
     }
     onClickAddObservation() {
       const dialogConfig = new MatDialogConfig();

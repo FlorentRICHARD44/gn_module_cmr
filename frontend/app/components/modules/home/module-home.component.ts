@@ -6,6 +6,7 @@ import { DatatableComponent } from '@librairies/@swimlane/ngx-datatable';
 import { Layer } from '@librairies/leaflet';
 import { MapService } from "@geonature_common/map/map.service";
 import { MapListService } from '@geonature_common/map-list/map-list.service';
+import { BaseMapViewComponent } from './../../BaseMapViewComponent';
 import { CmrService } from './../../../services/cmr.service';
 import { CmrMapService } from './../../../services/cmr-map.service';
 import { DataService } from './../../../services/data.service';
@@ -20,11 +21,10 @@ import { Module } from '../../../class/module';
     templateUrl: './module-home.component.html',
     styleUrls: ['./../../../../style.scss', './module-home.component.scss']
 })
-export class ModuleHomeComponent implements OnInit {
+export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit {
     public module: Module = new Module();
     public properties: Array<any> = [];
     public fields: any = {};
-    public cardContentHeight: any;
     public individuals: Array<any> = [];
     public individualListProperties: Array<any> = [];
     public individualFieldsDef: any = {};
@@ -45,11 +45,13 @@ export class ModuleHomeComponent implements OnInit {
         private _cmrMapService: CmrMapService,
         private route: ActivatedRoute,
         private _router: Router,
-        private _mapService: MapService,
+        protected _mapService: MapService,
         private _mapListService: MapListService,
         public dialog: MatDialog,
         private _dataService: DataService
-    ) {}
+    ) {
+      super(_mapService);
+    }
 
     ngOnInit() {
       this.styles = this._cmrMapService.getMapFeaturesStyles();
@@ -79,34 +81,7 @@ export class ModuleHomeComponent implements OnInit {
             ).subscribe(() => {});
         });
     }
-     
-    ngAfterViewInit() {
-        setTimeout(() => this.calcCardContentHeight(), 300);
-    }
-    @HostListener("window:resize", ["$event"])
-    onResize(event) {
-      this.calcCardContentHeight();
-    }
-    calcCardContentHeightParent(minusHeight?) {
-      const windowHeight = window.innerHeight;
-      const tbH = document.getElementById("app-toolbar")
-        ? document.getElementById("app-toolbar").offsetHeight
-        : 0;
-      const height = windowHeight - tbH - (minusHeight || 0);
-      return height;
-    }
-    calcCardContentHeight() {
-      let minusHeight = 10;
-  
-      this.cardContentHeight = this.calcCardContentHeightParent(minusHeight + 20)
-  
-      // resize map after resize container
-      if (this._mapService.map) {
-        setTimeout(() => {
-          this._mapService.map.invalidateSize();
-        }, 10);
-      }
-    }
+
     /**
      * Find a feature layer by its id.
      * @param id 

@@ -5,13 +5,14 @@ import { MapService } from "@geonature_common/map/map.service";
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { Module } from '../../../class/module';
+import { BaseMapViewComponent } from '../../BaseMapViewComponent';
 
 @Component({
     selector : 'pnx-cmr-observation-details',
     templateUrl: './observation-details.component.html',
     styleUrls: ['./../../../../style.scss', './observation-details.component.scss']
 })
-export class ObservationDetailsComponent implements OnInit {
+export class ObservationDetailsComponent extends BaseMapViewComponent implements OnInit {
     public path = [];
     public module: Module = new Module();
     public observation: any = {};
@@ -22,7 +23,6 @@ export class ObservationDetailsComponent implements OnInit {
     public individual: any = {};
     public individualProperties: Array<any> = [];
     public individualFields: any = {};
-    public cardContentHeight: any;
     public observationForm: FormGroup;
     public observationFormDefinitions = [];
 
@@ -33,8 +33,9 @@ export class ObservationDetailsComponent implements OnInit {
         private _dataService: DataService,
         private _router: Router,
         private _route: ActivatedRoute,
-        private _mapService: MapService
+        protected _mapService: MapService
     ) {
+      super(_mapService);
     }
 
     ngOnInit() {
@@ -97,33 +98,5 @@ export class ObservationDetailsComponent implements OnInit {
                 });
             });
         });
-    }
-     
-    ngAfterViewInit() {
-        setTimeout(() => this.calcCardContentHeight(), 300);
-    }
-    @HostListener("window:resize", ["$event"])
-    onResize(event) {
-      this.calcCardContentHeight();
-    }
-    calcCardContentHeightParent(minusHeight?) {
-      const windowHeight = window.innerHeight;
-      const tbH = document.getElementById("app-toolbar")
-        ? document.getElementById("app-toolbar").offsetHeight
-        : 0;
-      const height = windowHeight - tbH - (minusHeight || 0);
-      return height;
-    }
-    calcCardContentHeight() {
-      let minusHeight = 10;
-  
-      this.cardContentHeight = this.calcCardContentHeightParent(minusHeight + 20)
-  
-      // resize map after resize container
-      if (this._mapService.map) {
-        setTimeout(() => {
-          this._mapService.map.invalidateSize();
-        }, 10);
-      }
     }
 }

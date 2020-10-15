@@ -5,13 +5,14 @@ import { MapService } from "@geonature_common/map/map.service";
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { Module } from '../../../class/module';
+import { BaseMapViewComponent } from '../../BaseMapViewComponent';
 
 @Component({
     selector : 'pnx-cmr-observation-form',
     templateUrl: './observation-form.component.html',
     styleUrls: ['./../../../../style.scss', './observation-form.component.scss']
 })
-export class ObservationFormComponent implements OnInit {
+export class ObservationFormComponent extends BaseMapViewComponent implements OnInit {
     public path = [];
     public module: Module = new Module();
     public observation: any = {};
@@ -20,7 +21,6 @@ export class ObservationFormComponent implements OnInit {
     public individual: any = {};
     public individualProperties: Array<any> = [];
     public individualFields: any = {};
-    public cardContentHeight: any;
     public allForm: FormGroup;
     public observationForm: FormGroup;
     public observationFormDefinitions = [];
@@ -37,9 +37,10 @@ export class ObservationFormComponent implements OnInit {
         private _dataService: DataService,
         private _router: Router,
         private _route: ActivatedRoute,
-        private _mapService: MapService,
+        protected _mapService: MapService,
         private _formBuilder: FormBuilder
     ) {
+      super(_mapService);
     }
 
     ngOnInit() {
@@ -126,6 +127,7 @@ export class ObservationFormComponent implements OnInit {
     }
 
     ngAfterViewInit() {
+      super.ngAfterViewInit();
       for (let grp of this.formGroups) {
         if (grp['yesno_field']) {
           let yesno_field = grp['form'].get(grp['yesno_field']);
@@ -135,7 +137,6 @@ export class ObservationFormComponent implements OnInit {
           }
         }
       }
-      setTimeout(() => this.calcCardContentHeight(), 300);
     }
 
     /* Manage Yes/No updates in the form groups.
@@ -158,31 +159,6 @@ export class ObservationFormComponent implements OnInit {
         }
       }
     };
-    
-    @HostListener("window:resize", ["$event"])
-    onResize(event) {
-      this.calcCardContentHeight();
-    }
-    calcCardContentHeightParent(minusHeight?) {
-      const windowHeight = window.innerHeight;
-      const tbH = document.getElementById("app-toolbar")
-        ? document.getElementById("app-toolbar").offsetHeight
-        : 0;
-      const height = windowHeight - tbH - (minusHeight || 0);
-      return height;
-    }
-    calcCardContentHeight() {
-      let minusHeight = 10;
-  
-      this.cardContentHeight = this.calcCardContentHeightParent(minusHeight + 20)
-  
-      // resize map after resize container
-      if (this._mapService.map) {
-        setTimeout(() => {
-          this._mapService.map.invalidateSize();
-        }, 10);
-      }
-    }
 
     onSubmit() {
         var data = this.observationForm.value;

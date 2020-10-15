@@ -7,16 +7,16 @@ import { CmrService } from './../../../services/cmr.service';
 import { CmrMapService } from './../../../services/cmr-map.service';
 import { DataService } from '../../../services/data.service';
 import { Module } from '../../../class/module';
+import { BaseMapViewComponent } from '../../BaseMapViewComponent';
 
 @Component({
     selector : 'pnx-cmr-site-form',
     templateUrl: './site-form.component.html',
     styleUrls: ['./../../../../style.scss']
 })
-export class SiteFormComponent implements OnInit {
+export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
     public path = [];
     public module: Module = new Module();
-    public cardContentHeight: any;
     public leafletDrawOptions: any = {};
     public siteForm: FormGroup;
     public siteFormDefinitions = [];
@@ -30,13 +30,13 @@ export class SiteFormComponent implements OnInit {
         private _cmrService: CmrService,
         private _router: Router,
         private _route: ActivatedRoute,
-        private _mapService: MapService,
+        protected _mapService: MapService,
         private _cmrMapService: CmrMapService,
         private _formBuilder: FormBuilder,
         private _commonService: CommonService,
         private _dataService: DataService
     ) {
-        
+        super(_mapService);
     }
 
     ngOnInit() {
@@ -85,35 +85,11 @@ export class SiteFormComponent implements OnInit {
     }
      
     ngAfterViewInit() {
-        setTimeout(() => this.calcCardContentHeight(), 300);
+        super.ngAfterViewInit();
         this.siteForm.addControl(
           "geom",
           this._formBuilder.control("", Validators.required)
         );
-    }
-    @HostListener("window:resize", ["$event"])
-    onResize(event) {
-      this.calcCardContentHeight();
-    }
-    calcCardContentHeightParent(minusHeight?) {
-      const windowHeight = window.innerHeight;
-      const tbH = document.getElementById("app-toolbar")
-        ? document.getElementById("app-toolbar").offsetHeight
-        : 0;
-      const height = windowHeight - tbH - (minusHeight || 0);
-      return height;
-    }
-    calcCardContentHeight() {
-      let minusHeight = 10;
-  
-      this.cardContentHeight = this.calcCardContentHeightParent(minusHeight + 20)
-  
-      // resize map after resize container
-      if (this._mapService.map) {
-        setTimeout(() => {
-          this._mapService.map.invalidateSize();
-        }, 10);
-      }
     }
 
     setNewGeometry(geojson) {
