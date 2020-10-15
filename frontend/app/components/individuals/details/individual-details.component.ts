@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MapService } from "@geonature_common/map/map.service";
 import { Module } from '../../../class/module';
+import { BaseMapViewComponent } from '../../BaseMapViewComponent';
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 
@@ -13,10 +14,9 @@ import { DataService } from './../../../services/data.service';
     templateUrl: './individual-details.component.html',
     styleUrls: ['./../../../../style.scss', './individual-details.component.scss']
 })
-export class IndividualDetailsComponent implements OnInit {
+export class IndividualDetailsComponent extends BaseMapViewComponent implements OnInit {
     public path: Array<any> = [];
     public module: Module = new Module();
-    public cardContentHeight: any;
     public individual: any = {};
     public properties: Array<any> = [];
     public fields: Array<any> = [];
@@ -31,9 +31,11 @@ export class IndividualDetailsComponent implements OnInit {
     constructor(
         private _cmrService: CmrService,
         private route: ActivatedRoute,
-        private _mapService: MapService,
+        protected _mapService: MapService,
         private _dataService: DataService // used in template
-    ) {}
+    ) {
+      super(_mapService);
+    }
 
     ngOnInit() {
         this.route.params.subscribe(params => {
@@ -76,33 +78,5 @@ export class IndividualDetailsComponent implements OnInit {
                 });
             });
         });
-    }
-     
-    ngAfterViewInit() {
-        setTimeout(() => this.calcCardContentHeight(), 300);
-    }
-    @HostListener("window:resize", ["$event"])
-    onResize(event) {
-      this.calcCardContentHeight();
-    }
-    calcCardContentHeightParent(minusHeight?) {
-      const windowHeight = window.innerHeight;
-      const tbH = document.getElementById("app-toolbar")
-        ? document.getElementById("app-toolbar").offsetHeight
-        : 0;
-      const height = windowHeight - tbH - (minusHeight || 0);
-      return height;
-    }
-    calcCardContentHeight() {
-      let minusHeight = 10;
-  
-      this.cardContentHeight = this.calcCardContentHeightParent(minusHeight + 20)
-  
-      // resize map after resize container
-      if (this._mapService.map) {
-        setTimeout(() => {
-          this._mapService.map.invalidateSize();
-        }, 10);
-      }
     }
 }

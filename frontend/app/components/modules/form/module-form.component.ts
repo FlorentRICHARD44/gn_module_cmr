@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MapService } from "@geonature_common/map/map.service";
 import { Module } from '../../../class/module';
+import { BaseMapViewComponent } from '../../BaseMapViewComponent';
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 
@@ -14,22 +15,23 @@ import { DataService } from './../../../services/data.service';
     templateUrl: './module-form.component.html',
     styleUrls: ['./../../../../style.scss']
 })
-export class ModuleFormComponent implements OnInit {
+export class ModuleFormComponent extends BaseMapViewComponent implements OnInit {
     public module: Module = new Module();
     public fields: any = {};
     public moduleForm: FormGroup;
     public moduleFormDefinitions: Array<any> = [];
-    public cardContentHeight: any;
     public bEdit = false;
 
     constructor(
         private _cmrService: CmrService,
         private _route: ActivatedRoute,
         private _router: Router,
-        private _mapService: MapService,
+        protected _mapService: MapService,
         private _dataService: DataService,
         private _formBuilder: FormBuilder
-    ) {}
+    ) {
+      super(_mapService);
+    }
 
     ngOnInit() {
         this.moduleForm =  this._formBuilder.group({});
@@ -52,33 +54,9 @@ export class ModuleFormComponent implements OnInit {
     }
      
     ngAfterViewInit() {
+      super.ngAfterViewInit();
         var formattedValues = this._dataService.formatDataForBeforeEdition(this.module, this.module.forms.module.fields);
         this.moduleForm.patchValue(formattedValues);
-        setTimeout(() => this.calcCardContentHeight(), 300);
-    }
-    @HostListener("window:resize", ["$event"])
-    onResize(event) {
-      this.calcCardContentHeight();
-    }
-    calcCardContentHeightParent(minusHeight?) {
-      const windowHeight = window.innerHeight;
-      const tbH = document.getElementById("app-toolbar")
-        ? document.getElementById("app-toolbar").offsetHeight
-        : 0;
-      const height = windowHeight - tbH - (minusHeight || 0);
-      return height;
-    }
-    calcCardContentHeight() {
-      let minusHeight = 10;
-  
-      this.cardContentHeight = this.calcCardContentHeightParent(minusHeight + 20)
-  
-      // resize map after resize container
-      if (this._mapService.map) {
-        setTimeout(() => {
-          this._mapService.map.invalidateSize();
-        }, 10);
-      }
     }
 
     onSubmit() {
