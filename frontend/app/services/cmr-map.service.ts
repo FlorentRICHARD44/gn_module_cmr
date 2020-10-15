@@ -47,4 +47,25 @@ export class CmrMapService {
         leafletDrawOption.edit.remove = false;
         return leafletDrawOption;
     }
+
+    /**
+     * Get the definition of styles for the map features.
+     * Common style for the whole module.
+     */
+    getMapFeaturesStyles() {
+        return {
+            default: {
+              opacity: 0.7,
+              fillOpacity: 0.5,
+              color: 'blue',
+              zIndex: 600
+            },
+            selected: {
+              opacity: 0.7,
+              fillOpacity: 0.5,
+              color: 'red',
+              zIndex: 660
+            }
+        };
+    }
 }

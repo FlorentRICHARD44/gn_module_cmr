@@ -41,3 +41,8 @@
 :host ::ng-deep pnx-observers .input-group {
     height: 31px;
 }
+
+/** tables **/
+:host /deep/ .datatable-body-row.active .datatable-row-group {
+    background-color: rgb(117, 227, 118) !important;
+}
