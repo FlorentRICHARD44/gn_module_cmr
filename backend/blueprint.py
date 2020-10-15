@@ -265,6 +265,13 @@ def get_all_observations_of_an_individual(id_individual):
     obs_repo = ObservationsRepository()
     return obs_repo.get_all_filter_by(TObservation.id_individual, id_individual)
 
+# Get all observations geometries of one individual
+@blueprint.route('/individual/<int:id_individual>/observations/geometries')
+@json_resp
+def get_all_observations_geometries_of_an_individual(id_individual):
+    obs_repo = ObservationsRepository()
+    return obs_repo.get_all_geometries_filter_by(TObservation.id_individual, id_individual)
+
 # Save an observation
 @blueprint.route('/observation', methods=['PUT'])
 @json_resp

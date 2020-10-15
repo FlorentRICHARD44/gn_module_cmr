@@ -168,6 +168,11 @@ class ObservationsRepository(BaseRepository):
     def __init__(self):
         super().__init__(TObservation)
 
+    def get_all_geometries_filter_by(self, filter_column, value):
+        q = DB.session.query(self.model, func.ST_AsGEOJSON(TSite.geom)).join(
+            TVisit, (TVisit.id_visit == self.model.id_visit)).join(
+            TSite, (TSite.id_site == TVisit.id_site)).filter(filter_column == value)
+        return [data.to_geojson(geom) for (data, geom) in q.all()]
 
 class ConfigRepository:
     """

@@ -83,14 +83,8 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
      */
     initFeatures() {
       for (let ft of this.mapFeatures['features']) {
-        var url_base = [location.href];
-        if (ft['object_type'] == 'sitegroup') {
-          url_base.push('sitegroup', ft['id']);
-        } else if (ft['object_type'] == 'site') {
-          url_base.push('site', ft['id']);
-        }
         var lyr = this.findFeatureLayer(ft.id, ft['object_type']);
-        this.setPopup(lyr, url_base);
+        this.setPopup(lyr, this.route, ft);
         lyr.setStyle(this.getMapStyle());
         let onLyrClickFct = this.onSitegroupLayerClick(ft);
         lyr.off('click', onLyrClickFct);
@@ -98,29 +92,12 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
       }
     }
     /**
-     * Build a popup to the feature.
-     * @param layer 
-     * @param url_base 
-     */
-    setPopup(layer, url_base) {  
-      if (layer._popup) {
-        return;
-      }
-      const url = url_base.join('/');
-      const sPopup = `
-      <div>
-        <h5>  <a href=${url}>${layer['feature'].properties.name}</a></h5>
-      </div>
-      `;
-      layer.bindPopup(sPopup).closePopup();
-    }
-    /**
      * Called when click on a feature on the map.
      * @param sitegroup 
      */
     onSitegroupLayerClick(sitegroup) {
       return (event) => {
-        this.updateFeaturesStyle([sitegroup.id]);
+        this.updateFeaturesStyle(this.mapFeatures, [sitegroup.id]);
         this.setSelected(sitegroup.id);
       }
     }
@@ -133,7 +110,7 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
       if (!(event && event.type === 'click')) {
         return;
       }
-      this.updateFeaturesStyle([event.row.id_sitegroup]);
+      this.updateFeaturesStyle(this.mapFeatures, [event.row.id_sitegroup]);
       for (let ft of this.mapFeatures['features']) {
         let lyr = this.findFeatureLayer(ft.id, ft.object_type);
         if (ft.id === event.row.id_sitegroup) {
@@ -143,20 +120,6 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
         }
       }
       this._mapListService.zoomOnSelectedLayer(this._mapService.map, this.findFeatureLayer(event.row.id_sitegroup, 'sitegroup'));
-    }
-    /**
-     * Update the style of features on map according new status.
-     * @param selected 
-     */
-    updateFeaturesStyle(selected) {
-      for (let ft of this.mapFeatures['features']) {
-        var lyr = this.findFeatureLayer(ft.id, ft.object_type);
-        if (selected.indexOf(ft.id) > -1) {
-          lyr.setStyle(this.getMapStyle('selected'));
-        } else {
-          lyr.setStyle(this.getMapStyle());
-        }
-      }
     }
 
     /**

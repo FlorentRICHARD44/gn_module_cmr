@@ -36,9 +36,27 @@ class TObservation(DB.Model):
             data['visit_id'] = self.visit.id_visit
             data['visit_date'] = self.visit.to_dict()['date']
             data['site_id'] = self.visit.id_site
-            data["site_name"] = self.visit.site.name if self.visit.site else None
+            if self.visit.site is not None:
+                data["site_name"] = self.visit.site.name
+                data["sitegroup_id"] = self.visit.site.id_sitegroup
+                if self.visit.site.sitegroup is not None:
+                    data["sitegroup_name"] = self.visit.site.sitegroup.name
         data["individual_identifier"] = self.individual.to_dict()['identifier'] if self.individual else None
         return data_to_json(data)
+
+    def to_geojson(self, geom):
+        """
+        Observation has no geom, but used to get all captures of an individual.
+        """
+        feature = {}
+        if geom is not None:
+            data = self.to_dict()
+            feature['type'] = 'Feature'
+            feature['geometry'] = json.loads(geom)
+            feature['object_type'] = 'observation'
+            feature['id'] = data['id_observation']
+            feature['properties'] = data
+        return feature
 
     @staticmethod
     def from_dict(data):

@@ -2,6 +2,7 @@ import { HostListener, Injector } from '@angular/core';
 import { Layer } from '@librairies/leaflet';
 import { MapService } from "@geonature_common/map/map.service";
 import { CmrInjector } from '../services/injector.service';
+import { ModuleConfig } from '../module.config';
 
 /**
  * This abstract base view is to be used by each view component using a map.
@@ -74,7 +75,62 @@ export class BaseMapViewComponent {
         return layerKey && layers[layerKey];
     }
 
+    /**
+     * Return the list style asked by style_name or default.
+     * @param style_name 
+     */
     getMapStyle(style_name = "default") {
         return this.styles[style_name] || this.styles['default'];
+    }
+    
+    /**
+     * Update the style of features on map according new status.
+     * @param selected 
+     */
+    updateFeaturesStyle(mapFeatures, selected) {
+        for (let ft of mapFeatures['features']) {
+          var lyr = this.findFeatureLayer(ft.id, ft.object_type);
+          if (selected.indexOf(ft.id) > -1) {
+            lyr.setStyle(this.getMapStyle('selected'));
+          } else {
+            lyr.setStyle(this.getMapStyle());
+          }
+        }
+    }
+      
+    /**
+     * Build a popup to the feature.
+     * @param layer 
+     * @param url_base 
+     */
+    setPopup(layer, route, feature) {
+        var url_base = ['#', ModuleConfig.MODULE_URL,'module',route.snapshot.params.module];
+        var name_prop = "";
+        if (feature.object_type == "sitegroup") {
+            name_prop = "name";
+            url_base = url_base.concat(['sitegroup', feature.id]);
+        } else if (feature.object_type == "site") {
+            name_prop = "name";
+            if (feature.properties.id_sitegroup) {
+                url_base = url_base.concat(['sitegroup', feature.properties.id_sitegroup]);
+            }
+            url_base = url_base.concat(['site', feature.id]);
+        } else if (feature.object_type == "observation") {
+            name_prop = "site_name";
+            if (feature.properties.sitegroup_id) {
+                url_base = url_base.concat(['sitegroup', feature.properties.sitegroup_id]);
+            }
+            url_base = url_base.concat(['site', feature.properties.site_id]);
+        }
+        if (layer._popup) {
+          return;
+        }
+        const url = url_base.join('/');
+        const sPopup = `
+        <div>
+          <h5>  <a href=${url}>${layer['feature'].properties[name_prop]}</a></h5>
+        </div>
+        `;
+        layer.bindPopup(sPopup).closePopup();
     }
 }
