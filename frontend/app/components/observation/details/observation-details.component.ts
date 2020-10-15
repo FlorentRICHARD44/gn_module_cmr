@@ -1,7 +1,6 @@
-import { Component, HostListener, OnInit} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { MapService } from "@geonature_common/map/map.service";
+import { FormGroup } from '@angular/forms';
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { Module } from '../../../class/module';
@@ -32,10 +31,8 @@ export class ObservationDetailsComponent extends BaseMapViewComponent implements
         private _cmrService: CmrService,
         private _dataService: DataService,
         private _router: Router,
-        private _route: ActivatedRoute,
-        protected _mapService: MapService
-    ) {
-      super(_mapService);
+        private _route: ActivatedRoute) {
+      super();
     }
 
     ngOnInit() {

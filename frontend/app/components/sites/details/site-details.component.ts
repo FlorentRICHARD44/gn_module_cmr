@@ -1,8 +1,5 @@
-import { Component, HostListener, OnInit} from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Observable, of, forkJoin } from '@librairies/rxjs';
-import { mergeMap, concatMap } from '@librairies/rxjs/operators';
-import { MapService } from "@geonature_common/map/map.service";
+import { Component, OnInit} from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { Module } from '../../../class/module';
@@ -33,10 +30,9 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
     constructor(
         private _cmrService: CmrService,
         private route: ActivatedRoute,
-        protected _mapService: MapService,
         private _dataService: DataService // used in template
     ) {
-      super(_mapService);
+      super();
     }
 
     ngOnInit() {

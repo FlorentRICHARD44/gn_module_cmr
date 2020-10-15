@@ -1,6 +1,5 @@
-import { Component, HostListener, OnInit} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MapService } from "@geonature_common/map/map.service";
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { MatDialog } from "@angular/material";
@@ -33,13 +32,11 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
 
     constructor(
         private _cmrService: CmrService,
-        private _router: Router,
         private _route: ActivatedRoute,
-        protected _mapService: MapService,
         public dialog: MatDialog,
         private _dataService: DataService // used in template
     ) {
-      super(_mapService);
+      super();
     }
 
     ngOnInit() {

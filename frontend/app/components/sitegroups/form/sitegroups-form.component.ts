@@ -1,7 +1,6 @@
-import { Component, HostListener, OnInit} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MapService } from "@geonature_common/map/map.service";
 import { CommonService } from "@geonature_common/service/common.service";
 import { CmrService } from '../../../services/cmr.service';
 import { CmrMapService } from '../../../services/cmr-map.service';
@@ -21,7 +20,7 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
     public sitegroupForm: FormGroup;
     public sitegroupFormDefinitions = [];
     public sitegroup: any = {};
-    public geometry;
+    public mapFeature;
 
     public bChainInput = false;
     public bEdit = false;
@@ -30,13 +29,12 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
         private _cmrService: CmrService,
         private _router: Router,
         private _route: ActivatedRoute,
-        protected _mapService: MapService,
         private _cmrMapService: CmrMapService,
         private _formBuilder: FormBuilder,
         private _commonService: CommonService,
         private _dataService: DataService
     ) {
-        super(_mapService);
+        super();
     }
 
     ngOnInit() {
@@ -67,7 +65,7 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
             this.sitegroupForm.patchValue(this._dataService.formatDataForBeforeEdition(data, this.module.forms.sitegroup.fields));
             this._cmrService.getOneSiteGroupGeometry(editId).subscribe((data) => {
               this.sitegroupForm.patchValue({'geom':data[0].geometry});
-              this.geometry = data[0].geometry;
+              this.mapFeature = data[0];
             });
           });
         }

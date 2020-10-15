@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { NgModule, Injector } from "@angular/core";
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from "@angular/router";
 import { MatSlideToggleModule } from "@angular/material";
@@ -22,6 +22,7 @@ import { ObservationFormComponent } from "./components/observation/form/observat
 import { ObservationDetailsComponent } from "./components/observation/details/observation-details.component";
 import { BreadcrumbComponent } from './components/common/breadcrumb/breadcrumb.component';
 import { GraphComponent } from './components/common/graph/graph.component';
+import { CmrInjector } from "./services/injector.service";
 
 // my module routing
 const routes: Routes = [
@@ -68,4 +69,8 @@ const routes: Routes = [
   providers: [],
   bootstrap: []
 })
-export class GeonatureModule {}
+export class GeonatureModule {
+  constructor(injector: Injector) {
+    CmrInjector.injector = injector;
+  }
+}

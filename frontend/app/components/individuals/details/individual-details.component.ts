@@ -1,6 +1,5 @@
-import { Component, HostListener, OnInit} from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MapService } from "@geonature_common/map/map.service";
+import { Component, OnInit} from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Module } from '../../../class/module';
 import { BaseMapViewComponent } from '../../BaseMapViewComponent';
 import { CmrService } from './../../../services/cmr.service';
@@ -31,10 +30,9 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
     constructor(
         private _cmrService: CmrService,
         private route: ActivatedRoute,
-        protected _mapService: MapService,
         private _dataService: DataService // used in template
     ) {
-      super(_mapService);
+      super();
     }
 
     ngOnInit() {

@@ -1,7 +1,6 @@
-import { Component, HostListener, OnInit} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { MapService } from "@geonature_common/map/map.service";
 import { CommonService } from "@geonature_common/service/common.service";
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
@@ -32,12 +31,11 @@ export class VisitFormComponent extends BaseMapViewComponent implements OnInit {
         private _dataService: DataService,
         private _router: Router,
         private _route: ActivatedRoute,
-        protected _mapService: MapService,
         private _formBuilder: FormBuilder,
         public dialog: MatDialog,
         private _commonService: CommonService
     ) {
-        super(_mapService);
+        super();
     }
 
     ngOnInit() {

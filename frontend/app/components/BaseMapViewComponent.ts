@@ -1,17 +1,34 @@
-import { HostListener } from '@angular/core';
+import { HostListener, Injector } from '@angular/core';
+import { Layer } from '@librairies/leaflet';
 import { MapService } from "@geonature_common/map/map.service";
+import { CmrInjector } from '../services/injector.service';
 
 /**
  * This abstract base view is to be used by each view component using a map.
  * It contains generic methods to initialize map (size, resize, ...).
  */
 export class BaseMapViewComponent {
-    
+    protected _mapService: MapService;
     public cardContentHeight: any;
+    public styles = {
+        default: {
+          opacity: 0.7,
+          fillOpacity: 0.5,
+          color: 'blue',
+          zIndex: 600
+        },
+        selected: {
+          opacity: 0.7,
+          fillOpacity: 0.5,
+          color: 'red',
+          zIndex: 660
+        }
+    };
 
     constructor(
-        protected _mapService: MapService
-    ) {}
+    ) {
+        this._mapService = CmrInjector.injector.get(MapService);
+    }
     
     ngAfterViewInit() {
         setTimeout(() => this.calcCardContentHeight(), 300);
@@ -42,5 +59,22 @@ export class BaseMapViewComponent {
           this._mapService.map.invalidateSize();
         }, 10);
       }
+    }
+
+    /**
+     * Find a feature layer by its id.
+     * @param id 
+     */
+    findFeatureLayer(id, object_type): Layer {
+        const layers = this._mapService.map['_layers'];
+        const layerKey = Object.keys(layers).find(key => {
+          const feature = layers[key] && layers[key].feature;
+          return feature && (feature['id'] === id || feature.properties['id'] === id) && (feature['object_type'] == object_type);
+        });
+        return layerKey && layers[layerKey];
+    }
+
+    getMapStyle(style_name = "default") {
+        return this.styles[style_name] || this.styles['default'];
     }
 }

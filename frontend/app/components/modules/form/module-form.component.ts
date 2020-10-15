@@ -1,7 +1,6 @@
-import { Component, HostListener, OnInit} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MapService } from "@geonature_common/map/map.service";
 import { Module } from '../../../class/module';
 import { BaseMapViewComponent } from '../../BaseMapViewComponent';
 import { CmrService } from './../../../services/cmr.service';
@@ -26,11 +25,10 @@ export class ModuleFormComponent extends BaseMapViewComponent implements OnInit 
         private _cmrService: CmrService,
         private _route: ActivatedRoute,
         private _router: Router,
-        protected _mapService: MapService,
         private _dataService: DataService,
         private _formBuilder: FormBuilder
     ) {
-      super(_mapService);
+      super();
     }
 
     ngOnInit() {
