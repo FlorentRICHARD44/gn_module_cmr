@@ -5,6 +5,7 @@ import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { Module } from '../../../class/module';
 import { BaseMapViewComponent } from '../../BaseMapViewComponent';
+import { BreadcrumbComponent } from '../../common/breadcrumb/breadcrumb.component';
 
 @Component({
     selector : 'pnx-cmr-observation-form',
@@ -70,38 +71,8 @@ export class ObservationFormComponent extends BaseMapViewComponent implements On
             }
             this._cmrService.getOneVisit(this._route.snapshot.paramMap.get('id_visit')).subscribe((data) => {
                 this.visit = data;
-                this.site = {
-                    id_site: this.visit.id_site,
-                    name: this.visit.site_name
-                };
-                this._cmrService.getOneSite(this.visit.id_site).subscribe((data) => {
-                  this.path = [{
-                    "text": "Module: " + this.module.module_label, 
-                    "link": ['module',this.module.module_code]
-                  }];
-                  if (data.id_sitegroup){
-                    this.path = this.path.concat([
-                      {
-                        "text": this.module.forms.sitegroup.label + ": " + data.sitegroup.name,
-                        "link":  ['module',this.module.module_code, 'sitegroup', data.id_sitegroup]
-                      },{
-                        "text": this.module.forms.site.label + ": " + this.site.name,
-                        "link": ['module',this.module.module_code, 'sitegroup', data.id_sitegroup, 'site', this._route.snapshot.paramMap.get('id_site')],
-                     }, {
-                        "text": this.module.forms.visit.label,
-                        "link": ['module',this.module.module_code, 'sitegroup', data.id_sitegroup, 'site', this._route.snapshot.paramMap.get('id_site'), 'visit', this._route.snapshot.paramMap.get('id_visit')],
-                    }]);
-                  } else {
-                    this.path = this.path.concat([{
-                        "text": this.module.forms.site.label + ": " + this.site.name,
-                        "link": ['module',this.module.module_code, 'site', this._route.snapshot.paramMap.get('id_site')],
-                     }, {
-                        "text": this.module.forms.visit.label,
-                        "link": ['module',this.module.module_code, 'site', this._route.snapshot.paramMap.get('id_site'), 'visit', this._route.snapshot.paramMap.get('id_visit')],
-                    }]);
-                  }
-                  this.path = [...this.path];
-                });
+                this.path = BreadcrumbComponent.buildPath('observation', this.module, {visit: this.visit});
+                this.path = [...this.path];
             });
             this._cmrService.getOneIndividual(this._route.snapshot.paramMap.get('id_individual')).subscribe((data) => {
                 this.individual = data;

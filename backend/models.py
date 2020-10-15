@@ -33,14 +33,11 @@ class TObservation(DB.Model):
     def to_dict(self):
         data = self.as_dict()
         if self.visit:
-            data['visit_id'] = self.visit.id_visit
+            data['visit'] = self.visit.to_dict() if self.visit else None
+            data['individual'] = self.individual.to_dict() if self.individual else None
             data['visit_date'] = self.visit.to_dict()['date']
-            data['site_id'] = self.visit.id_site
             if self.visit.site is not None:
                 data["site_name"] = self.visit.site.name
-                data["sitegroup_id"] = self.visit.site.id_sitegroup
-                if self.visit.site.sitegroup is not None:
-                    data["sitegroup_name"] = self.visit.site.sitegroup.name
         data["individual_identifier"] = self.individual.to_dict()['identifier'] if self.individual else None
         return data_to_json(data)
 
@@ -108,6 +105,7 @@ class TVisit(DB.Model):
 
     def to_dict(self):
         data = self.as_dict()
+        data['site'] = self.site.to_dict() if self.site else None
         data['site_name'] = self.site.name if self.site else None
         data['observers'] = [o.as_dict() for o in self.observers]
         data['nb_observations'] = self.nb_observations

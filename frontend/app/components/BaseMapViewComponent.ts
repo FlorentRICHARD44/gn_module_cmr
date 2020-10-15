@@ -117,10 +117,10 @@ export class BaseMapViewComponent {
             url_base = url_base.concat(['site', feature.id]);
         } else if (feature.object_type == "observation") {
             name_prop = "site_name";
-            if (feature.properties.sitegroup_id) {
-                url_base = url_base.concat(['sitegroup', feature.properties.sitegroup_id]);
+            if (feature.properties.visit.site.sitegroup.id) {
+                url_base = url_base.concat(['sitegroup', feature.properties.visit.site.sitegroup.id]);
             }
-            url_base = url_base.concat(['site', feature.properties.site_id]);
+            url_base = url_base.concat(['site', feature.properties.visit.id_site]);
         }
         if (layer._popup) {
           return;

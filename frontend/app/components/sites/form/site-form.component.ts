@@ -7,6 +7,7 @@ import { CmrMapService } from './../../../services/cmr-map.service';
 import { DataService } from '../../../services/data.service';
 import { Module } from '../../../class/module';
 import { BaseMapViewComponent } from '../../BaseMapViewComponent';
+import { BreadcrumbComponent } from '../../common/breadcrumb/breadcrumb.component';
 
 @Component({
     selector : 'pnx-cmr-site-form',
@@ -49,17 +50,12 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
           });
         } else {
           this.module = data;
-          this.path = [{
-              "text": "Module: " + this.module.module_label, 
-              "link": ['module',this.module.module_code],
-          }];
+          this.path =
+          this.path = BreadcrumbComponent.buildPath("site", this.module, {});
           if (this._route.snapshot.paramMap.get('id_sitegroup')) {
             this._cmrService.getOneSiteGroup(this._route.snapshot.paramMap.get('id_sitegroup')).subscribe(
               (data) => {
-                this.path.push({
-                  "text": this.module.forms.sitegroup.label + ": " + data.name,
-                  "link": ['module',this.module.module_code, 'sitegroup', data.id_sitegroup]
-                });
+                this.path = BreadcrumbComponent.buildPath("site", this.module, {id_sitegroup: data.id_sitegroup, sitegroup:{name: data.name}});
                 this.path = [...this.path];
               }
             );

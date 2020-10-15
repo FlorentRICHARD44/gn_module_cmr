@@ -6,6 +6,7 @@ import { Module } from '../../../class/module';
 import { BaseMapViewComponent } from '../../BaseMapViewComponent';
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
+import { BreadcrumbComponent } from '../../common/breadcrumb/breadcrumb.component';
 
 /**
  * This component is the detail page of a CMR Individual.
@@ -49,10 +50,7 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
                 this.module = this._cmrService.getModule(params.module);
                 this.properties = this.module.forms.individual.display_properties;
                 this.fields = this.module.forms.individual.fields;
-                this.path = [{
-                    "text": "Module: " + this.module.module_label, 
-                    "link": ['module',this.module.module_code]
-                }];
+                this.path = BreadcrumbComponent.buildPath('individual', this.module);
                 this.path = [...this.path];
                 this._cmrService.getOneIndividual(params.id_individual).subscribe((data) => this.individual = data);
 

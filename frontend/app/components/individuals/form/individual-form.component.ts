@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { Module } from '../../../class/module';
+import { BreadcrumbComponent } from '../../common/breadcrumb/breadcrumb.component';
 
 @Component({
     selector : 'pnx-cmr-individual-form',
@@ -40,10 +41,7 @@ export class IndividualFormComponent implements OnInit {
             });
           } else {
             this.module = data;
-            this.path = [{
-                "text": "Module: " + this.module.module_label, 
-                "link": ['module',this.module.module_code]
-            }];
+            this.path = BreadcrumbComponent.buildPath("individual", this.module);
             var schema = this.module.forms.individual.fields;
             this.individualFormDefinitions = this._dataService.buildFormDefinitions(schema);
             var editId = this._route.snapshot.paramMap.get('edit');

@@ -4,6 +4,7 @@ import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { Module } from '../../../class/module';
 import { BaseMapViewComponent } from '../../BaseMapViewComponent';
+import { BreadcrumbComponent } from '../../common/breadcrumb/breadcrumb.component';
 
 /**
  * This component is the home page of a CMR Site.
@@ -45,16 +46,7 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
                 this.visitFieldsDef = this.module.forms.visit.fields;
                 this._cmrService.getOneSite(params.id_site).subscribe((data) => {
                   this.site = data;
-                  this.path = [{
-                    "text": "Module: " + this.module.module_label, 
-                    "link": ['module',this.module.module_code]
-                  }];
-                  if (this.site.id_sitegroup) {
-                    this.path.push({
-                      "text": this.module.forms.sitegroup.label + ": " + this.site.sitegroup.name,
-                      "link": ['module',this.module.module_code, 'sitegroup', this.site.id_sitegroup]
-                    });
-                  }
+                  this.path = BreadcrumbComponent.buildPath("site", this.module, this.site);
                   this.path = [...this.path];
                 
                 });

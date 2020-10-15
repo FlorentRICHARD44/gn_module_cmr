@@ -5,6 +5,7 @@ import { DataService } from './../../../services/data.service';
 import { MatDialog } from "@angular/material";
 import { Module } from '../../../class/module';
 import { BaseMapViewComponent } from '../../BaseMapViewComponent';
+import { BreadcrumbComponent } from '../../common/breadcrumb/breadcrumb.component';
 
 /**
  * This component is the home page of a CMR Site Group.
@@ -43,10 +44,7 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
         this._route.params.subscribe(params => {
             this._cmrService.loadOneModule(params.module).subscribe(() => {
                 this.module = this._cmrService.getModule(params.module);
-                this.path = [{
-                    "text": "Module: " + this.module.module_label, 
-                    "link": ['module',this.module.module_code]
-                }];
+                this.path = BreadcrumbComponent.buildPath('sitegroup',this.module);
                 this.path = [...this.path];
 
                 this.properties = this.module.forms.sitegroup.display_properties;

@@ -7,6 +7,7 @@ import { CmrMapService } from '../../../services/cmr-map.service';
 import { DataService } from '../../../services/data.service';
 import { Module } from '../../../class/module';
 import { BaseMapViewComponent } from '../../BaseMapViewComponent';
+import { BreadcrumbComponent } from '../../common/breadcrumb/breadcrumb.component';
 
 @Component({
     selector : 'pnx-cmr-sitegroup-form',
@@ -49,10 +50,7 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
           });
         } else {
           this.module = data;
-          this.path = [{
-              "text": "Module: " + this.module.module_label, 
-              "link": ['module',this.module.module_code],
-          }];
+          this.path = BreadcrumbComponent.buildPath("sitegroup", this.module);
           this.leafletDrawOptions = this._cmrMapService.getLeafletDrawOptionDrawAll(this.module.forms.sitegroup.geometry_types);
           var schema = this.module.forms.sitegroup.fields;
           this.sitegroupFormDefinitions = this._dataService.buildFormDefinitions(schema);
