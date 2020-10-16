@@ -24,7 +24,6 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
     public properties: Array<any> = [];
     public fields: Array<any> = [];
     public medias: Array<any> = [];
-    public mapFeatures = {};
  
     public individuals: Array<any> = [];
     public individualListProperties: Array<any> = [];
@@ -77,6 +76,7 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
     /**
      * Initialize the feature with:
      * * add a popup (with name and hyperlink)
+     * need to override here to use the click only on sites.
      */
     initFeatures() {
       for (let ft of this.mapFeatures['features']) {
@@ -84,22 +84,13 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
         lyr.setStyle(this.getMapStyle(ft['object_type']));
         if (ft['object_type'] == 'site') {
           this.setPopup(lyr, this._route, ft, this.module);
-          let onLyrClickFct = this.onSiteLayerClick(ft);
+          let onLyrClickFct = this.onFeatureLayerClick(ft, 'site');
           lyr.off('click', onLyrClickFct);
           lyr.on('click', onLyrClickFct);
         }
       }
     }
-    /**
-     * Called when click on a feature on the map.
-     * @param site
-     */
-    onSiteLayerClick(site) {
-      return (event) => {
-        this.updateFeaturesStyle(this.mapFeatures, [site.id], 'site');
-        this.setSelected(site.id);
-      }
-    }
+
     /**
      * Called when click on a row in the table.
      * @param event 

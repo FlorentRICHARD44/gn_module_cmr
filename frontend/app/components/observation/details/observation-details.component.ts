@@ -52,8 +52,19 @@ export class ObservationDetailsComponent extends BaseMapViewComponent implements
                     }
                     this.path = BreadcrumbComponent.buildPath('observation', this.module, this.observation);
                     this.path = [...this.path];
+                    this._cmrService.getOneSiteGeometry(params.id_site).subscribe((data) => {
+                      if (params.id_sitegroup) {
+                        this._cmrService.getOneSiteGroupGeometry(params.id_sitegroup).subscribe((dataSitegroup) => {
+                          this.mapFeatures = {'features': dataSitegroup.concat(data)};
+                          setTimeout(function(){ this.initFeatures(this._route, this.module);}.bind(this), 300);
+                        });
+                      } else {
+                        this.mapFeatures = {'features': data};
+                        setTimeout(function(){this.initFeatures(this._route, this.module);}.bind(this), 300);
+                      }
+                    });
                 });
             });
         });
-    }
+  }
 }

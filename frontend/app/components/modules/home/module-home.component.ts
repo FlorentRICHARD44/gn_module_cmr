@@ -32,7 +32,6 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
     public sites: Array<any> = [];
     public siteListProperties: Array<any> = [];
     public siteFieldsDef: any = {};
-    public mapFeatures = {};
     public selected = [];
 
     @ViewChild(DatatableComponent) tableSitegroup: DatatableComponent;
@@ -69,37 +68,12 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
                 this._cmrService.getAllSitegroupsGeometriesByModule(this.module.id_module).subscribe((data) => {
                   this.sitegroups = data.map(site => site.properties);
                   this.mapFeatures = {'features':data};
-                  setTimeout(this.initFeatures.bind(this), 500);
+                  setTimeout(function() {this.initFeatures(this.route,this.module);}.bind(this), 500);
                 });
                 return of(true);
               })
             ).subscribe(() => {});
         });
-    }
-
-    /**
-     * Initialize the feature with:
-     * * add a popup (with name and hyperlink)
-     */
-    initFeatures() {
-      for (let ft of this.mapFeatures['features']) {
-        var lyr = this.findFeatureLayer(ft.id, ft['object_type']);
-        this.setPopup(lyr, this.route, ft, this.module);
-        lyr.setStyle(this.getMapStyle(ft['object_type']));
-        let onLyrClickFct = this.onSitegroupLayerClick(ft);
-        lyr.off('click', onLyrClickFct);
-        lyr.on('click', onLyrClickFct);
-      }
-    }
-    /**
-     * Called when click on a feature on the map.
-     * @param sitegroup 
-     */
-    onSitegroupLayerClick(sitegroup) {
-      return (event) => {
-        this.updateFeaturesStyle(this.mapFeatures, [sitegroup.id], 'sitegroup');
-        this.setSelected(sitegroup.id);
-      }
     }
 
     /**

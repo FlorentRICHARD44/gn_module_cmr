@@ -134,13 +134,6 @@ def get_all_sites_geometries_by_sitegroup(id_sitegroup):
     site_repo = SitesRepository()
     return site_repo.get_all_geometries_filter_by(TSite.id_sitegroup, id_sitegroup)
 
-# Get one site
-@blueprint.route('/site/<int:id_site>', methods=['GET'])
-@json_resp
-def get_one_site(id_site):
-    site_repo = SitesRepository()
-    return site_repo.get_one(TSite.id_site, id_site)
-
 # Get geometries for a site
 @blueprint.route('/site/<int:id_site>/geometries', methods=['GET'])
 @json_resp

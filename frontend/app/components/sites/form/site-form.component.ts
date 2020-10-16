@@ -22,7 +22,6 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
     public siteFormDefinitions = [];
     public site: any = {};
     public geometry;
-    public mapFeatures = {};
 
     public bChainInput = false;
     public bEdit = false;
@@ -60,7 +59,7 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
                 this.mapFeatures = {'features': data };
                 this.path = BreadcrumbComponent.buildPath("site", this.module, {id_sitegroup: sitegroup.id_sitegroup, sitegroup:sitegroup});
                 this.path = [...this.path];
-                setTimeout(this.initFeatures.bind(this), 300);
+                setTimeout(function() {this.initFeatures(this._route, this.module);}.bind(this), 300);
               }
             );
           }
@@ -71,13 +70,11 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
         var editId = this._route.snapshot.paramMap.get('edit');
         if (editId) {
           this.bEdit = true;
-          this._cmrService.getOneSite(editId).subscribe((data) => {
-            this.site = data;
-            this.siteForm.patchValue(this._dataService.formatDataForBeforeEdition(data, this.module.forms.site.fields));
             this._cmrService.getOneSiteGeometry(editId).subscribe((data) => {
+              this.site = data[0].properties;
+              this.siteForm.patchValue(this._dataService.formatDataForBeforeEdition(this.site, this.module.forms.site.fields));
               this.siteForm.patchValue({'geom':data[0].geometry});
-                this.geometry = data[0].geometry;
-            });
+              this.geometry = data[0].geometry;
           });
         }
     }
@@ -123,21 +120,6 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
             }
           });
     }
-    
-    /**
-    * Initialize the feature with:
-    * * add a popup (with name and hyperlink)
-    */
-   initFeatures() {
-     for (let ft of this.mapFeatures['features']) {
-       var lyr = this.findFeatureLayer(ft.id, ft['object_type']);
-       this.setPopup(lyr, this._route, ft, this.module);
-       lyr.setStyle(this.getMapStyle(ft['object_type']));
-       let onLyrClickFct = this.onSitegroupLayerClick(ft);
-       lyr.off('click', onLyrClickFct);
-       lyr.on('click', onLyrClickFct);
-     }
-   }
    /**
     * Called when click on a feature on the map.
     * @param sitegroup 

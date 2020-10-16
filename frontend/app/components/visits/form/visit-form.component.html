@@ -2,6 +2,12 @@
     <div class="flex-container">
         <div class="cadre" [style.min-height]="cardContentHeight + 'px'">
             <pnx-map height="100%" class="map-card">
+              <pnx-geojson
+                  *ngIf="mapFeatures && mapFeatures['features']"
+                  [geojson]="mapFeatures"
+                  [zoomOnLayer]="true"
+                  [zoomOnFirstTime]="true"
+              ></pnx-geojson>
             </pnx-map>
         </div>
         <div class="cadre scroll">

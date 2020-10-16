@@ -77,6 +77,17 @@ export class ObservationFormComponent extends BaseMapViewComponent implements On
             this._cmrService.getOneIndividual(this._route.snapshot.paramMap.get('id_individual')).subscribe((data) => {
                 this.individual = data;
             });
+            this._cmrService.getOneSiteGeometry(this._route.snapshot.paramMap.get('id_site')).subscribe((data) => {
+              if (this._route.snapshot.paramMap.get('id_sitegroup')) {
+                this._cmrService.getOneSiteGroupGeometry(this._route.snapshot.paramMap.get('id_sitegroup')).subscribe((dataSitegroup) => {
+                  this.mapFeatures = {'features': dataSitegroup.concat(data)};
+                  setTimeout(function() {this.initFeatures(this._route, this.module);}.bind(this), 300);
+                });
+              } else {
+                this.mapFeatures = {'features': data};
+                setTimeout(function() {this.initFeatures(this._route, this.module);}.bind(this), 300);
+              }
+            });
             var editId = this._route.snapshot.paramMap.get('edit');
             if (editId) {
                 this.bEdit = true;

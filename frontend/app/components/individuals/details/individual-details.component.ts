@@ -96,26 +96,12 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
         setTimeout(function() {
           this.calcCardContentHeight();
           this.mapFeatures = this.mapFeaturesTemp;
-          setTimeout(this.initFeatures.bind(this), 500);
+          setTimeout(function() {this.initFeatures(this.route, this.module);}.bind(this), 500);
         }.bind(this), 300);
         this._firstResizeDone = true;
       }
     }
 
-    /**
-     * Initialize the feature with:
-     * * add a popup (with name and hyperlink)
-     */
-    initFeatures() {
-      for (let ft of this.mapFeatures['features']) {
-        var lyr = this.findFeatureLayer(ft.id, ft['object_type']);
-        this.setPopup(lyr, this.route, ft, this.module);
-        lyr.setStyle(this.getMapStyle(ft['object_type']));
-        let onLyrClickFct = this.onFeatureLayerClick(ft);
-        lyr.off('click', onLyrClickFct);
-        lyr.on('click', onLyrClickFct);
-      }
-    }
     /**
      * Called when click on a row in the table.
      * @param event 
@@ -134,17 +120,6 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
         }
       }
       this._mapListService.zoomOnSelectedLayer(this._mapService.map, this.findFeatureLayer(event.row.id_observation, 'observation'));
-    }
-    
-    /**
-     * Called when click on a feature on the map.
-     * @param feature 
-     */
-    onFeatureLayerClick(feature) {
-      return (event) => {
-        this.updateFeaturesStyle(this.mapFeatures, [feature.id], 'observation');
-        this.setSelected(feature.id);
-      }
     }
 
     /**

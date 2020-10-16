@@ -11,6 +11,8 @@ import { ModuleConfig } from '../module.config';
 export class BaseMapViewComponent {
     protected _mapService: MapService;
     public cardContentHeight: any;
+    public mapFeatures = {};
+
     public styles = {
         default: {
           opacity: 0.7,
@@ -18,23 +20,37 @@ export class BaseMapViewComponent {
           color: 'blue'
         },
         sitegroup: {
+          weight: 2,
           dashArray: [8,6],
           opacity: 0.6,
           fillOpacity: 0.4,
           color: 'blue'
         },
         site: {
+          radius: 9,
+          opacity: 0.7,
+          fillOpacity: 0.5,
+          color: 'blue'
+        },
+        observation: {
+          radius: 9,
           opacity: 0.7,
           fillOpacity: 0.5,
           color: 'blue'
         },
         'sitegroup-selected': {
+          weight: 2,
           dashArray: [8,6],
           opacity: 0.6,
           fillOpacity: 0.4,
           color: 'red'
         },
         'site-selected': {
+          opacity: 0.7,
+          fillOpacity: 0.5,
+          color: 'red'
+        },
+        'observation-selected': {
           opacity: 0.7,
           fillOpacity: 0.5,
           color: 'red'
@@ -75,6 +91,35 @@ export class BaseMapViewComponent {
           this._mapService.map.invalidateSize();
         }, 10);
       }
+    }
+
+    /**
+     * Initialize the feature with:
+     * * add a popup (with name and hyperlink)
+     */
+    initFeatures(route, module) {
+      for (let ft of this.mapFeatures['features']) {
+        var lyr = this.findFeatureLayer(ft.id, ft['object_type']);
+        this.setPopup(lyr, route, ft, module);
+        lyr.setStyle(this.getMapStyle(ft['object_type']));
+        let onLyrClickFct = this.onFeatureLayerClick(ft, ft['object_type']);
+        lyr.off('click', onLyrClickFct);
+        lyr.on('click', onLyrClickFct);
+      }
+    }
+    /**
+     * Called when click on a feature on the map.
+     * @param feature 
+     */
+    onFeatureLayerClick(feature, object_type) {
+      return (event) => {
+        this.updateFeaturesStyle(this.mapFeatures, [feature.id], object_type);
+        this.setSelected(feature.id);
+      }
+    }
+
+    setSelected(id) {
+        // Do nothing, to be overriden by children if specific behaviour needed.
     }
 
     /**
