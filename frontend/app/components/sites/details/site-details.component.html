@@ -36,6 +36,12 @@
                 </div>
             </div>
             <pnx-map height="40vh" class="map-card">
+                <pnx-geojson
+                    *ngIf="mapFeatures && mapFeatures['features']"
+                    [geojson]="mapFeatures"
+                    [zoomOnLayer]="true"
+                    [zoomOnFirstTime]="true"
+                ></pnx-geojson>
             </pnx-map>
         </div>
         <div class="cadre scroll">

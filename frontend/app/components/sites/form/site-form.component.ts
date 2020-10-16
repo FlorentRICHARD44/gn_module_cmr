@@ -22,6 +22,7 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
     public siteFormDefinitions = [];
     public site: any = {};
     public geometry;
+    public mapFeatures = {};
 
     public bChainInput = false;
     public bEdit = false;
@@ -53,10 +54,13 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
           this.path =
           this.path = BreadcrumbComponent.buildPath("site", this.module, {});
           if (this._route.snapshot.paramMap.get('id_sitegroup')) {
-            this._cmrService.getOneSiteGroup(this._route.snapshot.paramMap.get('id_sitegroup')).subscribe(
+            this._cmrService.getOneSiteGroupGeometry(this._route.snapshot.paramMap.get('id_sitegroup')).subscribe(
               (data) => {
-                this.path = BreadcrumbComponent.buildPath("site", this.module, {id_sitegroup: data.id_sitegroup, sitegroup:{name: data.name}});
+                let sitegroup = data[0].properties;
+                this.mapFeatures = {'features': data };
+                this.path = BreadcrumbComponent.buildPath("site", this.module, {id_sitegroup: sitegroup.id_sitegroup, sitegroup:sitegroup});
                 this.path = [...this.path];
+                setTimeout(this.initFeatures.bind(this), 300);
               }
             );
           }
@@ -119,4 +123,28 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
             }
           });
     }
+    
+    /**
+    * Initialize the feature with:
+    * * add a popup (with name and hyperlink)
+    */
+   initFeatures() {
+     for (let ft of this.mapFeatures['features']) {
+       var lyr = this.findFeatureLayer(ft.id, ft['object_type']);
+       this.setPopup(lyr, this._route, ft, this.module);
+       lyr.setStyle(this.getMapStyle(ft['object_type']));
+       let onLyrClickFct = this.onSitegroupLayerClick(ft);
+       lyr.off('click', onLyrClickFct);
+       lyr.on('click', onLyrClickFct);
+     }
+   }
+   /**
+    * Called when click on a feature on the map.
+    * @param sitegroup 
+    */
+   onSitegroupLayerClick(sitegroup) {
+     return (event) => {
+       this.updateFeaturesStyle(this.mapFeatures, [sitegroup.id], 'sitegroup');
+     }
+   }
 }

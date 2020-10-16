@@ -15,26 +15,29 @@ export class BaseMapViewComponent {
         default: {
           opacity: 0.7,
           fillOpacity: 0.5,
-          color: 'blue',
-          zIndex: 600
+          color: 'blue'
         },
         sitegroup: {
-          opacity: 0.7,
+          dashArray: [8,6],
+          opacity: 0.6,
           fillOpacity: 0.4,
-          color: '#8533ff',
-          zIndex: 600
+          color: 'blue'
         },
         site: {
           opacity: 0.7,
           fillOpacity: 0.5,
-          color: 'blue',
-          zIndex: 610
+          color: 'blue'
         },
-        selected: {
+        'sitegroup-selected': {
+          dashArray: [8,6],
+          opacity: 0.6,
+          fillOpacity: 0.4,
+          color: 'red'
+        },
+        'site-selected': {
           opacity: 0.7,
           fillOpacity: 0.5,
-          color: 'red',
-          zIndex: 660
+          color: 'red'
         }
     };
 
@@ -103,7 +106,7 @@ export class BaseMapViewComponent {
         for (let ft of mapFeatures['features']) {
           var lyr = this.findFeatureLayer(ft.id, ft.object_type);
           if (ft.object_type == object_type && selected.indexOf(ft.id) > -1) {
-            lyr.setStyle(this.getMapStyle('selected'));
+            lyr.setStyle(this.getMapStyle(ft.object_type + '-selected'));
           } else {
             lyr.setStyle(this.getMapStyle(ft.object_type));
           }
@@ -115,8 +118,9 @@ export class BaseMapViewComponent {
      * @param layer 
      * @param url_base 
      */
-    setPopup(layer, route, feature) {
+    setPopup(layer, route, feature, module) {
         var url_base = ['#', ModuleConfig.MODULE_URL,'module',route.snapshot.params.module];
+        var object_type_label = module.forms[feature.object_type].label;
         var name_prop = "";
         if (feature.object_type == "sitegroup") {
             name_prop = "name";
@@ -129,7 +133,6 @@ export class BaseMapViewComponent {
             url_base = url_base.concat(['site', feature.id]);
         } else if (feature.object_type == "observation") {
             name_prop = "site_name";
-            console.log(feature);
             if (feature.properties.visit.site.id_sitegroup) {
                 url_base = url_base.concat(['sitegroup', feature.properties.visit.site.id_sitegroup]);
             }
@@ -140,8 +143,8 @@ export class BaseMapViewComponent {
         }
         const url = url_base.join('/');
         const sPopup = `
-        <div>
-          <h5>  <a href=${url}>${layer['feature'].properties[name_prop]}</a></h5>
+        <div class="map-popup">
+          <p>${object_type_label}: <a href=${url}>${layer['feature'].properties[name_prop]}</a></p>
         </div>
         `;
         layer.bindPopup(sPopup).closePopup();

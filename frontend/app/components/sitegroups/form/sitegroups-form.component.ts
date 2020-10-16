@@ -58,13 +58,11 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
         var editId = this._route.snapshot.paramMap.get('edit');
         if (editId) {
           this.bEdit = true;
-          this._cmrService.getOneSiteGroup(editId).subscribe((data) => {
-            this.sitegroup = data;
-            this.sitegroupForm.patchValue(this._dataService.formatDataForBeforeEdition(data, this.module.forms.sitegroup.fields));
-            this._cmrService.getOneSiteGroupGeometry(editId).subscribe((data) => {
-              this.sitegroupForm.patchValue({'geom':data[0].geometry});
-              this.mapFeature = data[0];
-            });
+          this._cmrService.getOneSiteGroupGeometry(editId).subscribe((data) => {
+            this.sitegroup = data[0].properties;
+            this.sitegroupForm.patchValue(this._dataService.formatDataForBeforeEdition(this.sitegroup, this.module.forms.sitegroup.fields));
+            this.sitegroupForm.patchValue({'geom':data[0].geometry});
+            this.mapFeature = data[0];
           });
         }
     }

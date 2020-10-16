@@ -58,15 +58,13 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
                 this.siteFieldsDef = this.module.forms.site.fields;
                 this.individualListProperties = this.module.forms.individual.display_list;
                 this.individualFieldsDef = this.module.forms.individual.fields;
-                this._cmrService.getOneSiteGroup(params.id_sitegroup).subscribe((data) => {
-                    this.sitegroup = data;
-
-                    this._cmrService.getAllSitesBySiteGroup(this.sitegroup.id_sitegroup).subscribe((data) => this.sites = data);
-                    this._cmrService.getAllIndividualsBySiteGroup(this.sitegroup.id_sitegroup).subscribe((data) => this.individuals = data);
-                });
                 this._cmrService.getOneSiteGroupGeometry(params.id_sitegroup).subscribe((data) => {
+                  this.sitegroup = data[0].properties;
                   this.mapFeatures = {'features':data};
+                  this._cmrService.getAllIndividualsBySiteGroup(this.sitegroup.id_sitegroup).subscribe((data) => this.individuals = data);
+                  setTimeout(this.initFeatures.bind(this), 300);
                   this._cmrService.getAllSitesGeometriesBySiteGroup(params.id_sitegroup).subscribe((data) => {
+                    this.sites = data.map(site => site.properties);
                     this.mapFeatures['features'] = this.mapFeatures['features'].concat(data);
                     this.mapFeatures = {...this.mapFeatures};
                     setTimeout(this.initFeatures.bind(this), 300);
@@ -85,7 +83,7 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
         var lyr = this.findFeatureLayer(ft.id, ft['object_type']);
         lyr.setStyle(this.getMapStyle(ft['object_type']));
         if (ft['object_type'] == 'site') {
-          this.setPopup(lyr, this._route, ft);
+          this.setPopup(lyr, this._route, ft, this.module);
           let onLyrClickFct = this.onSiteLayerClick(ft);
           lyr.off('click', onLyrClickFct);
           lyr.on('click', onLyrClickFct);

@@ -83,13 +83,6 @@ def get_all_sitegroups_by_module_geometries(id_module):
     sitegroup_repo = SiteGroupsRepository()
     return sitegroup_repo.get_all_geometries_filter_by(TSiteGroup.id_module, id_module)
 
-# Get one site group by its id
-@blueprint.route('/sitegroup/<int:id_sitegroup>', methods=['GET'])
-@json_resp
-def get_one_sitegroup(id_sitegroup):
-    sitegroup_repo = SiteGroupsRepository()
-    return sitegroup_repo.get_one(TSiteGroup.id_sitegroup, id_sitegroup)
-
 # Get geometries for a site group
 @blueprint.route('/sitegroup/<int:id_sitegroup>/geometries', methods=['GET'])
 @json_resp

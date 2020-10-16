@@ -61,13 +61,13 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
                 this.sitegroupFieldsDef = this.module.forms.sitegroup.fields;
                 this.siteListProperties = this.module.forms.site.display_list;
                 this.siteFieldsDef = this.module.forms.site.fields;
-                this._cmrService.getAllSitegroupsByModule(this.module.id_module).subscribe((data) => this.sitegroups = data);
                 this._cmrService.getAllSitesByModule(this.module.id_module).subscribe((data) => this.sites = data);
                 this.individualListProperties = this.module.forms.individual.display_list;
                 this.individualFieldsDef = this.module.forms.individual.fields;
                 this._cmrService.getAllIndividualsByModule(this.module.id_module).subscribe((data) => this.individuals = data);
                 
                 this._cmrService.getAllSitegroupsGeometriesByModule(this.module.id_module).subscribe((data) => {
+                  this.sitegroups = data.map(site => site.properties);
                   this.mapFeatures = {'features':data};
                   setTimeout(this.initFeatures.bind(this), 500);
                 });
@@ -84,7 +84,7 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
     initFeatures() {
       for (let ft of this.mapFeatures['features']) {
         var lyr = this.findFeatureLayer(ft.id, ft['object_type']);
-        this.setPopup(lyr, this.route, ft);
+        this.setPopup(lyr, this.route, ft, this.module);
         lyr.setStyle(this.getMapStyle(ft['object_type']));
         let onLyrClickFct = this.onSitegroupLayerClick(ft);
         lyr.off('click', onLyrClickFct);

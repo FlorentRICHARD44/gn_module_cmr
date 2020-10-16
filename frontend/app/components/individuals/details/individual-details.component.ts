@@ -109,7 +109,7 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
     initFeatures() {
       for (let ft of this.mapFeatures['features']) {
         var lyr = this.findFeatureLayer(ft.id, ft['object_type']);
-        this.setPopup(lyr, this.route, ft);
+        this.setPopup(lyr, this.route, ft, this.module);
         lyr.setStyle(this.getMapStyle(ft['object_type']));
         let onLyrClickFct = this.onFeatureLayerClick(ft);
         lyr.off('click', onLyrClickFct);

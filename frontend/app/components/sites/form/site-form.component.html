@@ -8,6 +8,12 @@
                     [zoomLevel]="14"
                     (layerDrawed)="setNewGeometry($event)">
                 </pnx-leaflet-draw>
+                <pnx-geojson
+                    *ngIf="mapFeatures && mapFeatures['features']"
+                    [geojson]="mapFeatures"
+                    [zoomOnLayer]="true"
+                    [zoomOnFirstTime]="true"
+                ></pnx-geojson>
             </pnx-map>
         </div>
         <div class="cadre scroll">

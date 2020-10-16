@@ -60,10 +60,6 @@ export class CmrService {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sitegroups/geometries`);
     }
 
-    getOneSiteGroup(id_sitegroup) {
-        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/sitegroup/${id_sitegroup}`);
-    }
-
     getOneSiteGroupGeometry(id_sitegroup) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/sitegroup/${id_sitegroup}/geometries`);
     }
