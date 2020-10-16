@@ -92,6 +92,25 @@ class SiteGroupsRepository(BaseGeomRepository):
     def __init__(self):
         super().__init__(TSiteGroup)
 
+    def get_all_filter_by(self, filter_attribute, value):
+        result = []
+        q = DB.session.query(TSiteGroup,
+                func.count(distinct(TSite.id_site)), 
+                func.count(distinct(TObservation.id_observation)),
+                func.count(distinct(TObservation.id_individual))).join(
+                    TSite, (TSite.id_sitegroup == TSiteGroup.id_sitegroup), isouter=True).join(
+                    TVisit, (TVisit.id_site == TSite.id_site), isouter=True).join(
+                    TObservation, (TObservation.id_visit == TVisit.id_visit), isouter=True).filter(
+            filter_attribute == value).group_by(TSiteGroup.id_sitegroup)
+        data = q.all()
+        for (item, count_site, count_observation, count_individual) in data:
+            r = item.to_dict()
+            r['nb_site'] = count_site
+            r['nb_observations'] = count_observation
+            r['nb_individuals'] = count_individual
+            result.append(r)
+        return result
+
 
 class SitesRepository(BaseGeomRepository):
     """

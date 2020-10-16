@@ -62,8 +62,8 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
                   this.mapFeatures = {'features':data};
                   this._cmrService.getAllIndividualsBySiteGroup(this.sitegroup.id_sitegroup).subscribe((data) => this.individuals = data);
                   setTimeout(this.initFeatures.bind(this), 300);
+                  this._cmrService.getAllSitesBySiteGroup(params.id_sitegroup).subscribe((data) => this.sites = data);
                   this._cmrService.getAllSitesGeometriesBySiteGroup(params.id_sitegroup).subscribe((data) => {
-                    this.sites = data.map(site => site.properties);
                     this.mapFeatures['features'] = this.mapFeatures['features'].concat(data);
                     this.mapFeatures = {...this.mapFeatures};
                     setTimeout(this.initFeatures.bind(this), 300);

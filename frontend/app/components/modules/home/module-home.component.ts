@@ -65,8 +65,8 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
                 this.individualFieldsDef = this.module.forms.individual.fields;
                 this._cmrService.getAllIndividualsByModule(this.module.id_module).subscribe((data) => this.individuals = data);
                 
+                this._cmrService.getAllSitegroupsByModule(this.module.id_module).subscribe((data) => this.sitegroups = data);
                 this._cmrService.getAllSitegroupsGeometriesByModule(this.module.id_module).subscribe((data) => {
-                  this.sitegroups = data.map(site => site.properties);
                   this.mapFeatures = {'features':data};
                   setTimeout(function() {this.initFeatures(this.route,this.module);}.bind(this), 500);
                 });
