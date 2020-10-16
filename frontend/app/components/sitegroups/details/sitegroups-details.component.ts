@@ -1,8 +1,10 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, ViewChild} from '@angular/core';
+import { MatDialog } from "@angular/material";
 import { Router, ActivatedRoute } from '@angular/router';
+import { DatatableComponent } from '@librairies/@swimlane/ngx-datatable';
+import { MapListService } from '@geonature_common/map-list/map-list.service';
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
-import { MatDialog } from "@angular/material";
 import { Module } from '../../../class/module';
 import { BaseMapViewComponent } from '../../BaseMapViewComponent';
 import { BreadcrumbComponent } from '../../common/breadcrumb/breadcrumb.component';
@@ -31,10 +33,13 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
     public siteListProperties: Array<any> = [];
     public siteFieldsDef: any = {};
 
+    @ViewChild(DatatableComponent) tableSite: DatatableComponent;
+    public selected=[];
     constructor(
         private _cmrService: CmrService,
         private _route: ActivatedRoute,
         public dialog: MatDialog,
+        private _mapListService: MapListService,
         private _dataService: DataService // used in template
     ) {
       super();
@@ -64,9 +69,71 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
                   this._cmrService.getAllSitesGeometriesBySiteGroup(params.id_sitegroup).subscribe((data) => {
                     this.mapFeatures['features'] = this.mapFeatures['features'].concat(data);
                     this.mapFeatures = {...this.mapFeatures};
+                    setTimeout(this.initFeatures.bind(this), 300);
                   });
                 });
             });
         });
+    }
+
+    /**
+     * Initialize the feature with:
+     * * add a popup (with name and hyperlink)
+     */
+    initFeatures() {
+      for (let ft of this.mapFeatures['features']) {
+        var lyr = this.findFeatureLayer(ft.id, ft['object_type']);
+        lyr.setStyle(this.getMapStyle(ft['object_type']));
+        if (ft['object_type'] == 'site') {
+          this.setPopup(lyr, this._route, ft);
+          let onLyrClickFct = this.onSiteLayerClick(ft);
+          lyr.off('click', onLyrClickFct);
+          lyr.on('click', onLyrClickFct);
+        }
+      }
+    }
+    /**
+     * Called when click on a feature on the map.
+     * @param site
+     */
+    onSiteLayerClick(site) {
+      return (event) => {
+        this.updateFeaturesStyle(this.mapFeatures, [site.id], 'site');
+        this.setSelected(site.id);
+      }
+    }
+    /**
+     * Called when click on a row in the table.
+     * @param event 
+     */
+    onSiteRowClick(event) {
+      if (!(event && event.type === 'click')) {
+        return;
+      }
+      this.updateFeaturesStyle(this.mapFeatures, [event.row.id_site], 'site');
+      for (let ft of this.mapFeatures['features']) {
+        let lyr = this.findFeatureLayer(ft.id, ft.object_type);
+        if (ft.id === event.row.id_site) {
+          lyr.openPopup();
+        } else {
+          lyr.closePopup();
+        }
+      }
+      this._mapListService.zoomOnSelectedLayer(this._mapService.map, this.findFeatureLayer(event.row.id_site, 'site'));
+    }
+
+    /**
+     * Update the selection in table.
+     * @param id_site 
+     */
+    setSelected(id_site) {
+      // this.table._internalRows permet d'avoir les ligne triées et d'avoir les bons index
+      const index_row_selected = this.tableSite._internalRows.findIndex(row => row.id_site === id_site);
+      if (index_row_selected === -1) {
+        return;
+      }
+      this.selected = [this.tableSite._internalRows[index_row_selected]];
+      this.selected = [...this.selected];
+      this.tableSite.offset = Math.floor((index_row_selected) / this.tableSite._limit);
     }
 }

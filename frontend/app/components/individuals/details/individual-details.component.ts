@@ -110,7 +110,7 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
       for (let ft of this.mapFeatures['features']) {
         var lyr = this.findFeatureLayer(ft.id, ft['object_type']);
         this.setPopup(lyr, this.route, ft);
-        lyr.setStyle(this.getMapStyle());
+        lyr.setStyle(this.getMapStyle(ft['object_type']));
         let onLyrClickFct = this.onFeatureLayerClick(ft);
         lyr.off('click', onLyrClickFct);
         lyr.on('click', onLyrClickFct);
@@ -124,7 +124,7 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
       if (!(event && event.type === 'click')) {
         return;
       }
-      this.updateFeaturesStyle(this.mapFeatures,[event.row.id_observation]);
+      this.updateFeaturesStyle(this.mapFeatures,[event.row.id_observation], 'observation');
       for (let ft of this.mapFeatures['features']) {
         let lyr = this.findFeatureLayer(ft.id, ft.object_type);
         if (ft.id === event.row.id_observation) {
@@ -142,7 +142,7 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
      */
     onFeatureLayerClick(feature) {
       return (event) => {
-        this.updateFeaturesStyle(this.mapFeatures, [feature.id]);
+        this.updateFeaturesStyle(this.mapFeatures, [feature.id], 'observation');
         this.setSelected(feature.id);
       }
     }

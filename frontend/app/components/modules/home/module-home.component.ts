@@ -85,7 +85,7 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
       for (let ft of this.mapFeatures['features']) {
         var lyr = this.findFeatureLayer(ft.id, ft['object_type']);
         this.setPopup(lyr, this.route, ft);
-        lyr.setStyle(this.getMapStyle());
+        lyr.setStyle(this.getMapStyle(ft['object_type']));
         let onLyrClickFct = this.onSitegroupLayerClick(ft);
         lyr.off('click', onLyrClickFct);
         lyr.on('click', onLyrClickFct);
@@ -97,7 +97,7 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
      */
     onSitegroupLayerClick(sitegroup) {
       return (event) => {
-        this.updateFeaturesStyle(this.mapFeatures, [sitegroup.id]);
+        this.updateFeaturesStyle(this.mapFeatures, [sitegroup.id], 'sitegroup');
         this.setSelected(sitegroup.id);
       }
     }
@@ -110,7 +110,7 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
       if (!(event && event.type === 'click')) {
         return;
       }
-      this.updateFeaturesStyle(this.mapFeatures, [event.row.id_sitegroup]);
+      this.updateFeaturesStyle(this.mapFeatures, [event.row.id_sitegroup], 'sitegroup');
       for (let ft of this.mapFeatures['features']) {
         let lyr = this.findFeatureLayer(ft.id, ft.object_type);
         if (ft.id === event.row.id_sitegroup) {

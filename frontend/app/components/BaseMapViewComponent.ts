@@ -18,6 +18,18 @@ export class BaseMapViewComponent {
           color: 'blue',
           zIndex: 600
         },
+        sitegroup: {
+          opacity: 0.7,
+          fillOpacity: 0.4,
+          color: '#8533ff',
+          zIndex: 600
+        },
+        site: {
+          opacity: 0.7,
+          fillOpacity: 0.5,
+          color: 'blue',
+          zIndex: 610
+        },
         selected: {
           opacity: 0.7,
           fillOpacity: 0.5,
@@ -87,13 +99,13 @@ export class BaseMapViewComponent {
      * Update the style of features on map according new status.
      * @param selected 
      */
-    updateFeaturesStyle(mapFeatures, selected) {
+    updateFeaturesStyle(mapFeatures, selected, object_type) {
         for (let ft of mapFeatures['features']) {
           var lyr = this.findFeatureLayer(ft.id, ft.object_type);
-          if (selected.indexOf(ft.id) > -1) {
+          if (ft.object_type == object_type && selected.indexOf(ft.id) > -1) {
             lyr.setStyle(this.getMapStyle('selected'));
           } else {
-            lyr.setStyle(this.getMapStyle());
+            lyr.setStyle(this.getMapStyle(ft.object_type));
           }
         }
     }
@@ -117,8 +129,9 @@ export class BaseMapViewComponent {
             url_base = url_base.concat(['site', feature.id]);
         } else if (feature.object_type == "observation") {
             name_prop = "site_name";
-            if (feature.properties.visit.site.sitegroup.id) {
-                url_base = url_base.concat(['sitegroup', feature.properties.visit.site.sitegroup.id]);
+            console.log(feature);
+            if (feature.properties.visit.site.id_sitegroup) {
+                url_base = url_base.concat(['sitegroup', feature.properties.visit.site.id_sitegroup]);
             }
             url_base = url_base.concat(['site', feature.properties.visit.id_site]);
         }
