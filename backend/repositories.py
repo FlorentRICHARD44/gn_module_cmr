@@ -176,6 +176,22 @@ class IndividualsRepository(BaseRepository):
             result.append(r)
         return result
 
+    def get_all_geometries_filter_by(self, filter):
+        """
+        Get the observation and position of all observations made on a sitegroup.
+        This permits to link all the positions of individuals.
+        """
+        result = []
+        q = DB.session.query(TObservation, func.ST_AsGEOJSON(TSite.geom)).join(
+            TVisit, (TVisit.id_visit == TObservation.id_visit)).join(
+            TSite, (TSite.id_site == TVisit.id_site)).filter(filter)
+        for (site, geom) in q.all():
+            r = site.to_geojson(geom)
+            r['object_type'] = 'observation'
+            result.append(r)
+        return result
+
+
     def get_all_by_site(self, id_site):
         result = []
         q = DB.session.query(self.model, func.count(TObservation.id_observation)).join(

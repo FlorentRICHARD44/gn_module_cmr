@@ -35,7 +35,7 @@
                     </nav>
                 </div>
             </div>
-            <pnx-map height="40vh" class="map-card">
+            <pnx-map height="50vh" class="map-card">
                 <pnx-geojson
                     *ngIf="mapFeatures && mapFeatures['features']"
                     [geojson]="mapFeatures"
@@ -47,8 +47,8 @@
         <div class="cadre scroll" [style.max-height]="cardContentHeight + 'px'" style="overflow-y:auto">
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a class="nav-item nav-link active" data-toggle="tab" role="tab" aria-selected="false" id="nav-sites-tab" href="#sites-tab">{{module.forms.site.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ sites.length }}</span></a>
-                    <a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-individuals-tab" href="#individuals-tab">Individus<span class="badge badge-pill badge-primary ml-2">{{ individuals.length }}</span></a>
+                    <a (click)="showSites()" class="nav-item nav-link active" data-toggle="tab" role="tab" aria-selected="false" id="nav-sites-tab" href="#sites-tab">{{module.forms.site.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ sites.length }}</span></a>
+                    <a (click)="showIndividuals()" class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-individuals-tab" href="#individuals-tab">Individus<span class="badge badge-pill badge-primary ml-2">{{ individuals.length }}</span></a>
                 </div>
                 <div class="tab-content" id="nav-tabContent">
                     <!-- TAB "Site" -->
@@ -108,7 +108,10 @@
                             [count]="individuals.length"
                             [limit]="15"
                             [headerHeight]="50"
-                            [footerHeight]="50">
+                            [footerHeight]="50"
+                            [selectionType]="'single'"
+                            [selected]="selectedIndividual"
+                            (activate)="onIndividualRowClick($event)">
 
                             <ngx-datatable-column width="60">
                                 <ng-template let-row="row" ngx-datatable-cell-template>

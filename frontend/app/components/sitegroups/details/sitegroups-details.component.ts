@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild} from '@angular/core';
 import { MatDialog } from "@angular/material";
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { DatatableComponent } from '@librairies/@swimlane/ngx-datatable';
 import { MapListService } from '@geonature_common/map-list/map-list.service';
 import { CmrService } from './../../../services/cmr.service';
@@ -32,8 +32,14 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
     public siteListProperties: Array<any> = [];
     public siteFieldsDef: any = {};
 
+    public mapDataSitegroups = [];
+    public mapDataSites = [];
+    public mapDataIndividuals = [];
+    public bShowIndividuals = false;
+
     @ViewChild(DatatableComponent) tableSite: DatatableComponent;
     public selected=[];
+    public selectedIndividual = []
     constructor(
         private _cmrService: CmrService,
         private _route: ActivatedRoute,
@@ -59,17 +65,19 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
                 this.individualFieldsDef = this.module.forms.individual.fields;
                 this._cmrService.getOneSiteGroupGeometry(params.id_sitegroup).subscribe((data) => {
                   this.sitegroup = data[0].properties;
-                  this.mapFeatures = {'features':data};
+                  this.mapDataSitegroups = data;
                   this._cmrService.getAllIndividualsBySiteGroup(this.sitegroup.id_sitegroup).subscribe((data) => this.individuals = data);
-                  setTimeout(this.initFeatures.bind(this), 300);
                   this._cmrService.getAllSitesBySiteGroup(params.id_sitegroup).subscribe((data) => this.sites = data);
                   this._cmrService.getAllSitesGeometriesBySiteGroup(params.id_sitegroup).subscribe((data) => {
-                    this.mapFeatures['features'] = this.mapFeatures['features'].concat(data);
-                    this.mapFeatures = {...this.mapFeatures};
-                    setTimeout(this.initFeatures.bind(this), 300);
+                    this.mapDataSites = data;
+                    this.mapFeatures = {"features": this.mapDataSitegroups.concat(data)};
+                    setTimeout(this.initFeaturesSites.bind(this), 300);
+                    this._cmrService.getAllIndividualsGeometriesBySiteGroup(params.id_sitegroup).subscribe((data) => {
+                      this.mapDataIndividuals = data;
                   });
                 });
             });
+        });
         });
     }
 
@@ -78,11 +86,12 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
      * * add a popup (with name and hyperlink)
      * need to override here to use the click only on sites.
      */
-    initFeatures() {
+    initFeaturesSites() {
       for (let ft of this.mapFeatures['features']) {
         var lyr = this.findFeatureLayer(ft.id, ft['object_type']);
         lyr.setStyle(this.getMapStyle(ft['object_type']));
         if (ft['object_type'] == 'site') {
+          ft['hidden'] = false;
           this.setPopup(lyr, this._route, ft, this.module);
           let onLyrClickFct = this.onFeatureLayerClick(ft, 'site');
           lyr.off('click', onLyrClickFct);
@@ -92,7 +101,28 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
     }
 
     /**
-     * Called when click on a row in the table.
+     * Initialize the feature with:
+     * * add a popup (with name and hyperlink)
+     * need to override here to use the click only on individuals.
+     */
+    initFeaturesIndividuals() {
+      for (let ft of this.mapFeatures['features']) {
+        var lyr = this.findFeatureLayer(ft.id, ft['object_type']);
+        lyr.setStyle(this.getMapStyle(ft['object_type']));
+        if (ft.object_type == 'site') {
+          ft['hidden'] = true;
+          lyr.setStyle(this.getMapStyle('hidden'));
+        }
+        /*if (ft['object_type'] == 'observation') {
+          let onLyrClickFct = this.onFeatureLayerClick(ft, 'observation');
+          lyr.off('click', onLyrClickFct);
+          lyr.on('click', onLyrClickFct);
+        }*/
+      }
+    }
+
+    /**
+     * Called when click on a row in the site table.
      * @param event 
      */
     onSiteRowClick(event) {
@@ -111,6 +141,30 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
       this._mapListService.zoomOnSelectedLayer(this._mapService.map, this.findFeatureLayer(event.row.id_site, 'site'));
     }
 
+    onIndividualRowClick(event) {
+      if (!(event && event.type === 'click')) {
+        return;
+      }
+      this.updateFeaturesStyleIndividual(this.mapFeatures, [event.row.id_individual], 'observation');
+    }
+    /**
+     * Update the style of features on map according new status.
+     * @param selected 
+     */
+    updateFeaturesStyleIndividual(mapFeatures, selected, object_type) {
+      for (let ft of mapFeatures['features']) {
+        var lyr = this.findFeatureLayer(ft.id, ft.object_type);
+        if (ft.hidden) {
+          lyr.setStyle(this.getMapStyle('hidden'));
+        } else if (ft.object_type == object_type && selected.indexOf(ft.properties.id_individual) > -1) {
+          lyr.setStyle(this.getMapStyle(ft.object_type + '-selected'));
+          lyr.bringToFront();
+        } else {
+          lyr.setStyle(this.getMapStyle(ft.object_type));
+        }
+      }
+  }
+
     /**
      * Update the selection in table.
      * @param id_site 
@@ -124,5 +178,21 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
       this.selected = [this.tableSite._internalRows[index_row_selected]];
       this.selected = [...this.selected];
       this.tableSite.offset = Math.floor((index_row_selected) / this.tableSite._limit);
+    }
+
+    showIndividuals() {
+      this.bShowIndividuals = true;
+      this.mapFeatures = {"features": this.mapDataSitegroups.concat(this.mapDataSites.concat(this.mapDataIndividuals))};
+      setTimeout(function() {
+        this.initFeaturesIndividuals()
+      }.bind(this), 300);
+    }
+
+    showSites() {
+      this.bShowIndividuals = false;
+      this.mapFeatures = {"features": this.mapDataSitegroups.concat(this.mapDataSites)};
+      setTimeout(function() {
+        this.initFeaturesSites()
+      }.bind(this), 300);
     }
 }

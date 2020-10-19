@@ -8,6 +8,14 @@
                     [zoomOnLayer]="true"
                     [zoomOnFirstTime]="true"
                 ></pnx-geojson>
+                <pnx-geojson
+                    *ngIf="mapFeaturesIndividuals && mapFeaturesIndividuals['features']"
+                    [geojson]="mapFeaturesIndividuals"
+                    [style]="obsStyle"
+                    [asCluster]="true"
+                    [zoomOnLayer]="false"
+                    [zoomOnFirstTime]="false"
+                ></pnx-geojson>
             </pnx-map>
         </div>
         <div class="cadre scroll" [style.max-height]="cardContentHeight + 'px'" style="overflow-y:auto">

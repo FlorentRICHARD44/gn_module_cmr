@@ -115,8 +115,16 @@ export class CmrService {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/individuals`);
     }
 
+    getAllIndividualsGeometriesByModule(id_module) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/individuals/geometries`);
+    }
+
     getAllIndividualsBySiteGroup(id_sitegroup) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/sitegroup/${id_sitegroup}/individuals`);
+    }
+
+    getAllIndividualsGeometriesBySiteGroup(id_sitegroup) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/sitegroup/${id_sitegroup}/individuals/geometries`);
     }
     
     getAllIndividualsBySite(id_site) {

@@ -19,6 +19,12 @@ export class BaseMapViewComponent {
           fillOpacity: 0.5,
           color: 'blue'
         },
+        hidden: {
+          opacity: 0.2,
+          fillOpacity: 0.1,
+          color: 'blue',
+
+        },
         sitegroup: {
           weight: 2,
           dashArray: [8,6],
@@ -150,7 +156,9 @@ export class BaseMapViewComponent {
     updateFeaturesStyle(mapFeatures, selected, object_type) {
         for (let ft of mapFeatures['features']) {
           var lyr = this.findFeatureLayer(ft.id, ft.object_type);
-          if (ft.object_type == object_type && selected.indexOf(ft.id) > -1) {
+          if (ft.hidden) {
+            lyr.setStyle(this.getMapStyle('hidden'));
+          } else if (ft.object_type == object_type && selected.indexOf(ft.id) > -1) {
             lyr.setStyle(this.getMapStyle(ft.object_type + '-selected'));
           } else {
             lyr.setStyle(this.getMapStyle(ft.object_type));

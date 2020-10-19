@@ -6,7 +6,6 @@ import { DatatableComponent } from '@librairies/@swimlane/ngx-datatable';
 import { MapListService } from '@geonature_common/map-list/map-list.service';
 import { BaseMapViewComponent } from './../../BaseMapViewComponent';
 import { CmrService } from './../../../services/cmr.service';
-import { CmrMapService } from './../../../services/cmr-map.service';
 import { DataService } from './../../../services/data.service';
 import { MatDialog } from "@angular/material";
 import { Module } from '../../../class/module';
@@ -33,12 +32,15 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
     public siteListProperties: Array<any> = [];
     public siteFieldsDef: any = {};
     public selected = [];
+    public selectedIndividual = [];
+    public obsStyle;
+
+    public mapFeaturesIndividuals;
 
     @ViewChild(DatatableComponent) tableSitegroup: DatatableComponent;
 
     constructor(
         private _cmrService: CmrService,
-        private _cmrMapService: CmrMapService,
         private route: ActivatedRoute,
         private _router: Router,
         private _mapListService: MapListService,
@@ -46,6 +48,7 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
         private _dataService: DataService
     ) {
       super();
+      this.obsStyle = this.getMapStyle('observation');
     }
 
     ngOnInit() {
@@ -69,6 +72,9 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
                 this._cmrService.getAllSitegroupsGeometriesByModule(this.module.id_module).subscribe((data) => {
                   this.mapFeatures = {'features':data};
                   setTimeout(function() {this.initFeatures(this.route,this.module);}.bind(this), 500);
+                  this._cmrService.getAllIndividualsGeometriesByModule(this.module.id_module).subscribe((data)=> {
+                    this.mapFeaturesIndividuals = {'features': data};
+                  });
                 });
                 return of(true);
               })
