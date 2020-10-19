@@ -90,6 +90,14 @@ def get_one_sitegroup_geometries(id_sitegroup):
     sitegroup_repo = SiteGroupsRepository()
     return sitegroup_repo.get_geometry(TSiteGroup.id_sitegroup == id_sitegroup)
 
+# Check if sitegroup contains site (geometry check)
+@blueprint.route('/sitegroup/<int:id_sitegroup>/containssite', methods=['POST'])
+@json_resp
+def check_if_sitegroup_contains_site(id_sitegroup):
+    sitegroup_repo = SiteGroupsRepository()
+    contains_site = sitegroup_repo.sitegroup_contains_site(id_sitegroup, request.json)
+    return {"contains_site": contains_site[0]}
+
 
 #############################
 # SITES ROUTES

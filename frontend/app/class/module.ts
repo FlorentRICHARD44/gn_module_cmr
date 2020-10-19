@@ -24,6 +24,7 @@ export class Module {
             display_properties:[],
             display_list: [],
             geometry_types: [],
+            check_site_within_sitegroup: false,
             properties_to_keep_when_chaining: []
         },
         sitegroup : {

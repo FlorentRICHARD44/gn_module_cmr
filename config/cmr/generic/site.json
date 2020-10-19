@@ -2,6 +2,7 @@
     "label": "Site",
     "label_plural": "Sites",
     "geometry_types": ["Point","LineString","Polygon"],
+    "check_site_within_sitegroup": false,
     "display_properties": ["name","comments","nb_visits"],
     "display_list": ["name","nb_visits","nb_observations","nb_individuals"],
     "properties_to_keep_when_chaining": [],

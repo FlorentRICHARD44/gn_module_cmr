@@ -68,6 +68,10 @@ export class CmrService {
         return this._api.put<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/sitegroup`, data);
     }
 
+    checkSiteGroupContainsSite(id_sitegroup, geometry) {
+        return this._api.post<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/sitegroup/${id_sitegroup}/containssite`, geometry);
+    }
+
     /* SITE QUERIES */
     getAllSitesByModule(id_module) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sites`);

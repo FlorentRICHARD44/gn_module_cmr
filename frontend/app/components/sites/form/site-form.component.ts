@@ -12,7 +12,7 @@ import { BreadcrumbComponent } from '../../common/breadcrumb/breadcrumb.componen
 @Component({
     selector : 'pnx-cmr-site-form',
     templateUrl: './site-form.component.html',
-    styleUrls: ['./../../../../style.scss']
+    styleUrls: ['./../../../../style.scss', './site-form.component.scss']
 })
 export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
     public path = [];
@@ -22,7 +22,8 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
     public siteFormDefinitions = [];
     public site: any = {};
     public geometry;
-
+    
+    public waitControl = false;
     public bChainInput = false;
     public bEdit = false;
 
@@ -88,38 +89,61 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
     }
 
     setNewGeometry(geojson) {
-      this.siteForm.patchValue({
-        geom: geojson ? geojson.geometry : undefined
-      });
+      if (this.module.forms.site.check_site_within_sitegroup) {
+        this.waitControl = true;
+        this._cmrService.checkSiteGroupContainsSite(this._route.snapshot.paramMap.get('id_sitegroup'), geojson.geometry).subscribe((data) => {
+          this.waitControl = false;
+          if (data.contains_site) {
+            this.siteForm.patchValue({
+              geom: geojson ? geojson.geometry : undefined
+            });
+            this._commonService.regularToaster(
+              "success",
+              "Géométrie valide"
+            );
+          } else {
+            this.siteForm.patchValue({
+              geom: undefined
+            });
+            this._commonService.regularToaster(
+              "error",
+              this.module.forms.site.label + " en dehors de " + this.module.forms.sitegroup.label
+            );
+          }
+        });
+      } else {
+        this.siteForm.patchValue({
+          geom: geojson ? geojson.geometry : undefined
+        });
+      }
     }
-
     onSubmit(addVisit) {
-        var formData = this._dataService.formatPropertiesBeforeSave(this.siteForm.value,this.module.forms.site.fields);
-        formData['id_module'] = this.module.id_module;
-        if (this._route.snapshot.paramMap.get('id_sitegroup')) {
-          formData['id_sitegroup'] = this._route.snapshot.paramMap.get('id_sitegroup');
-        }
-        this._cmrService.saveSite(formData).subscribe(result => {
-            if (this.bChainInput) { // update form resetting all fields not configured to be kept.
-              this.siteForm.reset();
-              var patch = {};
-              for (var k of Object.keys(formData)) {
-                if( this.module.forms.site.properties_to_keep_when_chaining.indexOf(k) > -1) {
-                  patch[k] = formData[k]
-                }
+      var formData = this._dataService.formatPropertiesBeforeSave(this.siteForm.value,this.module.forms.site.fields);
+      formData['id_module'] = this.module.id_module;
+      if (this._route.snapshot.paramMap.get('id_sitegroup')) {
+        formData['id_sitegroup'] = this._route.snapshot.paramMap.get('id_sitegroup');
+      }
+      this._cmrService.saveSite(formData).subscribe(result => {
+          if (this.bChainInput) { // update form resetting all fields not configured to be kept.
+            this.siteForm.reset();
+            var patch = {};
+            for (var k of Object.keys(formData)) {
+              if( this.module.forms.site.properties_to_keep_when_chaining.indexOf(k) > -1) {
+                patch[k] = formData[k]
               }
-              this.siteForm.patchValue(patch);
-              this._commonService.regularToaster(
-                "info",
-                "Formulaire enregistré!"
-              );
-            } else if (addVisit) {
-              this._router.navigate(['..', 'site', result.id_site, 'visit'],{relativeTo: this._route});
-            } else {  // go the details page
-              this._router.navigate(['..', 'site', result.id_site],{relativeTo: this._route});
             }
-          });
-    }
+            this.siteForm.patchValue(patch);
+            this._commonService.regularToaster(
+              "info",
+              "Formulaire enregistré!"
+            );
+          } else if (addVisit) {
+            this._router.navigate(['..', 'site', result.id_site, 'visit'],{relativeTo: this._route});
+          } else {  // go the details page
+            this._router.navigate(['..', 'site', result.id_site],{relativeTo: this._route});
+          }
+        });
+      }
    /**
     * Called when click on a feature on the map.
     * @param sitegroup 

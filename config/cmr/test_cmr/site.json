@@ -2,6 +2,7 @@
     "label": "Point de Capture",
     "label_plural": "Points de Capture",
     "geometry_types": ["Point"],
+    "check_site_within_sitegroup": true,
     "display_properties": ["name", "habitat","conductivité","piege_type","date_pose","date_retrait","comments","nb_visits"],
     "display_list": ["name", "piege_type","nb_visits","nb_observations","nb_individuals"],
     "properties_to_keep_when_chaining": ["lieu","habitat","conductivité","piege_type","date_pose"],

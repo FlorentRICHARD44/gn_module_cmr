@@ -1,3 +1,4 @@
+import json
 import os
 from flask import current_app
 from geonature.utils.env import DB
@@ -5,6 +6,8 @@ from sqlalchemy import distinct, func
 from sqlalchemy.orm import joinedload, subqueryload
 from sqlalchemy.inspection import inspect
 from sqlalchemy.ext.hybrid import hybrid_property
+from geoalchemy2.shape import from_shape
+from shapely.geometry import asShape
 from .models import TModuleComplement, TSiteGroup, TSite, TVisit, TIndividual, TObservation
 from .utils.config_utils import get_json_config_from_file, get_config_path
 
@@ -110,6 +113,13 @@ class SiteGroupsRepository(BaseGeomRepository):
             r['nb_individuals'] = count_individual
             result.append(r)
         return result
+    
+    def sitegroup_contains_site(self, id_sitegroup, geom):
+        q = DB.session.query(func.ST_Contains(TSiteGroup.geom, 
+                                            func.ST_SetSRID(func.ST_GeomFromGeoJSON(json.dumps(geom)), 
+                                                        4326))).filter(
+                TSiteGroup.id_sitegroup == id_sitegroup)
+        return q.one()
 
 
 class SitesRepository(BaseGeomRepository):
