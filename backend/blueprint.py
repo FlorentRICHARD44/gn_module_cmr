@@ -63,6 +63,16 @@ def update_module(module_name):
 def save_sitegroup():
     data = request.json
     sitegroup_repo = SiteGroupsRepository()
+
+    # Before to save, read the config and compute some data from municipality area (optional).
+    mod_repo = ModulesRepository()
+    module = mod_repo.get_one(TModuleComplement.id_module, data['id_module'])
+    cfg_repo = ConfigRepository()
+    sitegroup_cfg = cfg_repo._build_form_from_its_json(module['module_code'], 'sitegroup')
+    if sitegroup_cfg['compute_data_from_municipality_area']:
+        sitegroup_repo.compute_data_from_municipality_area(sitegroup_cfg['compute_data_from_municipality_area'], data)
+
+    # Save data
     if data['id_sitegroup']:
         return sitegroup_repo.update_one(data)
     else:

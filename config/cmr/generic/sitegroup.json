@@ -2,6 +2,7 @@
     "label": "Groupe de Sites",
     "label_plural": "Groupes de Sites",
     "geometry_types": ["Polygon"],
+    "compute_data_from_municipality_area": {},
     "display_properties": ["name","comments"],
     "display_list": ["name","nb_sites","nb_observations","nb_individuals"],
     "properties_to_keep_when_chaining": [],

@@ -2,6 +2,7 @@ import json
 import os
 from flask import current_app
 from geonature.utils.env import DB
+from geonature.core.ref_geo.models import LAreas, LiMunicipalities
 from sqlalchemy import distinct, func
 from sqlalchemy.orm import joinedload, subqueryload
 from sqlalchemy.inspection import inspect
@@ -120,6 +121,27 @@ class SiteGroupsRepository(BaseGeomRepository):
                                                         4326))).filter(
                 TSiteGroup.id_sitegroup == id_sitegroup)
         return q.one()
+    
+    def find_municipalities(self, geom):
+        q = DB.session.query(LiMunicipalities).join(
+            LAreas, (LAreas.id_area == LiMunicipalities.id_area)).filter(
+                func.ST_Intersects(func.ST_Transform(LAreas.geom, 4326), 
+                                func.ST_SetSRID(func.ST_GeomFromGeoJSON(json.dumps(geom)), 4326)))
+        return q.all()
+    
+    def compute_data_from_municipality_area(self, params, data):
+        """
+        If some params are to be computed from municipality area, compute them here.
+        """
+        munis = self.find_municipalities(data['geom'])
+        for key, value in params.items():  # initialize variable list
+            data[key] = []
+        for muni in munis:
+            for key, value in params.items():
+                data[key].append(getattr(muni,value))
+        for key, value in params.items():  # ensure unique values and sorted
+            data[key] = sorted(list(set(data[key])))
+        return data
 
 
 class SitesRepository(BaseGeomRepository):

@@ -2,21 +2,19 @@
     "label": "Aire d'étude",
     "label_plural": "Aires d'étude",
     "geometry_types": ["Polygon"],
-    "display_properties": ["name","commune","code_postal","comments"],
-    "display_list": ["name","commune","code_postal","nb_sites","nb_observations","nb_individuals"],
+    "compute_data_from_municipality_area": {
+        "communes": "nom_com",
+        "departement": "insee_dep"
+    },
+    "display_properties": ["name","communes","departement","comments"],
+    "display_list": ["name","communes","departement","nb_sites","nb_observations","nb_individuals"],
     "properties_to_keep_when_chaining": [],
     "specific": {
-        "commune": {
-            "type_widget": "text",
-            "attribut_label": "Commune",
-            "required": true
+        "communes": {
+            "attribut_label": "Commune"
         },
-        "code_postal": {
-            "type_widget": "text",
-            "attribut_label": "Code Postal",
-            "pattern": "^[0-9]{5}$",
-            "pattern_message": "Code postal sur 5 chiffres",
-            "required": true
+        "departement": {
+            "attribut_label": "Département"
         }
     }
 }
