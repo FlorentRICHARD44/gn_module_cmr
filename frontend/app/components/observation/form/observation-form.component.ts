@@ -30,6 +30,7 @@ export class ObservationFormComponent extends BaseMapViewComponent implements On
     public formGroups: Array<any> = [];
 
     public bEdit = false;
+    public bSaving = false;
     private _document = {};
 
     constructor(
@@ -141,6 +142,7 @@ export class ObservationFormComponent extends BaseMapViewComponent implements On
     };
 
     onSubmit() {
+        this.bSaving = true;
         var data = this.observationForm.value;
         var fields =  JSON.parse(JSON.stringify(this.module.forms.observation.fields));
         for (let grp of this.formGroups) {
@@ -153,6 +155,7 @@ export class ObservationFormComponent extends BaseMapViewComponent implements On
         formData["id_individual"] = this._route.snapshot.paramMap.get('id_individual')
     
         this._cmrService.saveObservation(formData).subscribe(result => {
+            this.bSaving = false;
             this._router.navigate(['../../..'],{relativeTo: this._route});
         });
     }

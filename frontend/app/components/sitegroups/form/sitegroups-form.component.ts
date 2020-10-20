@@ -25,6 +25,7 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
 
     public bChainInput = false;
     public bEdit = false;
+    public bSaving = false;
 
     constructor(
         private _cmrService: CmrService,
@@ -82,9 +83,11 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
     }
 
     onSubmit(addVisit) {
+        this.bSaving = true;
         var formData = this._dataService.formatPropertiesBeforeSave(this.sitegroupForm.value,this.module.forms.sitegroup.fields);
         formData['id_module'] = this.module.id_module;
         this._cmrService.saveSiteGroup(formData).subscribe(result => {
+            this.bSaving = false;
             if (this.bChainInput) { // update form resetting all fields not configured to be kept.
               this.sitegroupForm.reset();
               var patch = {};

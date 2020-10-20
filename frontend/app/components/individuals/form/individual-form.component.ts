@@ -20,6 +20,7 @@ export class IndividualFormComponent implements OnInit {
     public individualFormDefinitions: Array<any> = [];
 
     public bEdit = false;
+    public bSaving = false;
 
     constructor(
         private _cmrService: CmrService,
@@ -56,10 +57,12 @@ export class IndividualFormComponent implements OnInit {
     }
 
     onSubmit() {
+        this.bSaving = true;
         var formData = this._dataService.formatPropertiesBeforeSave(this.individualForm.value, this.module.forms.individual.fields);
         formData["id_module"] = this.module.id_module;
     
         this._cmrService.saveIndividual(formData).subscribe(result => {
+            this.bSaving = false;
             this._router.navigate([result.id_individual],{relativeTo: this._route});
         });
     }

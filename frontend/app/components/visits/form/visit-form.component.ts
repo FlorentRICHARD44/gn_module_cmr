@@ -26,6 +26,7 @@ export class VisitFormComponent extends BaseMapViewComponent implements OnInit {
 
     public bChainInput = false;
     public bEdit = false;
+    public bSaving = false;
 
     constructor(
         private _cmrService: CmrService,
@@ -90,11 +91,13 @@ export class VisitFormComponent extends BaseMapViewComponent implements OnInit {
     }
 
     onSubmit(addObservation) {
+      this.bSaving = true;
       var formValues = this.genericVisitForm.value;
       formValues['observation'] = this.visitForm.get('observation').value;
       var formData = this._dataService.formatPropertiesBeforeSave(formValues, this.module.forms.visit.fields);
       formData['id_site'] = this.site.id_site;
       this._cmrService.saveVisit(formData).subscribe(result => {
+        this.bSaving = false;
         if (this.bChainInput) { // update form resetting all fields not configured to be kept.
           this.visitForm.reset();
           this.genericVisitForm.reset();
