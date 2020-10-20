@@ -199,6 +199,25 @@ def save_visit():
     else:
         return visit_repo.create_one(data)
 
+@blueprint.route('/visits', methods=['POST'])
+@json_resp
+def create_visits_in_batch():
+    data = request.json
+    visit_repo = VisitsRepository()
+    for d in data['visits']:
+        observers_list = []
+        if d['observers']:
+            observers = (
+                DB.session.query(User).filter(
+                    User.id_role.in_(d['observers'])
+                    ).all()
+            )
+            for o in observers:
+                observers_list.append(o)
+        d['observers'] = observers_list
+    result = visit_repo.create_all(data['visits'])
+    return {'visits': result}
+
 
 #############################
 # INDIVIDUALS ROUTES

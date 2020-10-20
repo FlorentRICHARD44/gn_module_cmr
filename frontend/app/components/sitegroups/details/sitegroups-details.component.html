@@ -59,6 +59,7 @@
                         attr.aria-labelledby="nav-sites-tab">
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button class="btn btn-success float-left" [routerLink]="['site']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.site.label}}</button>
+                            <button class="btn btn-success float-left ml-2" *ngIf="module.forms.sitegroup.use_batch_visit_creation" [disabled]="sites.length < 1" (click)="onClickBatchVisit()">Ajouter une visite pour chaque {{module.forms.site.label}}</button>
                             <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export</button>
                             <button disabled class="btn btn-primary float-right"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>

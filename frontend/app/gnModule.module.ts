@@ -23,6 +23,7 @@ import { ObservationDetailsComponent } from "./components/observation/details/ob
 import { BreadcrumbComponent } from './components/common/breadcrumb/breadcrumb.component';
 import { GraphComponent } from './components/common/graph/graph.component';
 import { CmrInjector } from "./services/injector.service";
+import { SitegroupBatchVisitComponent } from "./components/sitegroups/batchvisit/sitegroup-batchvisit.component";
 
 // my module routing
 const routes: Routes = [
@@ -58,14 +59,14 @@ const routes: Routes = [
 @NgModule({
   declarations: [BreadcrumbComponent, GraphComponent,
     ModuleListComponent, ModuleHomeComponent, ModuleDisclaimerComponent, ModuleFormComponent,
-    SiteGroupFormComponent, SiteGroupDetailsComponent,
+    SiteGroupFormComponent, SiteGroupDetailsComponent, SitegroupBatchVisitComponent,
     SiteFormComponent, SiteDetailsComponent,
     VisitFormComponent, VisitDetailsComponent,
     IndividualFormObsComponent, IndividualFormComponent, IndividualDetailsComponent,
     ObservationFormComponent, ObservationDetailsComponent
   ],
   imports: [GN2CommonModule, CommonModule, RouterModule.forChild(routes), MatDialogModule, MatSlideToggleModule, ChartsModule],
-  entryComponents: [ModuleDisclaimerComponent, IndividualFormObsComponent],
+  entryComponents: [ModuleDisclaimerComponent, IndividualFormObsComponent, SitegroupBatchVisitComponent],
   providers: [],
   bootstrap: []
 })

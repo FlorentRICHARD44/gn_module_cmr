@@ -48,6 +48,17 @@ class BaseRepository:
         DB.session.commit()
         return data.to_dict()
     
+    def create_all(self, datas):
+        """
+        Create list of new items.
+        """
+        new_datas = []
+        for data in datas:
+            new_datas.append(self.model.from_dict(data))
+        DB.session.add_all(new_datas)
+        DB.session.commit()
+        return [data.to_dict() for data in new_datas]
+    
     def update_one(self, data):
         """
         Update an existing item.

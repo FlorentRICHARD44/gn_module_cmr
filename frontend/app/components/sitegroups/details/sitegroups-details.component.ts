@@ -1,13 +1,15 @@
 import { Component, OnInit, ViewChild} from '@angular/core';
-import { MatDialog } from "@angular/material";
+import { MatDialog, MatDialogConfig } from "@angular/material";
 import { ActivatedRoute } from '@angular/router';
 import { DatatableComponent } from '@librairies/@swimlane/ngx-datatable';
 import { MapListService } from '@geonature_common/map-list/map-list.service';
+import { CommonService } from "@geonature_common/service/common.service";
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { Module } from '../../../class/module';
 import { BaseMapViewComponent } from '../../BaseMapViewComponent';
 import { BreadcrumbComponent } from '../../common/breadcrumb/breadcrumb.component';
+import { SitegroupBatchVisitComponent } from '../batchvisit/sitegroup-batchvisit.component';
 
 /**
  * This component is the home page of a CMR Site Group.
@@ -45,6 +47,7 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
         private _route: ActivatedRoute,
         public dialog: MatDialog,
         private _mapListService: MapListService,
+        private _commonService: CommonService,
         private _dataService: DataService // used in template
     ) {
       super();
@@ -115,11 +118,6 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
           ft['hidden'] = true;
           lyr.setStyle(this.getMapStyle('hidden'));
         }
-        /*if (ft['object_type'] == 'observation') {
-          let onLyrClickFct = this.onFeatureLayerClick(ft, 'observation');
-          lyr.off('click', onLyrClickFct);
-          lyr.on('click', onLyrClickFct);
-        }*/
       }
     }
 
@@ -196,5 +194,29 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
       setTimeout(function() {
         this.initFeaturesSites()
       }.bind(this), 300);
+    }
+
+    onClickBatchVisit() {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.data = {module: this.module, sites: this.sites};
+      dialogConfig.maxHeight = window.innerHeight - 20 + "px";
+      dialogConfig.position = { top: "30px" };
+      var dialogRef = this.dialog.open(SitegroupBatchVisitComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe((result) => { 
+          if (result) {
+
+              // Need to refresh list of sites to have new nb visits.
+              this._cmrService.getAllSitesBySiteGroup(this._route.snapshot.params.id_sitegroup).subscribe((data) => {
+                this.sites = data;
+                this.sites = [...this.sites]
+              });
+              // info to user.
+              this._commonService.regularToaster(
+                "info",
+                result.visits.length + " visites créées"
+              );
+
+          }
+      });
     }
 }

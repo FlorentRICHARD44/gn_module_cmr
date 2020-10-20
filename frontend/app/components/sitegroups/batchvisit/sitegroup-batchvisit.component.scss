@@ -1,0 +1,14 @@
+.button-container {
+    justify-content: center;
+}
+
+:host /deep/ table {
+    display: block;
+    max-height: 50vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+th, td {
+    padding: 3px 5px;
+}
