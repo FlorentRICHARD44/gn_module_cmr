@@ -53,6 +53,13 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
           this.module = data;
           this.path = BreadcrumbComponent.buildPath("sitegroup", this.module);
           this.leafletDrawOptions = this._cmrMapService.getLeafletDrawOptionDrawAll(this.module.forms.sitegroup.geometry_types);
+          for (let item of ['polygon', 'polyline','circlemarker']) {
+            if (this.leafletDrawOptions.draw[item]) {
+              this.leafletDrawOptions.draw[item] = {
+                shapeOptions: this.getMapStyle('sitegroup')
+              }
+            }
+          }
           var schema = this.module.forms.sitegroup.fields;
           this.sitegroupFormDefinitions = this._dataService.buildFormDefinitions(schema);
         }
@@ -64,8 +71,21 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
             this.sitegroupForm.patchValue(this._dataService.formatDataForBeforeEdition(this.sitegroup, this.module.forms.sitegroup.fields));
             this.sitegroupForm.patchValue({'geom':data[0].geometry});
             this.mapFeature = data[0];
+            setTimeout(this.updateEditingStyle.bind(this), 300);
           });
         }
+    }
+
+    /**
+     * Apply the normal style to edited item.
+     */
+    updateEditingStyle() {
+      var layers = this._mapService.map['_layers'];
+      for (let key of Object.keys(layers)) {
+        if ('editing' in layers[key]) {
+          layers[key].setStyle(this.getMapStyle('sitegroup'));
+        }
+      }
     }
      
     ngAfterViewInit() {
