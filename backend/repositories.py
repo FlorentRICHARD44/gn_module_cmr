@@ -2,6 +2,7 @@ import json
 import os
 from flask import current_app
 from geonature.utils.env import DB
+from geonature.core.gn_commons.models import TMedias
 from geonature.core.ref_geo.models import LAreas, LiMunicipalities
 from sqlalchemy import distinct, func
 from sqlalchemy.orm import joinedload, subqueryload
@@ -95,6 +96,16 @@ class ModulesRepository(BaseRepository):
         """
         module_to_update = DB.session.query(self.model).filter(TModuleComplement.module_code == module_code).one()
         module_to_update.data = data['data']  # Update the JSONB column "data"
+        medias_list = []
+        if data['medias']:
+            medias = (
+                DB.session.query(TMedias).filter(
+                    TMedias.id_media.in_([m['id_media'] for m in data['medias']])
+                    ).all()
+            )
+            for m in medias:
+                medias_list.append(m)
+        module_to_update.medias = medias_list
         DB.session.merge(module_to_update)
         DB.session.commit()
         return module_to_update.to_dict()

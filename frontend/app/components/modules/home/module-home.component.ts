@@ -4,6 +4,7 @@ import { of } from '@librairies/rxjs';
 import { mergeMap } from '@librairies/rxjs/operators';
 import { DatatableComponent } from '@librairies/@swimlane/ngx-datatable';
 import { MapListService } from '@geonature_common/map-list/map-list.service';
+import { MediaService } from '@geonature_common/service/media.service';
 import { BaseMapViewComponent } from './../../BaseMapViewComponent';
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
@@ -34,6 +35,7 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
     public selected = [];
     public selectedIndividual = [];
     public obsStyle;
+    public medias = [];
 
     public mapFeaturesIndividuals;
 
@@ -45,6 +47,7 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
         private _router: Router,
         private _mapListService: MapListService,
         public dialog: MatDialog,
+        public ms: MediaService,
         private _dataService: DataService
     ) {
       super();
@@ -57,6 +60,8 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
             this._cmrService.loadOneModule(params.module).pipe(
               mergeMap(() => {
                 this.module = this._cmrService.getModule(params.module);
+                console.log(this.module);
+                this.medias = this.module.medias;
                 this.properties = this.module.forms.module.display_properties;
                 this.fields = this.module.forms.module.fields;
                 this.sitegroupListProperties = this.module.forms.sitegroup.display_list;

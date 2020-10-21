@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { CmrService } from "./cmr.service";
 
+import { Media } from "@geonature_common/form/media/media";
+
 /**
  * Service with generic methods to handle data.
  */
@@ -78,6 +80,12 @@ export class DataService {
                     observers.push(o.id_role);
                 }
                 data[def] = observers;
+            } else if (fieldDef[def].type_widget == 'medias') {
+                if (data[def]) {
+                    for (var i = 0; i < data[def].length; i++) {
+                        data[def][i] = new Media(data[def][i]);
+                    }
+                }
             }
         }
         return data;
@@ -89,6 +97,7 @@ export class DataService {
      */
     buildFormDefinitions(schema) {
         return Object.keys(schema)
+              .sort((a, b) => { return a == 'medias' ? +1 : b == "medias" ? -1 : 0 })
               .filter((attribut_name) => schema[attribut_name].type_widget)
               .map((attribut_name) => {
                   const elem = schema[attribut_name];

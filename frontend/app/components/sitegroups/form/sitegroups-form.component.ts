@@ -62,17 +62,18 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
           }
           var schema = this.module.forms.sitegroup.fields;
           this.sitegroupFormDefinitions = this._dataService.buildFormDefinitions(schema);
-        }
-        var editId = this._route.snapshot.paramMap.get('edit');
-        if (editId) {
-          this.bEdit = true;
-          this._cmrService.getOneSiteGroupGeometry(editId).subscribe((data) => {
-            this.sitegroup = data[0].properties;
-            this.sitegroupForm.patchValue(this._dataService.formatDataForBeforeEdition(this.sitegroup, this.module.forms.sitegroup.fields));
-            this.sitegroupForm.patchValue({'geom':data[0].geometry});
-            this.mapFeature = data[0];
-            setTimeout(this.updateEditingStyle.bind(this), 300);
-          });
+          
+          var editId = this._route.snapshot.paramMap.get('edit');
+          if (editId) {
+            this.bEdit = true;
+            this._cmrService.getOneSiteGroupGeometry(editId).subscribe((data) => {
+              this.sitegroup = data[0].properties;
+              this.sitegroupForm.patchValue(this._dataService.formatDataForBeforeEdition(this.sitegroup, this.module.forms.sitegroup.fields));
+              this.sitegroupForm.patchValue({'geom':data[0].geometry});
+              this.mapFeature = data[0];
+              setTimeout(this.updateEditingStyle.bind(this), 300);
+            });
+          }
         }
     }
 

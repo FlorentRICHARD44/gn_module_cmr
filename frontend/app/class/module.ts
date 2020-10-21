@@ -6,6 +6,7 @@ export class Module {
     public module_label = "";
     public module_code = "";
     public use_sitegroup = false;
+    public medias: [];
     public config = {
         disclaimer: false,
         disclaimer_text: [],

@@ -4,6 +4,7 @@
     "display_properties": ["identifier","rfid","marker","comments"],
     "display_list": ["identifier","rfid","marker", "nb_observations"],
     "properties_to_keep_when_chaining": [],
+    "required_medias": [],
     "generic": {
         "id_individual": {
             "type_widget": "text",
@@ -25,15 +26,15 @@
             "attribut_label": "Marquage",
             "required": true
         },
-        "marker_media": {
-            "type_widget": "text",
-            "attribut_label": "Photo du marquage",
-            "required": false
-        },
         "comments": {
             "type_widget": "textarea",
             "attribut_label": "Commentaires",
             "required": false
+        },
+        "medias": {
+          "type_widget": "medias",
+          "attribut_label": "Médias",
+          "schema_dot_table": "gn_cmr.t_individual"
         },
         "nb_observations": {
             "attribut_label": "Nb Observations"

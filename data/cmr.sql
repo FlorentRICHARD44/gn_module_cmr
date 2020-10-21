@@ -113,6 +113,7 @@ CREATE TABLE gn_cmr.cor_visit_observer(
 -- TABLE t_observation: contains all observations concerning 1 individual in 1 visit
 CREATE TABLE gn_cmr.t_observation(
     id_observation serial NOT NULL,
+    uuid_observation uuid NOT NULL DEFAULT uuid_generate_v4(),
     id_individual integer NOT NULL,
     id_visit integer NOT NULL,
     data jsonb,
@@ -122,3 +123,12 @@ CREATE TABLE gn_cmr.t_observation(
     CONSTRAINT fk_gn_cmr_t_observation_id_visite FOREIGN KEY (id_visit) REFERENCES gn_cmr.t_visit(id_visit),
     CONSTRAINT check_gn_cmr_t_observation_type_observation_nomenclature CHECK (ref_nomenclatures.check_nomenclature_type_by_mnemonique(type_observation,'CMR_OBSERVATION_TYPE')) NOT VALID
 );
+
+
+-- TABLE LOCATION for media storage.
+INSERT INTO gn_commons.bib_tables_location (schema_name, table_name, pk_field, uuid_field_name, table_desc) VALUES
+('gn_cmr', 't_module_complements', 'id_module', 'uuid_module_complement', 'Table centralisant les compléments de module pour la CMR'),
+('gn_cmr', 't_sitegroup', 'id_sitegroup', 'uuid_sitegroup', 'Table centralisant les groupe de sites pour la CMR'),
+('gn_cmr', 't_site', 'id_site', 'uuid_site', 'Table centralisant les sites pour la CMR'),
+('gn_cmr', 't_individual', 'id_individual', 'uuid_individual', 'Table centralisant les individus pour la CMR'),
+('gn_cmr', 't_observation', 'id_observation', 'uuid_observation', 'Table centralisant les observations pour la CMR');

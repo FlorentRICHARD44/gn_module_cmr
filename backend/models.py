@@ -1,5 +1,6 @@
 import json
 from uuid import uuid4
+from geonature.core.gn_commons.models import TMedias, TModules
 from geonature.core.gn_meta.models import TDatasets
 from geonature.utils.utilssqlalchemy import serializable
 from geonature.utils.env import DB
@@ -8,13 +9,27 @@ from shapely.geometry import asShape
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.ext.hybrid import hybrid_property
 from geoalchemy2 import Geometry
-from geonature.core.gn_commons.models import TModules
 from pypnusershub.db.models import User
 
 from .utils.transform import data_to_json, json_to_data
 
 SCHEMA_NAME = 'gn_cmr'
 
+def update_media_data(data):
+    """
+    Method to update the media from JSON to correct existing medias in database.
+    """
+    medias_list = []
+    if data['medias']:
+        medias = (
+            DB.session.query(TMedias).filter(
+                TMedias.id_media.in_([m['id_media'] for m in data['medias']])
+                ).all()
+        )
+        for m in medias:
+            medias_list.append(m)
+    data['medias'] = medias_list
+    return data
 
 @serializable
 class TObservation(DB.Model):
@@ -25,10 +40,16 @@ class TObservation(DB.Model):
     __tablename__ = 't_observation'
     __table_args__ = {'schema': SCHEMA_NAME}
     id_observation = DB.Column(DB.Integer, primary_key=True)
+    uuid_observation = DB.Column(UUID(as_uuid=True), default=uuid4)
     id_individual = DB.Column(DB.Integer)
     id_visit = DB.Column(DB.Integer)
     data = DB.Column(JSONB)
     comments = DB.Column(DB.Unicode)
+    medias = DB.relationship(TMedias,
+            primaryjoin=(TMedias.uuid_attached_row == uuid_observation),
+            foreign_keys=[TMedias.uuid_attached_row],
+            cascade="all",
+            lazy="select")
 
     def to_dict(self):
         data = self.as_dict()
@@ -39,6 +60,7 @@ class TObservation(DB.Model):
             if self.visit.site is not None:
                 data["site_name"] = self.visit.site.name
         data["individual_identifier"] = self.individual.to_dict()['identifier'] if self.individual else None
+        data["medias"] = [media.as_dict() for media in self.medias]
         return data_to_json(data)
 
     def to_geojson(self, geom):
@@ -58,7 +80,11 @@ class TObservation(DB.Model):
     @staticmethod
     def from_dict(data):
         data = json_to_data(data, TObservation)
-        return TObservation(**data)
+        data = update_media_data(data)
+        obj = TObservation(**data)
+        for m in obj.medias:
+            m.uuid_attached_row = obj.uuid_observation
+        return obj
 
 corVisitObserver = DB.Table('cor_visit_observer', 
     DB.Column("id_visit",
@@ -137,6 +163,11 @@ class TSite(DB.Model):
     visits = DB.relationship(TVisit, 
             primaryjoin=(id_site == TVisit.id_site),
             foreign_keys=[TVisit.id_site])
+    medias = DB.relationship(TMedias,
+            primaryjoin=(TMedias.uuid_attached_row == uuid_site),
+            foreign_keys=[TMedias.uuid_attached_row],
+            cascade="all",
+            lazy="select")
 
     @hybrid_property
     def nb_visits(self):
@@ -146,6 +177,7 @@ class TSite(DB.Model):
         data = self.as_dict()
         data['nb_visits'] = self.nb_visits
         data['sitegroup'] = self.sitegroup.to_dict() if self.sitegroup else None
+        data['medias'] = [media.as_dict() for media in self.medias]
         return data_to_json(data)
 
     def to_geojson(self, geom):
@@ -163,7 +195,11 @@ class TSite(DB.Model):
     def from_dict(data):
         data['geom'] = from_shape(asShape(data['geom']), srid=4326)
         data = json_to_data(data, TSite)
-        return TSite(**data)
+        data = update_media_data(data)
+        obj = TSite(**data)
+        for m in obj.medias:
+            m.uuid_attached_row = obj.uuid_site
+        return obj
 
 TVisit.site = DB.relationship(TSite,
         primaryjoin=(TVisit.id_site == TSite.id_site),
@@ -188,6 +224,11 @@ class TSiteGroup(DB.Model):
     sites = DB.relationship(TSite,
                 primaryjoin=(id_sitegroup == TSite.id_sitegroup),
                 foreign_keys=[TSite.id_sitegroup])
+    medias = DB.relationship(TMedias,
+            primaryjoin=(TMedias.uuid_attached_row == uuid_sitegroup),
+            foreign_keys=[TMedias.uuid_attached_row],
+            cascade="all",
+            lazy="select")
 
     @hybrid_property
     def nb_sites(self):
@@ -196,6 +237,7 @@ class TSiteGroup(DB.Model):
     def to_dict(self):
         data = self.as_dict()
         data['nb_sites'] = self.nb_sites
+        data['medias'] = [media.as_dict() for media in self.medias]
         return data_to_json(data)
 
     def to_geojson(self, geom):
@@ -213,7 +255,11 @@ class TSiteGroup(DB.Model):
     def from_dict(data):
         data['geom'] = from_shape(asShape(data['geom']), srid=4326)
         data = json_to_data(data, TSiteGroup)
-        return TSiteGroup(**data)
+        data = update_media_data(data)
+        obj = TSiteGroup(**data)
+        for m in obj.medias:
+            m.uuid_attached_row = obj.uuid_sitegroup
+        return obj
 
 
 TSite.sitegroup = DB.relationship(TSiteGroup,
@@ -240,6 +286,11 @@ class TIndividual(DB.Model):
     observations = DB.relationship(TObservation, 
             primaryjoin=(TObservation.id_individual == id_individual),
             foreign_keys=[TObservation.id_individual])
+    medias = DB.relationship(TMedias,
+            primaryjoin=(TMedias.uuid_attached_row == uuid_individual),
+            foreign_keys=[TMedias.uuid_attached_row],
+            cascade="all",
+            lazy="select")
 
     @hybrid_property
     def nb_observations(self):
@@ -248,12 +299,17 @@ class TIndividual(DB.Model):
     def to_dict(self):
         data = self.as_dict()
         data['nb_observations'] = self.nb_observations
+        data['medias'] = [media.as_dict() for media in self.medias]
         return data_to_json(data)
 
     @staticmethod
     def from_dict(data):
         data = json_to_data(data, TIndividual)
-        return TIndividual(**data)
+        data = update_media_data(data)
+        obj = TIndividual(**data)
+        for m in obj.medias:
+            m.uuid_attached_row = obj.uuid_individual
+        return obj
 
 TObservation.individual = DB.relationship(TIndividual,
         primaryjoin=(TObservation.id_individual == TIndividual.id_individual),
@@ -282,11 +338,22 @@ class TModuleComplement(TModules):
     )
     data = DB.Column(JSONB)
     uuid_module_complement = DB.Column(UUID(as_uuid=True), default=uuid4)
+    medias = DB.relationship(TMedias,
+            primaryjoin=(TMedias.uuid_attached_row == uuid_module_complement),
+            foreign_keys=[TMedias.uuid_attached_row],
+            cascade="all",
+            lazy="select")
     
     def to_dict(self):
-        return data_to_json(self.as_dict())
+        data = data_to_json(self.as_dict())
+        data['medias'] = [media.as_dict() for media in self.medias]
+        return data
     
     @staticmethod
     def from_dict(data):
         data = json_to_data(data, TModuleComplement)
-        return TModuleComplement(**data)
+        data = update_media_data(data)
+        obj = TModuleComplement(**data)
+        for m in obj.medias:
+            m.uuid_attached_row = obj.uuid_individual
+        return obj

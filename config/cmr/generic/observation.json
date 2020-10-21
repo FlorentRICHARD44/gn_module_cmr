@@ -23,6 +23,11 @@
             "attribut_label": "Commentaires",
             "required": false
         },
+        "medias": {
+          "type_widget": "medias",
+          "attribut_label": "Médias",
+          "schema_dot_table": "gn_cmr.t_observation"
+        },
         "visit_date": {
             "attribut_label": "Date de Visite",
             "type_column": "date"

@@ -29,7 +29,7 @@ export class BaseMapViewComponent {
           weight: 2,
           dashArray: [8,6],
           opacity: 0.6,
-          fillOpacity: 0.4,
+          fillOpacity: 0.1,
           color: 'blue'
         },
         site: {

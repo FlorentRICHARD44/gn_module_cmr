@@ -1,5 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MediaService } from '@geonature_common/service/media.service';
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { Module } from '../../../class/module';
@@ -31,6 +32,7 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
     constructor(
         private _cmrService: CmrService,
         private route: ActivatedRoute,
+        public ms: MediaService,
         private _dataService: DataService // used in template
     ) {
       super();
@@ -46,6 +48,7 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
                 this.visitFieldsDef = this.module.forms.visit.fields;
                 this._cmrService.getOneSiteGeometry(params.id_site).subscribe((data) => {
                   this.site = data[0].properties;
+                  this.medias = this.site.medias;
                   this.path = BreadcrumbComponent.buildPath("site", this.module, this.site);
                   this.path = [...this.path];
                   if (params.id_sitegroup) {

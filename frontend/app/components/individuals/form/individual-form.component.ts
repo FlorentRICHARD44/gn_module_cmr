@@ -50,7 +50,7 @@ export class IndividualFormComponent implements OnInit {
                 this.bEdit = true;
                 this._cmrService.getOneIndividual(editId).subscribe((data) => {
                     this.individual = data;
-                    this.individualForm.patchValue(data);
+                    this.individualForm.patchValue(this._dataService.formatDataForBeforeEdition(data, this.module.forms.individual.fields));
                 });
             }
         }

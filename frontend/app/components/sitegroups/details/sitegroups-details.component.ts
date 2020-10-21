@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DatatableComponent } from '@librairies/@swimlane/ngx-datatable';
 import { MapListService } from '@geonature_common/map-list/map-list.service';
 import { CommonService } from "@geonature_common/service/common.service";
+import { MediaService } from '@geonature_common/service/media.service';
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { Module } from '../../../class/module';
@@ -48,6 +49,7 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
         public dialog: MatDialog,
         private _mapListService: MapListService,
         private _commonService: CommonService,
+        private ms: MediaService, // used in template
         private _dataService: DataService // used in template
     ) {
       super();
@@ -68,6 +70,7 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
                 this.individualFieldsDef = this.module.forms.individual.fields;
                 this._cmrService.getOneSiteGroupGeometry(params.id_sitegroup).subscribe((data) => {
                   this.sitegroup = data[0].properties;
+                  this.medias = this.sitegroup.medias || [];
                   this.mapDataSitegroups = data;
                   this.mapFeatures = {"features": this.mapDataSitegroups};
                     setTimeout(this.initFeaturesSites.bind(this), 300);
@@ -182,6 +185,7 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
 
     showIndividuals() {
       this.bShowIndividuals = true;
+      this.selectedIndividual = [];
       this.mapFeatures = {"features": this.mapDataSitegroups.concat(this.mapDataSites.concat(this.mapDataIndividuals))};
       setTimeout(function() {
         this.initFeaturesIndividuals()
@@ -190,6 +194,7 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
 
     showSites() {
       this.bShowIndividuals = false;
+      this.selected = [];
       this.mapFeatures = {"features": this.mapDataSitegroups.concat(this.mapDataSites)};
       setTimeout(function() {
         this.initFeaturesSites()

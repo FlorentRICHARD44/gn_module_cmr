@@ -32,11 +32,30 @@
                                         <td class="text-in-area">{{ _dataService.formatProperty(individual[fieldName], fields[fieldName])}}</td>
                                     </tr>
                                 </table>
-                                <h5>Taxonomie</h5>
-                            </div>
-                            <div class="">
+                                <hr class="mt-3 mb-3">
                                 <h5>Médias</h5>
-                                <!-- TODO voir à mettre dans un onglet à part -->
+                                <ng-container *ngFor="let media of medias; index as i">
+                                    <div class="medias-tab">
+                                      <div [matTooltip]="ms.toString(media)">
+                                        <a [href]="ms.href(media)" target="_blank">{{ media.title_fr }}</a>
+                                        <i>
+                                          ({{ ms.typeMedia(media)
+                                          }}<span *ngIf="media.author"> par {{ media.author }}</span
+                                          >)
+                                        </i>
+                                      </div>
+                                      <p *ngIf="media.description_fr">{{media.description_fr}}</p>
+                                      <div>
+                                        <pnx-display-medias
+                                          [medias]="medias"
+                                          [index]="i"
+                                          display="medium"
+                                          diaporama="true"
+                                        >
+                                        </pnx-display-medias>
+                                      </div>
+                                    </div>
+                                  </ng-container>
                             </div>
                             <div id="graph-list" class="">
                                 <h5>Courbes d'évolutions</h5>
@@ -46,6 +65,16 @@
                     </div>
                     <div class="tab-pane fade" id="historic-tab" role="tabpanel" attr.aria-labelledby="nav-historic-tab">
                         <div class="flex-container">
+                            <div class="">
+                                <pnx-map height="60vh" class="map-card">
+                                    <pnx-geojson
+                                        *ngIf="mapFeatures && mapFeatures['features']"
+                                        [geojson]="mapFeatures"
+                                        [zoomOnLayer]="true"
+                                        [zoomOnFirstTime]="true"
+                                    ></pnx-geojson>
+                                </pnx-map>
+                            </div>
                             <div class="">
                                 <div class="details">
                                     <ngx-datatable #tableHistoric
@@ -76,17 +105,6 @@
                                         </ngx-datatable-column>
                                     </ngx-datatable>
                                 </div>
-                                <pnx-map height="40vh" class="map-card">
-                                    <pnx-geojson
-                                        *ngIf="mapFeatures && mapFeatures['features']"
-                                        [geojson]="mapFeatures"
-                                        [zoomOnLayer]="true"
-                                        [zoomOnFirstTime]="true"
-                                    ></pnx-geojson>
-                                </pnx-map>
-                            </div>
-                            <div class="">
-                                <h5>Détails</h5>
                             </div>
                         </div>
                     </div>

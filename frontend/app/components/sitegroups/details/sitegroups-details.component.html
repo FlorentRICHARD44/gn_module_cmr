@@ -24,25 +24,46 @@
                                         <td class="text-in-area">{{ _dataService.formatProperty(sitegroup[fieldName], fields[fieldName])}}</td>
                                     </tr>
                                 </table>
+                                <pnx-map height="50vh" class="map-card">
+                                    <pnx-geojson
+                                        *ngIf="mapFeatures && mapFeatures['features']"
+                                        [geojson]="mapFeatures"
+                                        [zoomOnLayer]="true"
+                                        [zoomOnFirstTime]="true"
+                                    ></pnx-geojson>
+                                </pnx-map>
                             </div>
                             <div class="tab-pane fade"
                                 id="media-tab"
                                 role="tabpanel"
                                 attr.aria-labelledby="nav-media-tab">
-                                <h3>Medias</h3>
+                                <ng-container *ngFor="let media of medias; index as i">
+                                    <div class="medias-tab">
+                                      <div [matTooltip]="ms.toString(media)">
+                                        <a [href]="ms.href(media)" target="_blank">{{ media.title_fr }}</a>
+                                        <i>
+                                          ({{ ms.typeMedia(media)
+                                          }}<span *ngIf="media.author"> par {{ media.author }}</span
+                                          >)
+                                        </i>
+                                      </div>
+                                      <p *ngIf="media.description_fr">{{media.description_fr}}</p>
+                                      <div>
+                                        <pnx-display-medias
+                                          [medias]="medias"
+                                          [index]="i"
+                                          display="medium"
+                                          diaporama="true"
+                                        >
+                                        </pnx-display-medias>
+                                      </div>
+                                    </div>
+                                  </ng-container>
                             </div>
                         </div>
                     </nav>
                 </div>
             </div>
-            <pnx-map height="50vh" class="map-card">
-                <pnx-geojson
-                    *ngIf="mapFeatures && mapFeatures['features']"
-                    [geojson]="mapFeatures"
-                    [zoomOnLayer]="true"
-                    [zoomOnFirstTime]="true"
-                ></pnx-geojson>
-            </pnx-map>
         </div>
         <div class="cadre scroll" [style.max-height]="cardContentHeight + 'px'" style="overflow-y:auto">
             <nav>

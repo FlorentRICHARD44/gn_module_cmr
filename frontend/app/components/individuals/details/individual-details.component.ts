@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatatableComponent } from '@librairies/@swimlane/ngx-datatable';
 import { MapListService } from '@geonature_common/map-list/map-list.service';
+import { MediaService } from '@geonature_common/service/media.service';
 import { Module } from '../../../class/module';
 import { BaseMapViewComponent } from '../../BaseMapViewComponent';
 import { CmrService } from './../../../services/cmr.service';
@@ -22,6 +23,7 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
     public path: Array<any> = [];
     public module: Module = new Module();
     public individual: any = {};
+    public medias = [];
     public properties: Array<any> = [];
     public fields: Array<any> = [];
     public historic: Array<any> = [];
@@ -39,6 +41,7 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
         private _cmrService: CmrService,
         private route: ActivatedRoute,
         private _mapListService: MapListService,
+        private ms: MediaService,
         private _dataService: DataService // used in template
     ) {
       super();
@@ -52,7 +55,10 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
                 this.fields = this.module.forms.individual.fields;
                 this.path = BreadcrumbComponent.buildPath('individual', this.module);
                 this.path = [...this.path];
-                this._cmrService.getOneIndividual(params.id_individual).subscribe((data) => this.individual = data);
+                this._cmrService.getOneIndividual(params.id_individual).subscribe((data) => {
+                  this.individual = data;
+                  this.medias = this.individual.medias;
+                });
 
                 this.historicListProperties = this.module.forms.observation.individual_historic_display_list;
                 this.historicFieldsDef = Object.assign({},this.module.forms.observation.fields);
@@ -114,6 +120,7 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
       for (let ft of this.mapFeatures['features']) {
         let lyr = this.findFeatureLayer(ft.id, ft.object_type);
         if (ft.id === event.row.id_observation) {
+          lyr.bringToFront();
           lyr.openPopup();
         } else {
           lyr.closePopup();
