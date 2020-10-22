@@ -8,6 +8,8 @@
       </div>
         <div class="cadre" [style.min-height]="cardContentHeight + 'px'">
             <pnx-map height="100%" class="map-card">
+                <pnx-gps (markerChanged)="setNewGeometry($event)"></pnx-gps>
+                <pnx-leaflet-filelayer (onGeomChange)="onGeomChangeGPSFile($event)" [editMode]="true"></pnx-leaflet-filelayer>
                 <pnx-leaflet-draw 
                     [geojson]="geometry" 
                     [options]="leafletDrawOptions" 

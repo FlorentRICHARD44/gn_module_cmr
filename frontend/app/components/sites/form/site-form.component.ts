@@ -90,6 +90,15 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
     }
 
     setNewGeometry(geojson) {
+      this.addNewGeometry(geojson, false);
+    }
+    onGeomChangeGPSFile(geojson) {
+      if (geojson.geometry.coordinates.length > 2) {
+        geojson.geometry.coordinates = [geojson.geometry.coordinates[0], geojson.geometry.coordinates[1]]
+      }
+      this.addNewGeometry(geojson, true);
+    }
+    addNewGeometry(geojson, get_properties) {
       if (this.module.forms.site.check_site_within_sitegroup) {
         this.waitControl = true;
         this._cmrService.checkSiteGroupContainsSite(this._route.snapshot.paramMap.get('id_sitegroup'), geojson.geometry).subscribe((data) => {
@@ -98,6 +107,12 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
             this.siteForm.patchValue({
               geom: geojson ? geojson.geometry : undefined
             });
+            if (get_properties) {
+              this.siteForm.patchValue({
+                name: geojson.properties.name,
+                comments: geojson.properties.desc
+              });
+            }
             this._commonService.regularToaster(
               "success",
               "Géométrie valide"
@@ -116,6 +131,12 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
         this.siteForm.patchValue({
           geom: geojson ? geojson.geometry : undefined
         });
+        if (get_properties) {
+          this.siteForm.patchValue({
+            name: geojson.properties.name,
+            comments: geojson.properties.desc
+          });
+        }
       }
     }
     onSubmit(addVisit) {

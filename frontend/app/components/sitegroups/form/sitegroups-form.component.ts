@@ -123,7 +123,7 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
                 "Formulaire enregistré!"
               );
             } else if (addVisit) {
-              this._router.navigate(['..', 'sitegroup', result.id_sitegroup, 'sitegroup'],{relativeTo: this._route});
+              this._router.navigate(['..', 'sitegroup', result.id_sitegroup, 'site'],{relativeTo: this._route});
             } else {  // go the details page
               this._router.navigate(['..', 'sitegroup', result.id_sitegroup],{relativeTo: this._route});
             }
