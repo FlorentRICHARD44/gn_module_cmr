@@ -85,7 +85,10 @@
                                     </a>
                                 </ng-template>
                             </ngx-datatable-column>
-                            <ngx-datatable-column width="150" *ngFor="let prop of sitegroupListProperties" [name]="sitegroupFieldsDef[prop].attribut_label" [prop]="prop" >
+                            <ngx-datatable-column *ngFor="let prop of sitegroupListProperties"  [width]="prop.width" [name]="sitegroupFieldsDef[prop.field].attribut_label" [prop]="prop.field" >
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <span>{{_dataService.formatProperty(row[prop.field], sitegroupFieldsDef[prop.field])}}</span>
+                                </ng-template>
                             </ngx-datatable-column>
                         </ngx-datatable>
                     </div>
@@ -126,7 +129,10 @@
                                     </a>
                                 </ng-template>
                             </ngx-datatable-column>
-                            <ngx-datatable-column width="150" *ngFor="let prop of siteListProperties" [name]="siteFieldsDef[prop].attribut_label" [prop]="prop" >
+                            <ngx-datatable-column *ngFor="let prop of siteListProperties" [width]="prop.width" [name]="siteFieldsDef[prop.field].attribut_label" [prop]="prop.field" >
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <span>{{_dataService.formatProperty(row[prop.field], siteFieldsDef[prop.field])}}</span>
+                                </ng-template>
                             </ngx-datatable-column>
                         </ngx-datatable>
                     </div>
@@ -165,7 +171,10 @@
                                     </a>
                                 </ng-template>
                             </ngx-datatable-column>
-                            <ngx-datatable-column width="150" *ngFor="let prop of individualListProperties" [name]="individualFieldsDef[prop].attribut_label" [prop]="prop" >
+                            <ngx-datatable-column *ngFor="let prop of individualListProperties" [width]="prop.width" [name]="individualFieldsDef[prop.field].attribut_label" [prop]="prop.field" >
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <span>{{_dataService.formatProperty(row[prop.field], individualFieldsDef[prop.field])}}</span>
+                                </ng-template>
                             </ngx-datatable-column>
                         </ngx-datatable>
                     </div>

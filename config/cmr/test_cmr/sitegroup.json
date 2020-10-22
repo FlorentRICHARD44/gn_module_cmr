@@ -7,7 +7,25 @@
         "departement": "insee_dep"
     },
     "display_properties": ["name","communes","departement","comments"],
-    "display_list": ["name","communes","departement","nb_sites","nb_observations","nb_individuals"],
+    "display_list": [{
+        "field":"name",
+        "width": 200
+    },{
+        "field":"communes",
+        "width": 250
+    },{
+        "field":"departement",
+        "width": 100
+    },{
+        "field":"nb_sites",
+        "width": 100
+    },{
+        "field": "nb_observations",
+        "width": 100
+    },{
+        "field": "nb_individuals",
+        "width": 100
+    }],
     "use_batch_visit_creation": true,
     "properties_to_keep_when_chaining": [],
     "specific": {

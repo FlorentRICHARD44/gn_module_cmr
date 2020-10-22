@@ -1,6 +1,12 @@
 {
     "display_properties": ["type","comments","individual_state","developpement_stade","age","particular_signs"],
-    "display_list": ["individual_identifier","type"],
+    "display_list": [{
+        "field":"individual_identifier",
+        "width": 150
+    },{
+        "field": "type",
+        "width": 250
+    }],
     "properties_to_keep_when_chaining": [],
     "individual_histogram_items": [{
         "field":"poids_g",

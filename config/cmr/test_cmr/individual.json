@@ -1,6 +1,21 @@
 {
     "display_properties": ["identifier","rfid","sexe","marker","comments"],
-    "display_list": ["identifier","rfid","sexe","marker","nb_observations"],
+    "display_list": [{
+        "field":"identifier",
+        "width": 150
+    },{
+        "field": "rfid",
+        "width": 150
+    },{
+        "field": "sexe",
+        "width": 120
+    },{
+        "field": "marker",
+        "width": 150
+    },{
+        "field": "nb_observations",
+        "width": 120
+    }],
     "properties_to_keep_when_chaining": [],
     "specific": {
         "sexe": {

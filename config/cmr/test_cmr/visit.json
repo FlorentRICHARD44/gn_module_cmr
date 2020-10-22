@@ -1,6 +1,21 @@
 {
     "display_properties": ["site_name","date","dataset_name","session","observers","observation","nb_observations","comments"],
-    "display_list": ["date","observers","session","observation","nb_observations"],
+    "display_list": [{
+        "field":"date",
+        "width": 120
+    },{
+        "field":"observers",
+        "width": 250
+    },{
+        "field": "session",
+        "width": 120
+    },{
+        "field": "observation",
+        "width": 80
+    },{
+        "field": "nb_observations",
+        "width": 120
+    }],
     "properties_to_keep_when_chaining": [],
     "specific": {
         "session": {

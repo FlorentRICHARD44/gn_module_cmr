@@ -2,9 +2,24 @@
     "label": "Observation",
     "label_plural": "Observations",
     "display_properties": ["type","visit_date","comments"],
-    "display_list": ["individual_identifier","type"],
+    "display_list": [{
+        "field":"individual_identifier",
+        "width": 150
+    },{
+        "field": "type",
+        "width": 250
+    }],
     "properties_to_keep_when_chaining": [],
-    "individual_historic_display_list": ["type","visit_date","site_name"],
+    "individual_historic_display_list": [{
+        "field":"type",
+        "width": 250
+    },{
+        "field":"visit_date",
+        "width": 120
+    },{
+        "field":"site_name",
+        "width": 150
+    }],
     "individual_histogram_items": [],
     "generic": {
         "id_observation": {

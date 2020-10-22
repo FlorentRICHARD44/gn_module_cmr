@@ -2,7 +2,19 @@
     "label": "Individu",
     "label_plural": "Individus",
     "display_properties": ["identifier","rfid","marker","comments"],
-    "display_list": ["identifier","rfid","marker", "nb_observations"],
+    "display_list": [{
+        "field":"identifier",
+        "width": 150
+    },{
+        "field": "rfid",
+        "width": 150
+    },{
+        "field": "marker",
+        "width": 150
+    },{
+        "field": "nb_observations",
+        "width": 120
+    }],
     "properties_to_keep_when_chaining": [],
     "required_medias": [],
     "generic": {

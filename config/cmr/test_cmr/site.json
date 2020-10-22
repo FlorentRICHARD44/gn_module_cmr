@@ -4,7 +4,22 @@
     "geometry_types": ["Point"],
     "check_site_within_sitegroup": true,
     "display_properties": ["name", "habitat","conductivité","piege_type","date_pose","date_retrait","comments","nb_visits"],
-    "display_list": ["name", "piege_type","nb_visits","nb_observations","nb_individuals"],
+    "display_list": [{
+        "field":"name",
+        "width": 150
+    },{
+        "field":"piege_type",
+        "width": 250
+    },{
+        "field":"nb_visits",
+        "width": 120
+    },{
+        "field":"nb_observations",
+        "width": 120
+    },{
+        "field":"nb_individuals",
+        "width": 120
+    }],
     "properties_to_keep_when_chaining": ["lieu","habitat","conductivité","piege_type","date_pose"],
     "batch_visit_display_list": ["name","piege_type"],
     "specific": {

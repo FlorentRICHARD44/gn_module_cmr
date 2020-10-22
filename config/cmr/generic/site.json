@@ -4,7 +4,19 @@
     "geometry_types": ["Point","LineString","Polygon"],
     "check_site_within_sitegroup": false,
     "display_properties": ["name","comments","nb_visits"],
-    "display_list": ["name","nb_visits","nb_observations","nb_individuals"],
+    "display_list": [{
+        "field":"name",
+        "width": 250
+    },{
+        "field":"nb_visits",
+        "width": 100
+    },{
+        "field":"nb_observations",
+        "width": 100
+    },{
+        "field":"nb_individuals",
+        "width": 100
+    }],
     "properties_to_keep_when_chaining": [],
     "batch_visit_display_list": ["name"],
     "generic": {
