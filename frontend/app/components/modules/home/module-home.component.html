@@ -12,7 +12,6 @@
                     *ngIf="mapFeaturesIndividuals && mapFeaturesIndividuals['features']"
                     [geojson]="mapFeaturesIndividuals"
                     [style]="obsStyle"
-                    [asCluster]="true"
                     [zoomOnLayer]="false"
                     [zoomOnFirstTime]="false"
                 ></pnx-geojson>
@@ -151,7 +150,10 @@
                             [count]="individuals.length"
                             [limit]="15"
                             [headerHeight]="50"
-                            [footerHeight]="50">
+                            [footerHeight]="50"
+                            [selectionType]="'single'"
+                            [selected]="selectedIndividual"
+                            (activate)="onIndividualRowClick($event)">
 
                             <ngx-datatable-column width="60">
                                 <ng-template let-row="row" ngx-datatable-cell-template>

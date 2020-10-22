@@ -83,7 +83,7 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
     }
 
     /**
-     * Called when click on a row in the table.
+     * Called when click on a row in the sitegroup table.
      * @param event 
      */
     onSitegroupRowClick(event) {
@@ -100,6 +100,34 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
         }
       }
       this._mapListService.zoomOnSelectedLayer(this._mapService.map, this.findFeatureLayer(event.row.id_sitegroup, 'sitegroup'));
+    }
+
+    /**
+     * Called when click on a row in the individual table.
+     * @param event 
+     */
+    onIndividualRowClick(event) {
+      if (!(event && event.type === 'click')) {
+        return;
+      }
+      this.updateFeaturesStyleIndividual(this.mapFeaturesIndividuals, [event.row.id_individual], 'observation');
+    }
+    /**
+     * Update the style of features on map according new status.
+     * @param selected 
+     */
+    updateFeaturesStyleIndividual(mapFeatures, selected, object_type) {
+      for (let ft of mapFeatures['features']) {
+        var lyr = this.findFeatureLayer(ft.id, ft.object_type);
+        if (ft.hidden) {
+          lyr.setStyle(this.getMapStyle('hidden'));
+        } else if (ft.object_type == object_type && selected.indexOf(ft.properties.id_individual) > -1) {
+          lyr.setStyle(this.getMapStyle(ft.object_type + '-selected'));
+          lyr.bringToFront();
+        } else {
+          lyr.setStyle(this.getMapStyle(ft.object_type));
+        }
+      }
     }
 
     /**
