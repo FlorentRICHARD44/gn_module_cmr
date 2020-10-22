@@ -3,6 +3,7 @@
 }
 
 :host /deep/ table {
+    min-width: 900px;
     display: block;
     max-height: 50vh;
     overflow-y: auto;
@@ -10,5 +11,5 @@
 }
 
 th, td {
-    padding: 3px 5px;
+    padding: 3px 10px;
 }

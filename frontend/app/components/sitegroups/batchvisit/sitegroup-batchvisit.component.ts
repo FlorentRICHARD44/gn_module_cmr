@@ -38,6 +38,20 @@ export class SitegroupBatchVisitComponent {
         (<HTMLInputElement>document.getElementById('site-observ-'+id_site)).disabled = !checked;
     }
 
+    onAllVisitsChechboxChange(checked) {
+        for (let site of this.data.sites) {
+            (<HTMLInputElement>document.getElementById('site-visit-'+site.id_site)).checked = checked;
+            (<HTMLInputElement>document.getElementById('site-observ-'+site.id_site)).disabled = !checked;
+        }
+    }
+
+    onAllObservationsChechboxChange(checked) {
+        for (let site of this.data.sites) {
+            (<HTMLInputElement>document.getElementById('site-observ-'+site.id_site)).checked = checked;
+        }
+
+    }
+
     onSubmit() {
         let visitsToCreate = [];
         let visitValue = this._dataService.formatPropertiesBeforeSave(this.genericVisitForm.value, this.data.module.forms.visit.fields);

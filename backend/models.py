@@ -178,6 +178,10 @@ class TSite(DB.Model):
         data['nb_visits'] = self.nb_visits
         data['sitegroup'] = self.sitegroup.to_dict() if self.sitegroup else None
         data['medias'] = [media.as_dict() for media in self.medias]
+        data['missing_observation'] = False
+        for visit in self.visits:
+            if visit.observation and not visit.observations:
+                data['missing_observation'] = True
         return data_to_json(data)
 
     def to_geojson(self, geom):

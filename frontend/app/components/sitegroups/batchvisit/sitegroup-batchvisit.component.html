@@ -1,12 +1,16 @@
 <h2 mat-dialog-title>Ajout d'une visite pour chaque {{data.module.forms.site.label}}</h2>
 <mat-dialog-content>
-    <table>
-        <thead>
+    <table class="table table-striped table-hover">
+        <thead class="thead-light">
             <tr>
                 <th [colSpan]="data.module.forms.site.batch_visit_display_list.length">{{data.module.forms.site.label}}</th>
                 <th>Créer visite</th>
                 <th>Observation</th>
             </tr>
+            <tr>
+                <th class="text-right font-italic" [colSpan]="data.module.forms.site.batch_visit_display_list.length">Tous</th>
+                <th class="text-center"><input type="checkbox" (change)="onAllVisitsChechboxChange($event.target.checked)" checked></th>
+                <th class="text-center"><input type="checkbox" (change)="onAllObservationsChechboxChange($event.target.checked)"></th>
         </thead>
         <tbody>
             <tr *ngFor="let site of data.sites">
