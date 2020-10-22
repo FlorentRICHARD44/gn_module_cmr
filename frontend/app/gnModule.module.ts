@@ -24,6 +24,7 @@ import { BreadcrumbComponent } from './components/common/breadcrumb/breadcrumb.c
 import { GraphComponent } from './components/common/graph/graph.component';
 import { CmrInjector } from "./services/injector.service";
 import { SitegroupBatchVisitComponent } from "./components/sitegroups/batchvisit/sitegroup-batchvisit.component";
+import { MediaListComponent } from "./components/common/media-list/media-list.component";
 
 // my module routing
 const routes: Routes = [
@@ -57,7 +58,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [BreadcrumbComponent, GraphComponent,
+  declarations: [BreadcrumbComponent, GraphComponent, MediaListComponent,
     ModuleListComponent, ModuleHomeComponent, ModuleDisclaimerComponent, ModuleFormComponent,
     SiteGroupFormComponent, SiteGroupDetailsComponent, SitegroupBatchVisitComponent,
     SiteFormComponent, SiteDetailsComponent,

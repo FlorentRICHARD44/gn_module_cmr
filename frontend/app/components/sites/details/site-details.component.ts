@@ -1,6 +1,5 @@
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MediaService } from '@geonature_common/service/media.service';
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { Module } from '../../../class/module';
@@ -32,7 +31,6 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
     constructor(
         private _cmrService: CmrService,
         private route: ActivatedRoute,
-        public ms: MediaService,
         private _dataService: DataService // used in template
     ) {
       super();

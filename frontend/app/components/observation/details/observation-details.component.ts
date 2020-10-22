@@ -1,7 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup } from '@angular/forms';
-import { MediaService } from '@geonature_common/service/media.service';
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { Module } from '../../../class/module';
@@ -17,7 +16,6 @@ export class ObservationDetailsComponent extends BaseMapViewComponent implements
     public path = [];
     public module: Module = new Module();
     public observation: any = {individual:{}};
-    public medias: [];
     public properties: Array<any> [];
     public fields: any = {};
     public individualProperties: Array<any> = [];
@@ -30,7 +28,6 @@ export class ObservationDetailsComponent extends BaseMapViewComponent implements
     constructor(
         private _cmrService: CmrService,
         private _dataService: DataService,
-        private ms: MediaService,
         private _route: ActivatedRoute) {
       super();
     }
@@ -45,7 +42,6 @@ export class ObservationDetailsComponent extends BaseMapViewComponent implements
                 this.individualFields = this.module.forms.individual.fields;
                 this._cmrService.getOneObservation(params.id_observation).subscribe((data) => {
                     this.observation = data;
-                    this.medias = this.observation.medias;
                     this.formGroups = this.module.forms.observation.groups;
                     var i = 1;
                     for (var grp of this.formGroups) {

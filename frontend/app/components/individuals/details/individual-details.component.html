@@ -34,28 +34,14 @@
                                 </table>
                                 <hr class="mt-3 mb-3">
                                 <h5>Médias</h5>
-                                <ng-container *ngFor="let media of medias; index as i">
-                                    <div class="medias-tab">
-                                      <div [matTooltip]="ms.toString(media)">
-                                        <a [href]="ms.href(media)" target="_blank">{{ media.title_fr }}</a>
-                                        <i>
-                                          ({{ ms.typeMedia(media)
-                                          }}<span *ngIf="media.author"> par {{ media.author }}</span
-                                          >)
-                                        </i>
-                                      </div>
-                                      <p *ngIf="media.description_fr">{{media.description_fr}}</p>
-                                      <div>
-                                        <pnx-display-medias
-                                          [medias]="medias"
-                                          [index]="i"
-                                          display="medium"
-                                          diaporama="true"
-                                        >
-                                        </pnx-display-medias>
-                                      </div>
+                                <gn-cmr-media-list [medias]="individual.medias"></gn-cmr-media-list>
+                                <div *ngFor="let observation of historic">
+                                    <div *ngIf="observation.medias && observation.medias.length > 0">
+                                        <hr>
+                                        <p><strong>Observation:</strong> {{_dataService.formatProperty(observation.visit.date, {type_column:'date'})}}</p>
+                                        <gn-cmr-media-list [medias]="observation.medias"></gn-cmr-media-list>
                                     </div>
-                                  </ng-container>
+                                </div>
                             </div>
                             <div id="graph-list" class="">
                                 <h5>Courbes d'évolutions</h5>

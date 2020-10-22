@@ -19,6 +19,7 @@ export class Module {
             display_list: []
         },
         site: {
+            medias: [],
             label:"",
             label_plural:"",
             fields: [],
@@ -29,6 +30,7 @@ export class Module {
             properties_to_keep_when_chaining: []
         },
         sitegroup : {
+            medias: [],
             label:"", 
             label_plural:"",
             fields: [],
@@ -37,6 +39,7 @@ export class Module {
             geometry_types: []
         },
         individual : {
+            medias: [],
             label:"", 
             label_plural:"",
             fields: [],
@@ -52,6 +55,7 @@ export class Module {
             properties_to_keep_when_chaining: []
         },
         observation : {
+            medias: [],
             label:"", 
             label_plural:"",
             fields: [],
