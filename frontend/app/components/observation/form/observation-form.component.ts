@@ -7,6 +7,7 @@ import { Module } from '../../../class/module';
 import { BaseMapViewComponent } from '../../BaseMapViewComponent';
 import { BreadcrumbComponent } from '../../common/breadcrumb/breadcrumb.component';
 
+
 @Component({
     selector : 'pnx-cmr-observation-form',
     templateUrl: './observation-form.component.html',
@@ -25,6 +26,7 @@ export class ObservationFormComponent extends BaseMapViewComponent implements On
     public observationForm: FormGroup;
     public observationFormDefinitions = [];
     public externalAssetsPath;
+    public externalService;
 
     // Management of additional form groups
     public formGroups: Array<any> = [];
@@ -77,6 +79,15 @@ export class ObservationFormComponent extends BaseMapViewComponent implements On
             });
             this._cmrService.getOneIndividual(this._route.snapshot.paramMap.get('id_individual')).subscribe((data) => {
                 this.individual = data;
+                var initData = this._cmrService.getSpecificService(this.module.module_code).initObservation(this.observationForm, this.formGroups, this.visit, this.individual);
+                this.observationForm.patchValue(this._dataService.formatDataForBeforeEdition(initData, this.module.forms.observation.fields));
+                  for (let grp of this.formGroups) {
+                    grp['form'].patchValue(this._dataService.formatDataForBeforeEdition(initData, grp['fields']));
+                    if (grp['yesno_field']) {
+                      let yesno_field = grp['form'].get(grp['yesno_field']);
+                      setTimeout(() => this.updateStatus(grp, yesno_field), 500);
+                    }
+                  }
             });
             this._cmrService.getOneSiteGeometry(this._route.snapshot.paramMap.get('id_site')).subscribe((data) => {
               if (this._route.snapshot.paramMap.get('id_sitegroup')) {

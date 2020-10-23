@@ -45,6 +45,10 @@ export class IndividualFormComponent implements OnInit {
             this.path = BreadcrumbComponent.buildPath("individual", this.module);
             var schema = this.module.forms.individual.fields;
             this.individualFormDefinitions = this._dataService.buildFormDefinitions(schema);
+            setTimeout(function() {
+                let initData = this._cmrService.getSpecificService(this.module.module_code).initIndividual(this.individualForm);
+                this.individualForm.patchValue(this._dataService.formatDataForBeforeEdition(initData, this.module.forms.individual.fields));
+            }.bind(this), 200);
             var editId = this._route.snapshot.paramMap.get('edit');
             if (editId) {
                 this.bEdit = true;

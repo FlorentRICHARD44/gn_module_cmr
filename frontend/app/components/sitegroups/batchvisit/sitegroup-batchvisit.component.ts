@@ -33,6 +33,10 @@ export class SitegroupBatchVisitComponent {
             this.visitFormDefinitions = this._dataService.buildFormDefinitions(this.data.module.forms.visit.fields);
             this.genericVisitForm = this._formBuilder.group({});
     }
+    ngAfterViewInit() {
+        let initData = this._cmrService.getSpecificService(this.data.module.module_code).initVisit(this.genericVisitForm, undefined);
+        this.genericVisitForm.patchValue(this._dataService.formatDataForBeforeEdition(initData, this.data.module.forms.visit.fields));
+    }
 
     onVisitCheckboxChange(id_site, checked) {
         (<HTMLInputElement>document.getElementById('site-observ-'+id_site)).disabled = !checked;

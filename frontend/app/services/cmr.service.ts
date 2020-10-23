@@ -6,6 +6,14 @@ import { AppConfig } from "@geonature_config/app.config";
 import { ModuleConfig } from "../module.config";
 
 
+export interface SpecificService {
+    initSitegroup: (form) => {},
+    initSite: (form, sitegroup) => {},
+    initVisit: (form, site) => {},
+    initObservation: (form, formGroups, visit, individual) => {},
+    initIndividual: (form) => {};
+}
+
 @Injectable({
     providedIn: "root"
 })
@@ -19,6 +27,14 @@ export class CmrService {
 
     getExternalAssetsPath() {
         return AppConfig.URL_APPLICATION + '/external_assets/' + ModuleConfig.MODULE_CODE.toLowerCase();
+    }
+
+    /**
+     * Get the service specific to each sub-module.
+     * @param module 
+     */
+    getSpecificService(module):SpecificService {
+        return require('../../../config/cmr/' + module + '/specific.service.js');
     }
 
     /* MODULE QUERIES */

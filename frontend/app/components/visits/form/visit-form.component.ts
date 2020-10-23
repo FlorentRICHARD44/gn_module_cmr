@@ -2,7 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { CommonService } from "@geonature_common/service/common.service";
-import { CmrService } from './../../../services/cmr.service';
+import { CmrService, SpecificService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { Module } from '../../../class/module';
 import { MatDialog, MatDialogConfig } from "@angular/material";
@@ -27,6 +27,7 @@ export class VisitFormComponent extends BaseMapViewComponent implements OnInit {
     public bChainInput = false;
     public bEdit = false;
     public bSaving = false;
+    public initData = {};
 
     constructor(
         private _cmrService: CmrService,
@@ -59,7 +60,9 @@ export class VisitFormComponent extends BaseMapViewComponent implements OnInit {
           this.visitFormDefinitions = this._dataService.buildFormDefinitions(schema);
           this._cmrService.getOneSiteGeometry(this._route.snapshot.paramMap.get('id_site')).subscribe((data) => {
             this.site = data[0].properties;
-              this.path = BreadcrumbComponent.buildPath('visit', this.module, {site: data[0].properties});
+            this.initData = this._cmrService.getSpecificService(this.module.module_code).initVisit(this.genericVisitForm, this.site);
+            this.genericVisitForm.patchValue(this._dataService.formatDataForBeforeEdition(this.initData, this.module.forms.visit.fields));
+            this.path = BreadcrumbComponent.buildPath('visit', this.module, {site: data[0].properties});
               this.path = [...this.path];
             if (this._route.snapshot.paramMap.get('id_sitegroup')) {
               this._cmrService.getOneSiteGroupGeometry(this._route.snapshot.paramMap.get('id_sitegroup')).subscribe((dataSitegroup) => {
@@ -107,6 +110,7 @@ export class VisitFormComponent extends BaseMapViewComponent implements OnInit {
               patch[k] = formData[k]
             }
           }
+          this.genericVisitForm.patchValue(this._dataService.formatDataForBeforeEdition(this.initData, this.module.forms.visit.fields));
           this.visitForm.patchValue(patch);
           this.genericVisitForm.patchValue(patch);
           this._commonService.regularToaster(

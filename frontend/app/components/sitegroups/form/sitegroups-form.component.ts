@@ -2,7 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CommonService } from "@geonature_common/service/common.service";
-import { CmrService } from '../../../services/cmr.service';
+import { CmrService, SpecificService } from '../../../services/cmr.service';
 import { CmrMapService } from '../../../services/cmr-map.service';
 import { DataService } from '../../../services/data.service';
 import { Module } from '../../../class/module';
@@ -26,6 +26,7 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
     public bChainInput = false;
     public bEdit = false;
     public bSaving = false;
+    public initData = {};
 
     constructor(
         private _cmrService: CmrService,
@@ -53,6 +54,11 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
           this.module = data;
           this.path = BreadcrumbComponent.buildPath("sitegroup", this.module);
           this.leafletDrawOptions = this._cmrMapService.getLeafletDrawOptionDrawAll(this.module.forms.sitegroup.geometry_types);
+          
+         setTimeout(function() {
+           this.initData = this._cmrService.getSpecificService(this.module.module_code).initSitegroup(this.sitegroupForm);
+          this.sitegroupForm.patchValue(this._dataService.formatDataForBeforeEdition(this.initData, this.module.forms.sitegroup.fields));
+         }.bind(this), 200);
           for (let item of ['polygon', 'polyline','circlemarker']) {
             if (this.leafletDrawOptions.draw[item]) {
               this.leafletDrawOptions.draw[item] = {
@@ -117,6 +123,7 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
                   patch[k] = formData[k]
                 }
               }
+              this.sitegroupForm.patchValue(this._dataService.formatDataForBeforeEdition(this.initData, this.module.forms.sitegroup.fields));
               this.sitegroupForm.patchValue(patch);
               this._commonService.regularToaster(
                 "info",

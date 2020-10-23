@@ -40,6 +40,10 @@ export class IndividualFormObsComponent implements OnInit {
         this.individualForm = this._formBuilder.group(fields);
         this.individualFormDefinitions = this._dataService.buildFormDefinitions(schema);
         this._cmrService.getAllIndividualsByModule(this.data.module.id_module).subscribe((data) => this.individuals = data);
+        setTimeout(function() {
+            let initData = this._cmrService.getSpecificService(this.module.module_code).initIndividual(this.individualForm);
+            this.individualForm.patchValue(this._dataService.formatDataForBeforeEdition(initData, this.module.forms.individual.fields));
+        }.bind(this), 200);
     }
 
     ngAfterViewInit() {

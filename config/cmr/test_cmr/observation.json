@@ -65,7 +65,7 @@
             "attribut_label": "Etat femelle",
             "type_widget": "select",
             "values": ["Non Gravide","Gravide"],
-            "required": false
+            "required": true
         },
         "developpement_stade": {
             "type_widget": "select",
@@ -169,6 +169,11 @@
             "opened": false
         },
         "fields": {
+            "date_capture": {
+                "attribut_label": "Date de capture",
+                "type_widget": "date",
+                "required": true
+            },
             "date_relache": {
                 "attribut_label": "Date de relâché",
                 "type_widget": "date",

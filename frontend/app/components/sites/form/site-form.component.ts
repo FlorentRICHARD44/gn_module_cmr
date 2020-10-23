@@ -2,7 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CommonService } from "@geonature_common/service/common.service";
-import { CmrService } from './../../../services/cmr.service';
+import { CmrService, SpecificService } from './../../../services/cmr.service';
 import { CmrMapService } from './../../../services/cmr-map.service';
 import { DataService } from '../../../services/data.service';
 import { Module } from '../../../class/module';
@@ -27,6 +27,7 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
     public bChainInput = false;
     public bEdit = false;
     public bSaving = false;
+    public initData = {};
 
     constructor(
         private _cmrService: CmrService,
@@ -61,6 +62,8 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
                 this.mapFeatures = {'features': data };
                 this.path = BreadcrumbComponent.buildPath("site", this.module, {id_sitegroup: sitegroup.id_sitegroup, sitegroup:sitegroup});
                 this.path = [...this.path];
+                this.initData = this._cmrService.getSpecificService(this.module.module_code).initSite(this.siteForm, sitegroup);
+                this.siteForm.patchValue(this._dataService.formatDataForBeforeEdition(this.initData, this.module.forms.site.fields));
                 setTimeout(function() {this.initFeatures(this._route, this.module);}.bind(this), 300);
               }
             );
@@ -156,6 +159,7 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
                 patch[k] = formData[k]
               }
             }
+            this.siteForm.patchValue(this._dataService.formatDataForBeforeEdition(this.initData, this.module.forms.site.fields));
             this.siteForm.patchValue(patch);
             this._commonService.regularToaster(
               "info",
