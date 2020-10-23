@@ -243,8 +243,18 @@
             },
             "analyse_comp_type_prelevement": {
                 "attribut_label": "Type de Prélèvement",
-                "type_widget": "select",
-                "values": ["Prélèvement sanguin","Frottis carapace","Echantillon de griffe","Fèces","Autre"],
+                "type_widget": "multiselect",
+                "values": [{
+                    "value":"Prélèvement sanguin"
+                },{
+                    "value":"Frottis carapace"
+                },{
+                    "value":"Echantillon de griffe"
+                },{
+                    "value":"Fèces"
+                },{
+                    "value":"Autre"
+                }],
                 "required": true
             },
             "analyse_comp_type_prelevement_autre": {
