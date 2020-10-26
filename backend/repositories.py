@@ -4,7 +4,7 @@ from flask import current_app
 from geonature.utils.env import DB
 from geonature.core.gn_commons.models import TMedias
 from geonature.core.ref_geo.models import LAreas, LiMunicipalities
-from sqlalchemy import distinct, func
+from sqlalchemy import distinct, func, String
 from sqlalchemy.orm import joinedload, subqueryload
 from sqlalchemy.inspection import inspect
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -118,22 +118,29 @@ class SiteGroupsRepository(BaseGeomRepository):
     def __init__(self):
         super().__init__(TSiteGroup)
 
-    def get_all_filter_by(self, filter_attribute, value):
+    def get_all_geometries_filter_by_params(self, filter_column, value, params):
         result = []
-        q = DB.session.query(TSiteGroup,
-                func.count(distinct(TSite.id_site)), 
-                func.count(distinct(TObservation.id_observation)),
-                func.count(distinct(TObservation.id_individual))).join(
+        q = DB.session.query(TSiteGroup, 
+                            func.ST_AsGEOJSON(self.model.geom), 
+                            func.count(distinct(TSite.id_site)), 
+                            func.count(distinct(TObservation.id_observation)),
+                            func.count(distinct(TObservation.id_individual))).join(
                     TSite, (TSite.id_sitegroup == TSiteGroup.id_sitegroup), isouter=True).join(
                     TVisit, (TVisit.id_site == TSite.id_site), isouter=True).join(
-                    TObservation, (TObservation.id_visit == TVisit.id_visit), isouter=True).filter(
-            filter_attribute == value).group_by(TSiteGroup.id_sitegroup)
+                    TObservation, (TObservation.id_visit == TVisit.id_visit), isouter=True).filter(filter_column == value)
+        for k,v in params.items():
+            if hasattr(TSiteGroup, k):  # can be a column attribute
+                q = q.filter(getattr(TSiteGroup,k).ilike('%{}%'.format(v)))
+            else:  # or can be an attribute inside json column
+                pass
+                q = q.filter(TSiteGroup.data[k].cast(String).ilike('%{}%'.format(v)))
+        q = q.group_by(TSiteGroup.id_sitegroup)
         data = q.all()
-        for (item, count_site, count_observation, count_individual) in data:
-            r = item.to_dict()
-            r['nb_site'] = count_site
-            r['nb_observations'] = count_observation
-            r['nb_individuals'] = count_individual
+        for (item, geom, count_site, count_observation, count_individual) in data:
+            r = item.to_geojson(geom)
+            r['properties']['nb_site'] = count_site
+            r['properties']['nb_observations'] = count_observation
+            r['properties']['nb_individuals'] = count_individual
             result.append(r)
         return result
     

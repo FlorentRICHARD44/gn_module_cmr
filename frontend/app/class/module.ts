@@ -36,7 +36,8 @@ export class Module {
             fields: [],
             display_properties:[],
             display_list: [],
-            geometry_types: []
+            geometry_types: [],
+            search_filters: []
         },
         individual : {
             medias: [],

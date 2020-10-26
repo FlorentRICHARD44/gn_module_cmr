@@ -1,4 +1,5 @@
 <div class="main">
+    <gn-cmr-mask *ngIf="waitControl" text="Recherche en cours..."></gn-cmr-mask>
     <div class="flex-container">
         <div class="cadre" [style.min-height]="cardContentHeight + 'px'" [style.max-height]="cardContentHeight + 'px'">
             <pnx-map height="100%" class="map-card">
@@ -59,9 +60,14 @@
                     <div class="tab-pane fade" id="sitegroups-tab" role="tabpanel" attr.aria-labelledby="nav-sitegroups-tab" *ngIf="module.config.use_sitegroup">
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button class="btn btn-success float-left" [routerLink]="['sitegroup']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.sitegroup.label}}</button>
-                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export</button>
-                            <button disabled class="btn btn-primary float-right"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
+                            <button class="btn btn-primary float-right" (click)="filterDisplay = !filterDisplay" matTooltip="Afficher les critères de recherche"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
+                        <gn-cmr-filter 
+                            [class]="filterDisplay == true? 'd-block' : 'd-none'"
+                            [filters]="module.forms.sitegroup.search_filters" 
+                            [fieldsDef]="sitegroupFieldsDef" 
+                            (onSearch)="applySitegroupSearch($event)"
+                        ></gn-cmr-filter>
                         <ngx-datatable #tableSitegroup
                             class="material striped margin-top-xs"
                             [rows]="sitegroups"
@@ -73,6 +79,7 @@
                             [footerHeight]="50"
                             [selectionType]="'single'"
                             [selected]="selected"
+                            [messages]="{emptyMessage: 'Aucune donnée disponible', totalMessage: 'Total', selectedMessage: 'sélectionné'}"
                             (activate)="onSitegroupRowClick($event)">
 
                             <ngx-datatable-column width="60">
@@ -101,7 +108,6 @@
                         attr.aria-labelledby="nav-sites-tab" *ngIf="!module.config.use_sitegroup">
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button class="btn btn-success float-left" [routerLink]="['site']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.site.label}}</button>
-                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export</button>
                             <button disabled class="btn btn-primary float-right"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <ngx-datatable #tableSite
@@ -145,7 +151,6 @@
                         attr.aria-labelledby="nav-individuals-tab">
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button class="btn btn-success float-left" [routerLink]="['individual']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.individual.label}}</button>
-                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export</button>
                             <button disabled class="btn btn-primary float-right"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <ngx-datatable #tableIndividual

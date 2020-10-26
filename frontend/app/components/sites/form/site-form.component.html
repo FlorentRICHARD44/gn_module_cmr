@@ -1,11 +1,6 @@
 <div class="main">
     <div class="flex-container">
-      <div id="waiting-panel" *ngIf="waitControl">
-        <div>
-          <i class="fa fa-refresh fa-spin fa-3x"></i>
-          <p>Contrôles en cours...</p>
-        </div>
-      </div>
+      <gn-cmr-mask *ngIf="waitControl" text="Contrôles en cours..."></gn-cmr-mask>
         <div class="cadre" [style.min-height]="cardContentHeight + 'px'">
             <pnx-map height="100%" class="map-card">
                 <pnx-gps (markerChanged)="setNewGeometry($event)"></pnx-gps>

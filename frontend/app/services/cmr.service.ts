@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable, of, forkJoin } from '@librairies/rxjs';
-import { mergeMap, concatMap } from '@librairies/rxjs/operators';
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { of } from '@librairies/rxjs';
+import { mergeMap } from '@librairies/rxjs/operators';
 import { AppConfig } from "@geonature_config/app.config";
 import { ModuleConfig } from "../module.config";
 
@@ -68,12 +68,14 @@ export class CmrService {
     }
 
     /* SITEGROUP QUERIES */
-    getAllSitegroupsByModule(id_module) {
-        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sitegroups`);
-    }
-
-    getAllSitegroupsGeometriesByModule(id_module) {
-        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sitegroups/geometries`);
+    getAllSitegroupsGeometriesByModuleFiltered(id_module, params) {
+        let httpParams = new HttpParams();
+        for (let p of Object.keys(params)) {
+            if (params[p]) {
+                httpParams = httpParams.set(p, params[p]);
+            }
+        }
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sitegroups`, {params:httpParams});
     }
 
     getOneSiteGroupGeometry(id_sitegroup) {

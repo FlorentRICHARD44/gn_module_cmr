@@ -3,6 +3,7 @@
     "label_plural": "Groupes de Sites",
     "geometry_types": ["Polygon"],
     "compute_data_from_municipality_area": {},
+    "search_filters": ["name"],
     "display_properties": ["name","comments"],
     "display_list": [{
         "field":"name",

@@ -37,6 +37,9 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
 
     public mapFeaturesIndividuals;
 
+    public filterDisplay = false;
+    public waitControl = false;
+
     @ViewChild(DatatableComponent) tableSitegroup: DatatableComponent;
 
     constructor(
@@ -57,6 +60,7 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
             this._cmrService.loadOneModule(params.module).pipe(
               mergeMap(() => {
                 this.module = this._cmrService.getModule(params.module);
+
                 this.properties = this.module.forms.module.display_properties;
                 this.fields = this.module.forms.module.fields;
                 this.sitegroupListProperties = this.module.forms.sitegroup.display_list;
@@ -67,15 +71,10 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
                 this.individualListProperties = this.module.forms.individual.display_list;
                 this.individualFieldsDef = this.module.forms.individual.fields;
                 this._cmrService.getAllIndividualsByModule(this.module.id_module).subscribe((data) => this.individuals = data);
-                
-                this._cmrService.getAllSitegroupsByModule(this.module.id_module).subscribe((data) => this.sitegroups = data);
-                this._cmrService.getAllSitegroupsGeometriesByModule(this.module.id_module).subscribe((data) => {
-                  this.mapFeatures = {'features':data};
-                  setTimeout(function() {this.initFeatures(this.route,this.module);}.bind(this), 500);
-                  this._cmrService.getAllIndividualsGeometriesByModule(this.module.id_module).subscribe((data)=> {
+                this.applySitegroupSearch({});
+                this._cmrService.getAllIndividualsGeometriesByModule(this.module.id_module).subscribe((data)=> {
                     this.mapFeaturesIndividuals = {'features': data};
                   });
-                });
                 return of(true);
               })
             ).subscribe(() => {});
@@ -143,5 +142,39 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
       this.selected = [this.tableSitegroup._internalRows[index_row_selected]];
       this.selected = [...this.selected];
       this.tableSitegroup.offset = Math.floor((index_row_selected) / this.tableSitegroup._limit);
+    }
+
+    applySitegroupSearch(event) {
+      this.waitControl = true;
+      var params = event ? event : {};
+      this._cmrService.getAllSitegroupsGeometriesByModuleFiltered(this.module.id_module, params).subscribe(
+        (data) => {
+          this.mapFeatures = {'features':data};
+          this.sitegroups = [];
+          for (let item of data) {
+            this.sitegroups.push(item.properties);
+          }
+          this.sitegroups = [...this.sitegroups];
+          this.selected = [];
+          this.waitControl = false;
+          setTimeout(function() {
+            this.initFeatures(this.route,this.module);
+            this.forceIndividualsToFront();
+          }.bind(this), 500);
+        },
+        (error) => {
+          this.selected = [];
+          this.waitControl = false;
+          this.sitegroups = [];
+          this.mapFeatures = {'features': []};
+        }
+        );
+    }
+
+    forceIndividualsToFront() {
+      for (let ft of this.mapFeaturesIndividuals['features']) {
+        var lyr = this.findFeatureLayer(ft.id, ft.object_type);
+        lyr.bringToFront();
+      }
     }
 }
