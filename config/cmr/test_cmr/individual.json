@@ -14,7 +14,8 @@
         "width": 150
     },{
         "field": "nb_observations",
-        "width": 120
+        "width": 120,
+        "align": "right"
     }],
     "properties_to_keep_when_chaining": [],
     "specific": {

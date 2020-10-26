@@ -12,13 +12,16 @@
         "width": 250
     },{
         "field":"nb_visits",
-        "width": 120
+        "width": 120,
+        "align": "right"
     },{
         "field":"nb_observations",
-        "width": 120
+        "width": 120,
+        "align": "right"
     },{
         "field":"nb_individuals",
-        "width": 120
+        "width": 120,
+        "align": "right"
     }],
     "properties_to_keep_when_chaining": ["lieu","habitat","conductivité","piege_type","date_pose"],
     "batch_visit_display_list": ["name","piege_type"],

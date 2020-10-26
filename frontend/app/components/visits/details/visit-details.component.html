@@ -53,7 +53,7 @@
                             </a>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column *ngFor="let prop of observationListProperties" [width]="prop.width" [name]="observationFieldsDef[prop.field].attribut_label" [prop]="prop.field" >
+                    <ngx-datatable-column *ngFor="let prop of observationListProperties" [width]="prop.width" [name]="observationFieldsDef[prop.field].attribut_label" [prop]="prop.field" [cellClass]="'text-' + (prop['align'] ? prop['align'] : 'left')" >
                         <ng-template let-row="row" ngx-datatable-cell-template>
                             <span>{{_dataService.formatProperty(row[prop.field], observationFieldsDef[prop.field])}}</span>
                         </ng-template>

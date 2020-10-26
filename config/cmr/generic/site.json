@@ -9,13 +9,16 @@
         "width": 250
     },{
         "field":"nb_visits",
-        "width": 100
+        "width": 100,
+        "align": "right"
     },{
         "field":"nb_observations",
-        "width": 100
+        "width": 100,
+        "align": "right"
     },{
         "field":"nb_individuals",
-        "width": 100
+        "width": 100,
+        "align": "right"
     }],
     "properties_to_keep_when_chaining": [],
     "batch_visit_display_list": ["name"],

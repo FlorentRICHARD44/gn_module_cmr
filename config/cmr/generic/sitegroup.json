@@ -10,13 +10,16 @@
         "width": 250
     },{
         "field":"nb_sites",
-        "width": 50
+        "width": 80,
+        "align": "right"
     },{
         "field": "nb_observations",
-        "width": 50
+        "width": 120,
+        "align": "right"
     },{
         "field": "nb_individuals",
-        "width": 50
+        "width": 100,
+        "align": "right"
     }],
     "use_batch_visit_creation": false,
     "properties_to_keep_when_chaining": [],
