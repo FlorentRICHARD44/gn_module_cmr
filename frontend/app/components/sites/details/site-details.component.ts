@@ -28,6 +28,9 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
     public individualListProperties: Array<any> = [];
     public individualFieldsDef: any = {};
 
+    public waitControl = false;
+    public filterIndividualDisplay = false;
+
     constructor(
         private _cmrService: CmrService,
         private route: ActivatedRoute,
@@ -62,8 +65,22 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
                 this._cmrService.getAllVisitsBySite(params.id_site).subscribe((data) => this.visits = data);
                 this.individualListProperties = this.module.forms.individual.display_list;
                 this.individualFieldsDef = this.module.forms.individual.fields;
-                this._cmrService.getAllIndividualsBySite(params.id_site).subscribe((data) => this.individuals = data);
+                this.applyIndividualSearch({});
             })
+        });
+    }
+
+    applyIndividualSearch(event) {
+      this.waitControl = true;
+      var params = event ? event : {};
+      this._cmrService.getAllIndividualsBySite(this.route.snapshot.params.id_site, params).subscribe(
+        (data) => {
+          this.individuals = data;
+          this.waitControl = false;
+        },
+        (error) => {
+          this.individuals = [];
+          this.waitControl = false;
         });
     }
 }

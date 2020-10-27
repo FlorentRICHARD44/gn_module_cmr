@@ -236,19 +236,12 @@ def get_all_individuals_by_sitegroup(id_sitegroup):
     ind_repo = IndividualsRepository()
     return ind_repo.get_all_geometries_filter_by(TSite.id_sitegroup == id_sitegroup, request.args.to_dict())
 
-# Get position of each individual capture/recapture by site group
-@blueprint.route('/sitegroup/<int:id_sitegroup>/individuals/geometries', methods=['GET'])
-@json_resp
-def get_all_individuals_geometries_by_sitegroup(id_sitegroup):
-    ind_repo = IndividualsRepository()
-    return ind_repo.get_all_geometries_filter_by(TSite.id_sitegroup == id_sitegroup)
-
 # Get list of individuals by site
 @blueprint.route('/site/<int:id_site>/individuals', methods=['GET'])
 @json_resp
 def get_all_individuals_by_site(id_site):
     ind_repo = IndividualsRepository()
-    return ind_repo.get_all_by_site(id_site)
+    return ind_repo.get_all_by_site(id_site, request.args.to_dict())
 
 # Get one individual
 @blueprint.route('/individual/<int:id_individual>', methods=['GET'])

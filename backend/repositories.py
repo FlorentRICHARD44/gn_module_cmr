@@ -248,12 +248,18 @@ class IndividualsRepository(BaseRepository):
         return result
 
 
-    def get_all_by_site(self, id_site):
+    def get_all_by_site(self, id_site, params):
         result = []
         q = DB.session.query(self.model, func.count(TObservation.id_observation)).join(
             TObservation, (TObservation.id_individual == TIndividual.id_individual), isouter=True).join(
             TVisit, (TVisit.id_visit == TObservation.id_visit), isouter=True).filter(
-                TVisit.id_site == id_site).group_by(TIndividual.id_individual)
+                TVisit.id_site == id_site)
+        for k,v in params.items():
+            if hasattr(TIndividual, k):  # can be a column attribute
+                q = q.filter(getattr(TIndividual,k).ilike('%{}%'.format(v)))
+            else:  # or can be an attribute inside json column
+                q = q.filter(TIndividual.data[k].cast(String).ilike('%{}%'.format(v)))
+        q = q.group_by(TIndividual.id_individual)
         data = q.all()
         for (item, count) in data:
             r = item.to_dict()

@@ -164,7 +164,7 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
           lyr.setStyle(this.getMapStyle(ft.object_type));
         }
       }
-  }
+    }
 
     /**
      * Update the selection in table.
@@ -256,8 +256,6 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
         this.mapDataIndividuals = [];
         this.individuals = [];
         this.showIndividuals();
-      }
-    );
-
+      });
     }
 }
