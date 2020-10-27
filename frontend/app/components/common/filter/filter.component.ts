@@ -28,12 +28,18 @@ export class FilterComponent implements OnInit{
     ngOnInit() {
         this.filterForm = this._formBuilder.group({});
         for (let filter of this.filters) {
-          this.filterForm.addControl(filter, new FormControl());
+          this.filterForm.addControl(filter.field, new FormControl());
         }
     }
 
     onSearchClick($event) {
-        this.onSearch.emit(this.filterForm.value);
+        let values = {};
+        for (let key of Object.keys(this.filterForm.value)) {
+            if (this.filterForm.value[key] && this.filterForm.value[key] != 'null') { // need to filter null values
+                values[key] = this.filterForm.value[key];
+            }
+        }
+        this.onSearch.emit(values);
     }
 
     onEraseFilters() {

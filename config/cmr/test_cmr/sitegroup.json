@@ -6,7 +6,13 @@
         "communes": "nom_com",
         "departement": "insee_dep"
     },
-    "search_filters": ["name","communes", "departement"],
+    "search_filters": [{
+        "field": "name"
+    },{
+        "field": "communes"
+    },{
+        "field": "departement"
+    }],
     "display_properties": ["name","communes","departement","comments"],
     "display_list": [{
         "field":"name",

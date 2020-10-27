@@ -5,8 +5,12 @@
             <div class="row">
                 <div class="col-4" *ngFor="let filter of filters">
                     <div class="pr-1">
-                        <small>{{fieldsDef[filter].attribut_label}}</small>
-                        <input type="text" class="form-control form-control-sm" [formControl]="filterForm.get(filter)">
+                        <small>{{fieldsDef[filter.field].attribut_label}}</small>
+                        <input *ngIf="filter && (!filter.hasOwnProperty('type') || filter.type =='text')" type="text" class="form-control form-control-sm" [formControl]="filterForm.get(filter.field)">
+                        <select *ngIf="filter && filter.type == 'select'" class="form-control" [formControl]="filterForm.get(filter.field)">
+                            <option [value]="null"> - </option>
+                            <option  *ngFor="let val of fieldsDef[filter.field].values" [value]="val">{{val}}</option>
+                        </select>
                     </div>
                 </div>
             </div>

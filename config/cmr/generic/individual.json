@@ -1,7 +1,13 @@
 {
     "label": "Individu",
     "label_plural": "Individus",
-    "search_filters": ["identifier", "rfid","marker"],
+    "search_filters": [{
+        "field": "identifier"
+    },{
+        "field": "rfid"
+    },{
+        "field": "marker"
+    }],
     "display_properties": ["identifier","rfid","marker","comments"],
     "display_list": [{
         "field":"identifier",

@@ -197,9 +197,11 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
     }
 
     forceIndividualsToFront() {
-      for (let ft of this.mapFeaturesIndividuals['features']) {
-        var lyr = this.findFeatureLayer(ft.id, ft.object_type);
-        lyr.bringToFront();
+      if (this.mapFeaturesIndividuals) {
+        for (let ft of this.mapFeaturesIndividuals['features']) {
+          var lyr = this.findFeatureLayer(ft.id, ft.object_type);
+          lyr.bringToFront();
+        }
       }
     }
 }
