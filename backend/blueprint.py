@@ -215,19 +215,12 @@ def create_visits_in_batch():
 # INDIVIDUALS ROUTES
 #############################
 
-# Get the list of individuals by module
+# Get position of each individual capture/recapture by module using filters
 @blueprint.route('/module/<int:id_module>/individuals', methods=['GET'])
-@json_resp
-def get_all_individuals_by_module(id_module):
-    ind_repo = IndividualsRepository()
-    return ind_repo.get_all_filter_by(TSite.id_module, id_module)
-
-# Get position of each individual capture/recapture by module
-@blueprint.route('/module/<int:id_module>/individuals/geometries', methods=['GET'])
 @json_resp
 def get_all_individuals_geometries_by_module(id_module):
     ind_repo = IndividualsRepository()
-    return ind_repo.get_all_geometries_filter_by(TSite.id_module == id_module)
+    return ind_repo.get_all_geometries_filter_by(TSite.id_module == id_module, request.args.to_dict())
 
 # Get list of individuals by site group
 @blueprint.route('/sitegroup/<int:id_sitegroup>/individuals', methods=['GET'])

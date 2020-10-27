@@ -1,4 +1,5 @@
 {
+    "search_filters": ["identifier", "rfid","sexe","marker"],
     "display_properties": ["identifier","rfid","sexe","marker","comments"],
     "display_list": [{
         "field":"identifier",

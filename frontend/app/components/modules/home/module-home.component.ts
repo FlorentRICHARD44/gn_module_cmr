@@ -25,6 +25,7 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
     public individuals: Array<any> = [];
     public individualListProperties: Array<any> = [];
     public individualFieldsDef: any = {};
+    public individualSearchFilters = [];
     public sitegroups: Array<any> = [];
     public sitegroupListProperties: Array<any> = [];
     public sitegroupFieldsDef: any = {};
@@ -38,6 +39,7 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
     public mapFeaturesIndividuals;
 
     public filterDisplay = false;
+    public filterIndividualDisplay = false;
     public waitControl = false;
 
     @ViewChild(DatatableComponent) tableSitegroup: DatatableComponent;
@@ -65,16 +67,14 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
                 this.fields = this.module.forms.module.fields;
                 this.sitegroupListProperties = this.module.forms.sitegroup.display_list;
                 this.sitegroupFieldsDef = this.module.forms.sitegroup.fields;
+                this.individualListProperties = this.module.forms.individual.display_list;
+                this.individualFieldsDef = this.module.forms.individual.fields;
+                this.individualSearchFilters = this.module.forms.individual.search_filters;
                 this.siteListProperties = this.module.forms.site.display_list;
                 this.siteFieldsDef = this.module.forms.site.fields;
                 this._cmrService.getAllSitesByModule(this.module.id_module).subscribe((data) => this.sites = data);
-                this.individualListProperties = this.module.forms.individual.display_list;
-                this.individualFieldsDef = this.module.forms.individual.fields;
-                this._cmrService.getAllIndividualsByModule(this.module.id_module).subscribe((data) => this.individuals = data);
                 this.applySitegroupSearch({});
-                this._cmrService.getAllIndividualsGeometriesByModule(this.module.id_module).subscribe((data)=> {
-                    this.mapFeaturesIndividuals = {'features': data};
-                  });
+                this.applyIndividualSearch({});
                 return of(true);
               })
             ).subscribe(() => {});
@@ -169,6 +169,31 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
           this.mapFeatures = {'features': []};
         }
         );
+    }
+
+    applyIndividualSearch(event) {
+      this.waitControl = true;
+      var params = event ? event : {};
+      this._cmrService.getAllIndividualsGeometriesByModule(this.module.id_module, params).subscribe(
+        (data)=> {
+          this.mapFeaturesIndividuals = {'features': data};
+          this.individuals = [];
+          let individualIds = [];
+          for (let item of data) {
+            if (individualIds.indexOf(item.properties.individual.id_individual) == -1) {
+              individualIds.push(item.properties.individual.id_individual);
+              this.individuals.push(item.properties.individual);
+            }
+          }
+          this.selectedIndividual = [];
+          this.waitControl = false;
+        },
+        (error) => {
+          this.mapFeaturesIndividuals = {'features': []};
+          this.selectedIndividual = [];
+          this.individuals = [];
+          this.waitControl = false;
+        });
     }
 
     forceIndividualsToFront() {

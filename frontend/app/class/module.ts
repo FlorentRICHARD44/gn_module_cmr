@@ -45,7 +45,8 @@ export class Module {
             label_plural:"",
             fields: [],
             display_properties:[],
-            display_list: []
+            display_list: [],
+            search_filters: []
         },
         visit : {
             label:"", 

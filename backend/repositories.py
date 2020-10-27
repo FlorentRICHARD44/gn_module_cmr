@@ -132,7 +132,6 @@ class SiteGroupsRepository(BaseGeomRepository):
             if hasattr(TSiteGroup, k):  # can be a column attribute
                 q = q.filter(getattr(TSiteGroup,k).ilike('%{}%'.format(v)))
             else:  # or can be an attribute inside json column
-                pass
                 q = q.filter(TSiteGroup.data[k].cast(String).ilike('%{}%'.format(v)))
         q = q.group_by(TSiteGroup.id_sitegroup)
         data = q.all()
@@ -227,7 +226,7 @@ class IndividualsRepository(BaseRepository):
             result.append(r)
         return result
 
-    def get_all_geometries_filter_by(self, filter):
+    def get_all_geometries_filter_by(self, filter, params):
         """
         Get the observation and position of all observations made on a sitegroup.
         This permits to link all the positions of individuals.
@@ -235,7 +234,13 @@ class IndividualsRepository(BaseRepository):
         result = []
         q = DB.session.query(TObservation, func.ST_AsGEOJSON(TSite.geom)).join(
             TVisit, (TVisit.id_visit == TObservation.id_visit)).join(
-            TSite, (TSite.id_site == TVisit.id_site)).filter(filter)
+            TSite, (TSite.id_site == TVisit.id_site)).join(
+            TIndividual, (TIndividual.id_individual == TObservation.id_individual)).filter(filter)
+        for k,v in params.items():
+            if hasattr(TIndividual, k):  # can be a column attribute
+                q = q.filter(getattr(TIndividual,k).ilike('%{}%'.format(v)))
+            else:  # or can be an attribute inside json column
+                q = q.filter(TIndividual.data[k].cast(String).ilike('%{}%'.format(v)))
         for (site, geom) in q.all():
             r = site.to_geojson(geom)
             r['object_type'] = 'observation'

@@ -21,6 +21,16 @@ export class CmrService {
     private _modules= {};
     constructor(private _api: HttpClient) {}
 
+    _paramsToHttpParams(params) {
+        let httpParams = new HttpParams();
+        for (let p of Object.keys(params)) {
+            if (params[p]) {
+                httpParams = httpParams.set(p, params[p]);
+            }
+        }
+        return {params: httpParams};
+    }
+
     getModuleUrl() {
         return ModuleConfig.MODULE_URL;
     }
@@ -69,13 +79,7 @@ export class CmrService {
 
     /* SITEGROUP QUERIES */
     getAllSitegroupsGeometriesByModuleFiltered(id_module, params) {
-        let httpParams = new HttpParams();
-        for (let p of Object.keys(params)) {
-            if (params[p]) {
-                httpParams = httpParams.set(p, params[p]);
-            }
-        }
-        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sitegroups`, {params:httpParams});
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sitegroups`, this._paramsToHttpParams(params));
     }
 
     getOneSiteGroupGeometry(id_sitegroup) {
@@ -133,12 +137,8 @@ export class CmrService {
     }
 
     /* INDIVIDUAL QUERIES */
-    getAllIndividualsByModule(id_module) {
-        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/individuals`);
-    }
-
-    getAllIndividualsGeometriesByModule(id_module) {
-        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/individuals/geometries`);
+    getAllIndividualsGeometriesByModule(id_module, params) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/individuals`, this._paramsToHttpParams(params));
     }
 
     getAllIndividualsBySiteGroup(id_sitegroup) {
