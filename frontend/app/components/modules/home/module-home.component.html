@@ -153,7 +153,7 @@
                             <button class="btn btn-success float-left" [routerLink]="['individual']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.individual.label}}</button>
                             <button class="btn btn-primary float-right" (click)="filterIndividualDisplay = !filterIndividualDisplay"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
-                        <gn-cmr-filter *ngIf="module.forms.sitegroup.search_filters.length > 0"
+                        <gn-cmr-filter *ngIf="module.forms.individual.search_filters.length > 0"
                             [class]="filterIndividualDisplay == true? 'd-block' : 'd-none'"
                             [filters]="module.forms.individual.search_filters" 
                             [fieldsDef]="individualFieldsDef" 

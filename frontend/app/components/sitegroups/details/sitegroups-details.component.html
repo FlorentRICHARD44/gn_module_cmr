@@ -1,4 +1,5 @@
 <div class="main">
+    <gn-cmr-mask *ngIf="waitControl" text="Recherche en cours..."></gn-cmr-mask>
     <div class="flex-container">
         <div class="cadre" [style.min-height]="cardContentHeight + 'px'">
             <div id="details">
@@ -107,8 +108,14 @@
                         attr.aria-labelledby="nav-individuals-tab">
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export</button>
-                            <button disabled class="btn btn-primary float-right"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
+                            <button class="btn btn-primary float-right" (click)="filterIndividualDisplay = !filterIndividualDisplay"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
+                        <gn-cmr-filter *ngIf="module.forms.individual.search_filters.length > 0"
+                            [class]="filterIndividualDisplay == true? 'd-block' : 'd-none'"
+                            [filters]="module.forms.individual.search_filters" 
+                            [fieldsDef]="individualFieldsDef" 
+                            (onSearch)="applyIndividualSearch($event)"
+                        ></gn-cmr-filter>
                         <ngx-datatable #table
                             class="material striped margin-top-xs"
                             [rows]="individuals"
@@ -120,7 +127,8 @@
                             [footerHeight]="50"
                             [selectionType]="'single'"
                             [selected]="selectedIndividual"
-                            (activate)="onIndividualRowClick($event)">
+                            (activate)="onIndividualRowClick($event)"
+                            [messages]="{emptyMessage: 'Aucune donnée disponible', totalMessage: 'Total', selectedMessage: 'sélectionné'}">
 
                             <ngx-datatable-column width="60">
                                 <ng-template let-row="row" ngx-datatable-cell-template>

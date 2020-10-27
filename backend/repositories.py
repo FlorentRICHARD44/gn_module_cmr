@@ -211,20 +211,20 @@ class IndividualsRepository(BaseRepository):
     """
     def __init__(self):
         super().__init__(TIndividual)
-    
-    def get_all_by_sitegroup(self, id_sitegroup):
-        result = []
-        q = DB.session.query(self.model, func.count(TObservation.id_observation)).join(
-            TObservation, (TObservation.id_individual == TIndividual.id_individual), isouter=True).join(
-            TVisit, (TVisit.id_visit == TObservation.id_visit), isouter=True).join(
-            TSite, (TVisit.id_site == TSite.id_site), isouter=True).filter(
-                TSite.id_sitegroup == id_sitegroup).group_by(TIndividual.id_individual)
-        data = q.all()
-        for (item, count) in data:
-            r = item.to_dict()
-            r['nb_observations'] = count  # replace the overall nb_observations by nb observations on the site.
-            result.append(r)
-        return result
+# TODO need to apply the count of observations inside a sitegroup.
+#    def get_all_by_sitegroup(self, id_sitegroup):
+#        result = []
+#        q = DB.session.query(self.model, func.count(TObservation.id_observation)).join(
+#            TObservation, (TObservation.id_individual == TIndividual.id_individual), isouter=True).join(
+#            TVisit, (TVisit.id_visit == TObservation.id_visit), isouter=True).join(
+#            TSite, (TVisit.id_site == TSite.id_site), isouter=True).filter(
+#                TSite.id_sitegroup == id_sitegroup).group_by(TIndividual.id_individual)
+#        data = q.all()
+#        for (item, count) in data:
+#            r = item.to_dict()
+#            r['nb_observations'] = count  # replace the overall nb_observations by nb observations on the site.
+#            result.append(r)
+#        return result
 
     def get_all_geometries_filter_by(self, filter, params):
         """

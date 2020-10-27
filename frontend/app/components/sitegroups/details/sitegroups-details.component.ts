@@ -39,6 +39,9 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
     public mapDataIndividuals = [];
     public bShowIndividuals = false;
 
+    public waitControl = false;
+    public filterIndividualDisplay = false;
+
     @ViewChild(DatatableComponent) tableSite: DatatableComponent;
     public selected=[];
     public selectedIndividual = []
@@ -72,17 +75,14 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
                   this.mapDataSitegroups = data;
                   this.mapFeatures = {"features": this.mapDataSitegroups};
                     setTimeout(this.initFeaturesSites.bind(this), 300);
-                  this._cmrService.getAllIndividualsBySiteGroup(this.sitegroup.id_sitegroup).subscribe((data) => this.individuals = data);
                   this._cmrService.getAllSitesBySiteGroup(params.id_sitegroup).subscribe((data) => this.sites = data);
                   this._cmrService.getAllSitesGeometriesBySiteGroup(params.id_sitegroup).subscribe((data) => {
                     this.mapDataSites = data;
                     this.mapFeatures = {"features": this.mapDataSitegroups.concat(data)};
                     setTimeout(this.initFeaturesSites.bind(this), 300);
-                    this._cmrService.getAllIndividualsGeometriesBySiteGroup(params.id_sitegroup).subscribe((data) => {
-                      this.mapDataIndividuals = data;
-                  });
                 });
-            });
+                this.applyIndividualSearch({});
+              });
         });
         });
     }
@@ -221,5 +221,41 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
 
           }
       });
+    }
+
+    applyIndividualSearch(event) {
+      this.waitControl = true;
+      var params = event ? event : {};
+      this._cmrService.getAllIndividualsGeometriesBySiteGroup(this._route.snapshot.params.id_sitegroup, params).subscribe(
+        (data) => {
+          this.waitControl = false;
+          this.mapDataIndividuals = data;
+          let individualsId = [];
+          let obsPerIndividual = {};
+          this.individuals = [];
+          for (let item of data) {
+            if (individualsId.indexOf(item.properties.individual.id_individual) == -1) {
+              individualsId.push(item.properties.individual.id_individual);
+              this.individuals.push(item.properties.individual);
+            }
+            if (!obsPerIndividual.hasOwnProperty(item.properties.individual.id_individual)) {
+              obsPerIndividual[item.properties.individual.id_individual] = 0;
+            }
+            obsPerIndividual[item.properties.individual.id_individual]++;
+          }
+          for (let indi of this.individuals) {
+            indi['nb_observations'] = obsPerIndividual[indi.id_individual];
+          }
+          this.individuals = [...this.individuals];
+          this.selectedIndividual = [];
+      },
+      (error) => {
+        this.waitControl = false;
+        this.selectedIndividual = [];
+        this.mapDataIndividuals = [];
+        this.individuals = [];
+      }
+    );
+
     }
 }
