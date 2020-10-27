@@ -248,12 +248,14 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
           }
           this.individuals = [...this.individuals];
           this.selectedIndividual = [];
+          this.showIndividuals();
       },
       (error) => {
         this.waitControl = false;
         this.selectedIndividual = [];
         this.mapDataIndividuals = [];
         this.individuals = [];
+        this.showIndividuals();
       }
     );
 
