@@ -120,8 +120,7 @@ CREATE TABLE gn_cmr.t_observation(
     comments text,
     CONSTRAINT pk_gn_cmr_t_observation PRIMARY KEY (id_observation),
     CONSTRAINT fk_gn_cmr_t_observation_id_individual FOREIGN KEY (id_individual) REFERENCES gn_cmr.t_individual(id_individual),
-    CONSTRAINT fk_gn_cmr_t_observation_id_visite FOREIGN KEY (id_visit) REFERENCES gn_cmr.t_visit(id_visit),
-    CONSTRAINT check_gn_cmr_t_observation_type_observation_nomenclature CHECK (ref_nomenclatures.check_nomenclature_type_by_mnemonique(type_observation,'CMR_OBSERVATION_TYPE')) NOT VALID
+    CONSTRAINT fk_gn_cmr_t_observation_id_visite FOREIGN KEY (id_visit) REFERENCES gn_cmr.t_visit(id_visit)
 );
 
 
