@@ -6,7 +6,9 @@
 
 }
 
-select {
+select,
+.input-group-text,
+input[type=date] {
     height: calc(1.5em + .5rem + 2px);
     padding: .25rem .5rem;
     font-size: .875rem;

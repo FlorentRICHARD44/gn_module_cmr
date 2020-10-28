@@ -54,7 +54,8 @@ export class Module {
             fields: [],
             display_properties:[],
             display_list: [],
-            properties_to_keep_when_chaining: []
+            properties_to_keep_when_chaining: [],
+            search_filters: []
         },
         observation : {
             medias: [],

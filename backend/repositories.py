@@ -3,9 +3,12 @@ import os
 from flask import current_app
 from geonature.utils.env import DB
 from geonature.core.gn_commons.models import TMedias
+from geonature.core.gn_meta.models import TDatasets
+from pypnusershub.db.models import User
 from geonature.core.ref_geo.models import LAreas, LiMunicipalities
-from sqlalchemy import distinct, func, String
+from sqlalchemy import distinct, func, String, or_
 from sqlalchemy.orm import joinedload, subqueryload
+from sqlalchemy.orm.relationships import RelationshipProperty
 from sqlalchemy.inspection import inspect
 from sqlalchemy.ext.hybrid import hybrid_property
 from geoalchemy2.shape import from_shape
@@ -68,6 +71,27 @@ class BaseRepository:
         DB.session.merge(data)
         DB.session.commit()
         return data.to_dict()
+    
+    def _compute_additional_filter_params(self, query, params):
+        for k,v in params.items():
+            if hasattr(self.model, k):  # can be a column attribute
+                if isinstance(getattr(self.model, k).property, RelationshipProperty):
+                    if str(getattr(self.model, k).property.entity.class_) == "<class 'pypnusershub.db.models.User'>":
+                        conditions = ()
+                        for val in v.split(','):
+                            conditions = conditions + (getattr(self.model, k).any(id_role=val),)
+                        query = query.filter(or_(*conditions))
+                    if str(getattr(self.model, k).property.entity.class_) == "<class 'geonature.core.gn_meta.models.TDatasets'>":
+                        query = query.filter(getattr(self.model, k).has(id_dataset=v))
+                else:
+                    if str(getattr(self.model, k).property.columns[0].type) == 'BOOLEAN':
+                        query = query.filter(getattr(self.model, k).is_(True if v == "true" else False))
+                    else: 
+                        query = query.filter(getattr(self.model, k).ilike('%{}%'.format(v)))
+            else:  # or can be an attribute inside json column
+                query = query.filter(self.model.data[k].cast(String).ilike('%{}%'.format(v)))
+        return query
+
 
 class BaseGeomRepository(BaseRepository):
     """
@@ -128,11 +152,7 @@ class SiteGroupsRepository(BaseGeomRepository):
                     TSite, (TSite.id_sitegroup == TSiteGroup.id_sitegroup), isouter=True).join(
                     TVisit, (TVisit.id_site == TSite.id_site), isouter=True).join(
                     TObservation, (TObservation.id_visit == TVisit.id_visit), isouter=True).filter(filter_column == value)
-        for k,v in params.items():
-            if hasattr(TSiteGroup, k):  # can be a column attribute
-                q = q.filter(getattr(TSiteGroup,k).ilike('%{}%'.format(v)))
-            else:  # or can be an attribute inside json column
-                q = q.filter(TSiteGroup.data[k].cast(String).ilike('%{}%'.format(v)))
+        q = self._compute_additional_filter_params(q, params)
         q = q.group_by(TSiteGroup.id_sitegroup)
         data = q.all()
         for (item, geom, count_site, count_observation, count_individual) in data:
@@ -203,6 +223,11 @@ class VisitsRepository(BaseRepository):
     """
     def __init__(self):
         super().__init__(TVisit)
+    
+    def get_all_filter_by(self, filter_column, value, params):
+        q = DB.session.query(self.model).filter(filter_column == value)
+        q = self._compute_additional_filter_params(q, params)
+        return [d.to_dict() for d in q.all()]
 
 
 class IndividualsRepository(BaseRepository):
@@ -236,11 +261,7 @@ class IndividualsRepository(BaseRepository):
             TVisit, (TVisit.id_visit == TObservation.id_visit)).join(
             TSite, (TSite.id_site == TVisit.id_site)).join(
             TIndividual, (TIndividual.id_individual == TObservation.id_individual)).filter(filter)
-        for k,v in params.items():
-            if hasattr(TIndividual, k):  # can be a column attribute
-                q = q.filter(getattr(TIndividual,k).ilike('%{}%'.format(v)))
-            else:  # or can be an attribute inside json column
-                q = q.filter(TIndividual.data[k].cast(String).ilike('%{}%'.format(v)))
+        q = self._compute_additional_filter_params(q, params)
         for (site, geom) in q.all():
             r = site.to_geojson(geom)
             r['object_type'] = 'observation'

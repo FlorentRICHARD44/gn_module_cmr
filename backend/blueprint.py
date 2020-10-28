@@ -161,7 +161,7 @@ def get_one_site_geometries(id_site):
 @json_resp
 def get_all_visits_by_site(id_site):
     visit_repo = VisitsRepository()
-    return visit_repo.get_all_filter_by(TVisit.id_site, id_site)
+    return visit_repo.get_all_filter_by(TVisit.id_site, id_site, request.args.to_dict())
 
 # Get one visit
 @blueprint.route('/visit/<int:id_visit>', methods=['GET'])

@@ -56,8 +56,14 @@
                     <div class="tab-pane fade active show" id="visit-tab" role="tabpanel" attr.aria-labelledby="nav-visit-tab">
                         <div class="toolbar clearfix"><!-- TODO add cruved-->
                             <button class="btn btn-success float-left" [routerLink]="['visit']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.visit.label}}</button>
-                            <button disabled class="btn btn-primary float-right"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
+                            <button class="btn btn-primary float-right" (click)="filterVisitDisplay = !filterVisitDisplay"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
+                        <gn-cmr-filter *ngIf="module.forms.visit.search_filters.length > 0"
+                            [class]="filterVisitDisplay == true? 'd-block' : 'd-none'"
+                            [filters]="module.forms.visit.search_filters" 
+                            [fieldsDef]="visitFieldsDef" 
+                            (onSearch)="applyVisitSearch($event)"
+                        ></gn-cmr-filter>
                         <ngx-datatable #table
                             class="material striped margin-top-xs"
                             [rows]="visits"
@@ -67,7 +73,8 @@
                             [limit]="15"
                             [headerHeight]="50"
                             [footerHeight]="50"
-                            [sorts]="[{prop: 'date', dir:'desc'}]">
+                            [sorts]="[{prop: 'date', dir:'desc'}]"
+                            [messages]="{emptyMessage: 'Aucune donnée disponible', totalMessage: 'Total', selectedMessage: 'sélectionné'}">
 
                             <ngx-datatable-column width="20" headerClass="col-warning" cellClass="col-warning">
                                 <ng-template let-row="row" ngx-datatable-cell-template>

@@ -120,8 +120,8 @@ export class CmrService {
     }
 
     /* VISIT QUERIES */
-    getAllVisitsBySite(id_site) {
-        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/site/${id_site}/visits`);
+    getAllVisitsBySite(id_site, params) {
+        return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/site/${id_site}/visits`, this._paramsToHttpParams(params));
     }
 
     getOneVisit(id_visit) {

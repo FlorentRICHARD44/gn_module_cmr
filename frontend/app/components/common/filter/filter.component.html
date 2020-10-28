@@ -4,14 +4,42 @@
         <div class="col-10">
             <div class="row">
                 <div class="col-4" *ngFor="let filter of filters">
-                    <div class="pr-1">
-                        <small>{{fieldsDef[filter.field].attribut_label}}</small>
-                        <input *ngIf="filter && (!filter.hasOwnProperty('type') || filter.type =='text')" type="text" class="form-control form-control-sm" [formControl]="filterForm.get(filter.field)">
-                        <select *ngIf="filter && filter.type == 'select'" class="form-control" [formControl]="filterForm.get(filter.field)">
-                            <option [value]="null"> - </option>
-                            <option  *ngFor="let val of fieldsDef[filter.field].values" [value]="val">{{val}}</option>
-                        </select>
-                    </div>
+                    <small *ngIf="filter?.type != 'date'">{{fieldsDef[filter.field].attribut_label}}</small>
+                    <!-- type text, by default -->
+                    <input *ngIf="filter && (!filter.hasOwnProperty('type') || filter.type =='text')" type="text" class="form-control form-control-sm" [formControl]="filterForm.get(filter.field)">
+                    <!-- type select -->
+                    <select *ngIf="filter?.type == 'select'" class="form-control" [formControl]="filterForm.get(filter.field)">
+                        <option [value]="null"> - </option>
+                        <option  *ngFor="let val of fieldsDef[filter.field].values" [value]="val">{{val}}</option>
+                    </select>
+                    <!-- type boolean -->
+                    <select *ngIf="filter?.type == 'boolean'" class="form-control" [formControl]="filterForm.get(filter.field)">
+                        <option [value]="null"> - </option>
+                        <option [value]="true">Oui</option>
+                        <option [value]="false">Non</option>
+                    </select>
+                    <!-- type date (2 fields: min & max) -->
+                    <pnx-date *ngIf="filter?.type == 'date'" [label]="fieldsDef[filter.field].attribut_label + ' Min.'" [parentFormControl]="filterForm.get(filter.field + '_min')"></pnx-date>
+                    <pnx-date *ngIf="filter?.type == 'date'" [label]="fieldsDef[filter.field].attribut_label + ' Max.'" [parentFormControl]="filterForm.get(filter.field + '_max')"></pnx-date>
+                    <!-- type observer -->
+                    <pnx-observers
+                        *ngIf="filter?.type == 'observers'"
+                        [label]=""
+                        [parentFormControl]="filterForm.get(filter.field)"
+                        [idMenu]="fieldsDef[filter.field].id_menu"
+                        [codeList]="fieldsDef[filter.field].code_list"
+                        >
+                    </pnx-observers>
+                    <!-- type dataset -->
+                    <pnx-datasets
+                        *ngIf="filter?.type == 'dataset'"
+                        [label]=""
+                        [parentFormControl]="filterForm.get(filter.field)"
+                        [displayAll]="true"
+                        [multiSelect]="false"
+                        [moduleCode]="fieldsDef[filter.field].module_code"
+                        >
+                    </pnx-datasets>
                 </div>
             </div>
         </div>

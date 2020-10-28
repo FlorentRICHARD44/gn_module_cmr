@@ -1,6 +1,18 @@
 {
     "label": "Visite",
     "label_plural": "Visites",
+    "search_filters": [{
+        "field":"date",
+        "type": "date"
+    },{
+        "field": "observers"
+    }, {
+        "field": "dataset",
+        "type": "dataset"
+    }, {
+        "field": "observation",
+        "type": "boolean"
+    }],
     "display_properties": ["site_name","date","dataset_name","observation","observers","nb_observations","comments"],
     "display_list": [{
         "field":"date",
@@ -34,6 +46,11 @@
             "module_code": "test_cmr",
             "type_util": "dataset",
             "required": true
+        },
+        "dataset": {
+            "attribut_label": "Jeu de données",
+            "module_code": "test_cmr",
+            "type_util": "dataset"
         },
         "observers": {
             "type_widget": "observers",

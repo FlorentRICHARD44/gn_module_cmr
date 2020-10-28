@@ -28,14 +28,20 @@ export class FilterComponent implements OnInit{
     ngOnInit() {
         this.filterForm = this._formBuilder.group({});
         for (let filter of this.filters) {
-          this.filterForm.addControl(filter.field, new FormControl());
+            if (filter && filter.type != 'date') {
+              this.filterForm.addControl(filter.field, new FormControl());
+            } else {
+                this.filterForm.addControl(filter.field + '_min', new FormControl());
+                this.filterForm.addControl(filter.field + '_max', new FormControl());
+            }
         }
     }
 
     onSearchClick($event) {
         let values = {};
         for (let key of Object.keys(this.filterForm.value)) {
-            if (this.filterForm.value[key] && this.filterForm.value[key] != 'null') { // need to filter null values
+            if (this.filterForm.value[key] && this.filterForm.value[key] != 'null' && 
+                (!Array.isArray(this.filterForm.value[key]) || this.filterForm.value[key].length > 0)) { // need to filter null values
                 values[key] = this.filterForm.value[key];
             }
         }

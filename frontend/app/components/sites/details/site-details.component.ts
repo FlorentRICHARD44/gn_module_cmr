@@ -30,6 +30,7 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
 
     public waitControl = false;
     public filterIndividualDisplay = false;
+    public filterVisitDisplay = false;
 
     constructor(
         private _cmrService: CmrService,
@@ -62,9 +63,9 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
                     setTimeout(function() {this.initFeatures(this.route, this.module);}.bind(this), 300);
                   }
                 });
-                this._cmrService.getAllVisitsBySite(params.id_site).subscribe((data) => this.visits = data);
                 this.individualListProperties = this.module.forms.individual.display_list;
                 this.individualFieldsDef = this.module.forms.individual.fields;
+                this.applyVisitSearch({});
                 this.applyIndividualSearch({});
             })
         });
@@ -80,6 +81,21 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
         },
         (error) => {
           this.individuals = [];
+          this.waitControl = false;
+        });
+    }
+
+    applyVisitSearch(event) {
+      this.waitControl = true;
+      var params = event ? event : {};
+      
+      this._cmrService.getAllVisitsBySite(this.route.snapshot.params.id_site, params).subscribe(
+        (data) => {
+          this.visits = data;
+          this.waitControl = false;
+        },
+        (error) => {
+          this.visits = [];
           this.waitControl = false;
         });
     }

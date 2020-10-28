@@ -1,17 +1,36 @@
 {
+    "search_filters": [{
+        "field":"date",
+        "type": "date"
+    },{
+        "field": "session",
+        "type": "select"
+    },{
+        "field": "observers",
+        "type": "observers"
+    }, {
+        "field": "dataset",
+        "type": "dataset"
+    }, {
+        "field": "observation",
+        "type": "boolean"
+    }],
     "display_properties": ["site_name","date","dataset_name","session","observers","observation","nb_observations","comments"],
     "display_list": [{
         "field":"date",
         "width": 120
     },{
         "field":"observers",
-        "width": 250
+        "width": 200
     },{
         "field": "session",
         "width": 120
     },{
+        "field": "dataset_name",
+        "width": 200
+    },{
         "field": "observation",
-        "width": 80
+        "width": 100
     },{
         "field": "nb_observations",
         "width": 120,
