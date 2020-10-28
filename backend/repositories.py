@@ -73,18 +73,38 @@ class BaseRepository:
         return data.to_dict()
     
     def _compute_additional_filter_params(self, query, params):
+        """
+        Method to add some filters in a given query according params.
+        Special cases managed:
+        * normal column (text with "like" date min/max, observers, dataset, boolean)
+        * json column ( text with "like" )
+        """
         for k,v in params.items():
+            # Check suffix to manage date min/max
+            suffix = None
+            if k.endswith('_min') or k.endswith('_max'):
+                suffix = k[-4:]
+                k = k[0:-4]
+            
+            # Check if attribute is a column or a JSON
             if hasattr(self.model, k):  # can be a column attribute
+
+                # Check if attribute is a relationship or a normal column
                 if isinstance(getattr(self.model, k).property, RelationshipProperty):
                     if str(getattr(self.model, k).property.entity.class_) == "<class 'pypnusershub.db.models.User'>":
                         conditions = ()
                         for val in v.split(','):
                             conditions = conditions + (getattr(self.model, k).any(id_role=val),)
                         query = query.filter(or_(*conditions))
-                    if str(getattr(self.model, k).property.entity.class_) == "<class 'geonature.core.gn_meta.models.TDatasets'>":
+                    elif str(getattr(self.model, k).property.entity.class_) == "<class 'geonature.core.gn_meta.models.TDatasets'>":
                         query = query.filter(getattr(self.model, k).has(id_dataset=v))
+
                 else:
-                    if str(getattr(self.model, k).property.columns[0].type) == 'BOOLEAN':
+                    if suffix == '_min':
+                        query = query.filter(getattr(self.model, k) >= v)
+                    elif suffix == '_max':
+                        query = query.filter(getattr(self.model, k) <= v)
+                    elif str(getattr(self.model, k).property.columns[0].type) == 'BOOLEAN':
                         query = query.filter(getattr(self.model, k).is_(True if v == "true" else False))
                     else: 
                         query = query.filter(getattr(self.model, k).ilike('%{}%'.format(v)))
