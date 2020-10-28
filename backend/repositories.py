@@ -6,7 +6,7 @@ from geonature.core.gn_commons.models import TMedias
 from geonature.core.gn_meta.models import TDatasets
 from pypnusershub.db.models import User
 from geonature.core.ref_geo.models import LAreas, LiMunicipalities
-from sqlalchemy import distinct, func, String, or_
+from sqlalchemy import distinct, func, String, Date, or_
 from sqlalchemy.orm import joinedload, subqueryload
 from sqlalchemy.orm.relationships import RelationshipProperty
 from sqlalchemy.inspection import inspect
@@ -109,7 +109,12 @@ class BaseRepository:
                     else: 
                         query = query.filter(getattr(self.model, k).ilike('%{}%'.format(v)))
             else:  # or can be an attribute inside json column
-                query = query.filter(self.model.data[k].cast(String).ilike('%{}%'.format(v)))
+                if suffix == '_min':
+                    query = query.filter(self.model.data[k].cast(String).cast(Date) >= v)
+                elif suffix == '_max':
+                    query = query.filter(self.model.data[k].cast(String).cast(Date) <= v)
+                else:
+                    query = query.filter(self.model.data[k].cast(String).ilike('%{}%'.format(v)))
         return query
 
 
@@ -236,6 +241,27 @@ class SitesRepository(BaseGeomRepository):
             r['nb_individuals'] = count_individual
             result.append(r)
         return result
+
+    def get_all_geometries_filter_by(self, filter_column, value, params):
+        result = []
+        q = DB.session.query(TSite, 
+                func.ST_AsGEOJSON(TSite.geom), 
+                func.count(distinct(TVisit.id_visit)),
+                func.count(distinct(TObservation.id_observation)),
+                func.count(distinct(TObservation.id_individual))).join(
+                    TVisit, (TVisit.id_site == TSite.id_site), isouter=True).join(
+                    TObservation, (TObservation.id_visit == TVisit.id_visit), isouter=True).filter(filter_column == value)
+        q = self._compute_additional_filter_params(q, params)
+        q = q.group_by(TSite.id_site)
+        data = q.all()
+        for (item, geom, count_visit, count_observation, count_individual) in data:
+            r = item.to_geojson(geom)
+            r['properties']['nb_visit'] = count_visit if count_visit is not None else 0
+            r['properties']['nb_observations'] = count_observation if count_observation is not None else 0
+            r['properties']['nb_individuals'] = count_individual if count_individual is not None else 0
+            result.append(r)
+        return result
+
 
 class VisitsRepository(BaseRepository):
     """

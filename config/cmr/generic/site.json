@@ -3,6 +3,9 @@
     "label_plural": "Sites",
     "geometry_types": ["Point","LineString","Polygon"],
     "check_site_within_sitegroup": false,
+    "search_filters": [{
+        "field":"name"
+    }],
     "display_properties": ["name","comments","nb_visits"],
     "display_list": [{
         "field":"name",

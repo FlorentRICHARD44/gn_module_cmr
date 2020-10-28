@@ -3,6 +3,15 @@
     "label_plural": "Points de Capture",
     "geometry_types": ["Point"],
     "check_site_within_sitegroup": true,
+    "search_filters": [{
+        "field":"name"
+    },{
+        "field": "piege_type",
+        "type": "select"
+    },{
+        "field": "date_pose",
+        "type": "date"
+    }],
     "display_properties": ["name", "habitat","conductivité","piege_type","date_pose","date_retrait","comments","nb_visits"],
     "display_list": [{
         "field":"name",
@@ -11,8 +20,11 @@
         "field":"piege_type",
         "width": 250
     },{
+        "field": "date_pose",
+        "width": 120
+    },{
         "field":"nb_visits",
-        "width": 120,
+        "width": 100,
         "align": "right"
     },{
         "field":"nb_observations",
@@ -20,7 +32,7 @@
         "align": "right"
     },{
         "field":"nb_individuals",
-        "width": 120,
+        "width": 100,
         "align": "right"
     }],
     "properties_to_keep_when_chaining": ["lieu","habitat","conductivité","piege_type","date_pose"],

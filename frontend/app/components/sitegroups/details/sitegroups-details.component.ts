@@ -40,6 +40,7 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
     public bShowIndividuals = false;
 
     public waitControl = false;
+    public filterSiteDisplay = false;
     public filterIndividualDisplay = false;
 
     @ViewChild(DatatableComponent) tableSite: DatatableComponent;
@@ -71,17 +72,12 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
                 this.individualFieldsDef = this.module.forms.individual.fields;
                 this._cmrService.getOneSiteGroupGeometry(params.id_sitegroup).subscribe((data) => {
                   this.sitegroup = data[0].properties;
-                  this.medias = this.sitegroup.medias;
+                  this.medias = this.sitegroup.medias || [];
                   this.mapDataSitegroups = data;
                   this.mapFeatures = {"features": this.mapDataSitegroups};
                     setTimeout(this.initFeaturesSites.bind(this), 300);
-                  this._cmrService.getAllSitesBySiteGroup(params.id_sitegroup).subscribe((data) => this.sites = data);
-                  this._cmrService.getAllSitesGeometriesBySiteGroup(params.id_sitegroup).subscribe((data) => {
-                    this.mapDataSites = data;
-                    this.mapFeatures = {"features": this.mapDataSitegroups.concat(data)};
-                    setTimeout(this.initFeaturesSites.bind(this), 300);
-                });
-                this.applyIndividualSearch({});
+                  this.applySiteSearch({});
+                  this.applyIndividualSearch({});
               });
         });
         });
@@ -207,19 +203,38 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
       var dialogRef = this.dialog.open(SitegroupBatchVisitComponent, dialogConfig);
       dialogRef.afterClosed().subscribe((result) => { 
           if (result) {
-
               // Need to refresh list of sites to have new nb visits.
-              this._cmrService.getAllSitesBySiteGroup(this._route.snapshot.params.id_sitegroup).subscribe((data) => {
-                this.sites = data;
-                this.sites = [...this.sites]
-              });
+              this.applySiteSearch({});
               // info to user.
               this._commonService.regularToaster(
                 "info",
                 result.visits.length + " visites créées"
               );
-
           }
+      });
+    }
+
+    applySiteSearch(event) {
+      this.waitControl = true;
+      var params = event ? event : {};
+      this._cmrService.getAllSitesGeometriesBySiteGroup(this._route.snapshot.params.id_sitegroup, params).subscribe(
+        (data) => {
+          this.mapDataSites = data;
+          this.sites = [];
+          for (let site of data) {
+            this.sites.push(site.properties);
+          }
+          this.mapFeatures = {"features": this.mapDataSitegroups.concat(data)};
+          this.waitControl = false;
+          this.selected = [];
+          setTimeout(this.showSites.bind(this), 300);
+      },
+      (error) => {
+        this.mapDataSites = [];
+        this.sites = [];
+        this.selected = [];
+        this.waitControl = false;
+        setTimeout(this.showSites.bind(this), 300);
       });
     }
 
