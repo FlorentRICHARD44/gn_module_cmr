@@ -5,12 +5,12 @@ export class Module {
     public id_module;
     public module_label = "";
     public module_code = "";
-    public use_sitegroup = false;
     public medias: [];
     public config = {
         disclaimer: false,
         disclaimer_text: [],
-        welcome: ""
+        welcome: "",
+        use_sitegroup: false
     };
     public forms = {
         module: {

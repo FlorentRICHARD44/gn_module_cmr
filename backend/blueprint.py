@@ -116,19 +116,12 @@ def save_site():
     else:
         return site_repo.create_one(data)
 
-# Get the list of sites by module
+# Get the list of geometries for sites by module with filter
 @blueprint.route('/module/<int:id_module>/sites', methods=['GET'])
-@json_resp
-def get_all_sites_by_module(id_module):
-    site_repo = SitesRepository()
-    return site_repo.get_all_filter_by(TSite.id_module, id_module)
-
-# Get the list of geometries for sites by module
-@blueprint.route('/module/<int:id_module>/sites/geometries', methods=['GET'])
 @json_resp
 def get_all_sites_geometries_by_module(id_module):
     site_repo = SitesRepository()
-    return site_repo.get_all_geometries_filter_by(TSite.id_module, id_module)
+    return site_repo.get_all_geometries_filter_by(TSite.id_module, id_module, request.args.to_dict())
 
 # Get the list of sites geometries by site group with filter
 @blueprint.route('/sitegroup/<int:id_sitegroup>/sites', methods=['GET'])

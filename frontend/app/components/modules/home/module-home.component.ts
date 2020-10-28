@@ -39,6 +39,7 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
     public mapFeaturesIndividuals;
 
     public filterDisplay = false;
+    public filterSiteDisplay = false;
     public filterIndividualDisplay = false;
     public waitControl = false;
 
@@ -72,8 +73,11 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
                 this.individualSearchFilters = this.module.forms.individual.search_filters;
                 this.siteListProperties = this.module.forms.site.display_list;
                 this.siteFieldsDef = this.module.forms.site.fields;
-                this._cmrService.getAllSitesByModule(this.module.id_module).subscribe((data) => this.sites = data);
-                this.applySitegroupSearch({});
+                if (this.module.config.use_sitegroup) {
+                  this.applySitegroupSearch({});
+                } else {
+                  this.applySiteSearch({});
+                }
                 this.applyIndividualSearch({});
                 return of(true);
               })
@@ -99,6 +103,26 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
         }
       }
       this._mapListService.zoomOnSelectedLayer(this._mapService.map, this.findFeatureLayer(event.row.id_sitegroup, 'sitegroup'));
+    }
+
+    /**
+     * Called when click on a row in the site table.
+     * @param event 
+     */
+    onSiteRowClick(event) {
+      if (!(event && event.type === 'click')) {
+        return;
+      }
+      this.updateFeaturesStyle(this.mapFeatures, [event.row.id_site], 'site');
+      for (let ft of this.mapFeatures['features']) {
+        let lyr = this.findFeatureLayer(ft.id, ft.object_type);
+        if (ft.id === event.row.id_site) {
+          lyr.openPopup();
+        } else {
+          lyr.closePopup();
+        }
+      }
+      this._mapListService.zoomOnSelectedLayer(this._mapService.map, this.findFeatureLayer(event.row.id_site, 'site'));
     }
 
     /**
@@ -133,9 +157,15 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
      * Update the selection in table.
      * @param id_sitegroup 
      */
-    setSelected(id_sitegroup) {
-      // this.table._internalRows permet d'avoir les ligne triées et d'avoir les bons index
-      const index_row_selected = this.tableSitegroup._internalRows.findIndex(row => row.id_sitegroup === id_sitegroup);
+    setSelected(id) {
+      let index_row_selected;
+      if (this.module.config.use_sitegroup) {
+        // this.table._internalRows permet d'avoir les ligne triées et d'avoir les bons index
+        index_row_selected = this.tableSitegroup._internalRows.findIndex(row => row.id_sitegroup === id);
+      } else {
+        // this.table._internalRows permet d'avoir les ligne triées et d'avoir les bons index
+        index_row_selected = this.tableSitegroup._internalRows.findIndex(row => row.id_site === id);
+      }
       if (index_row_selected === -1) {
         return;
       }
@@ -169,6 +199,31 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
           this.mapFeatures = {'features': []};
         }
         );
+    }
+
+    applySiteSearch(event) {
+      this.waitControl = true;
+      var params = event ? event : {};
+      this._cmrService.getAllSitesGeometriesByModule(this.module.id_module, params).subscribe(
+        (data) => {
+          this.mapFeatures = {'features':data};
+          this.sites = [];
+          for (let site of data) {
+            this.sites.push(site.properties);
+          }
+          this.selected = [];
+          this.waitControl = false;
+          setTimeout(function() {
+            this.initFeatures(this.route,this.module);
+            this.forceIndividualsToFront();
+          }.bind(this), 500);
+        },
+        (error) => {
+          this.mapFeatures = {'features':[]};
+          this.waitControl = false;
+          this.sites = [];
+          this.selected = [];
+        });
     }
 
     applyIndividualSearch(event) {
