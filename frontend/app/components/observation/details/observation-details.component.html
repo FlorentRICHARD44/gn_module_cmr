@@ -9,13 +9,13 @@
                 </div>
                 <div class="">
                     <div class="mb-2">
-                        <span><strong>{{module.forms.site.label}}: </strong>{{observation?.visit?.site?.name}}</span>
+                        <span><strong>{{module.forms.site.label}}: </strong><a [routerLink]="['../../../..']">{{observation?.visit?.site?.name}}</a></span>
                     </div>
                     <div class="mb-2">
-                        <span><strong>{{module.forms.visit.label}}: </strong>{{_dataService.formatProperty(observation?.visit?.date, module.forms.visit.fields['date'])}}</span>
+                        <span><strong>{{module.forms.visit.label}}: </strong><a [routerLink]="['../..']">{{_dataService.formatProperty(observation?.visit?.date, module.forms.visit.fields['date'])}}</a></span>
                     </div>
                     <div class="mb-2">
-                        <strong>{{module.forms.individual.label}}:</strong>
+                        <strong>{{module.forms.individual.label}}: </strong><a [routerLink]="['/' + _cmrService.getModuleUrl(),'module',module.module_code, 'individual', observation.individual.id_individual]">{{observation.individual.identifier}}</a>
                         <table class="table table-striped table-sm scrollable">
                             <tr *ngFor="let fieldName of individualProperties">
                                 <th>{{ individualFields[fieldName].attribut_label }}</th>
