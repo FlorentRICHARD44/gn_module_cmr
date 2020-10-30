@@ -1,3 +1,4 @@
+import datetime as dt
 from flask import Blueprint, current_app, request
 from geonature.utils.env import DB
 from geonature.utils.utilssqlalchemy import json_resp
@@ -6,6 +7,9 @@ from .repositories import ModulesRepository, SiteGroupsRepository, SitesReposito
 from .models import TModuleComplement, TSiteGroup, TSite, TVisit, TIndividual, TObservation
 from .utils.transform import data_to_json, json_to_data
 
+from flask import send_from_directory
+import geonature.utils.filemanager as fm
+from pathlib import Path
 blueprint = Blueprint('cmr', __name__)
 
 
@@ -246,6 +250,26 @@ def save_individual():
         return ind_repo.update_one(data)
     else:
         return ind_repo.create_one(data)
+
+@blueprint.route('/module/<module_code>/ficheindividual/<int:id_individual>', methods=['GET'])
+def get_fiche_individu(module_code, id_individual):
+    ind_repo = IndividualsRepository()
+    individual = ind_repo.get_one(TIndividual.id_individual, id_individual)
+    df = {}
+    df['module_code'] = module_code
+    df['individual'] = individual
+    obs_repo = ObservationsRepository()
+    df['observations'] = obs_repo.get_all_filter_by(TObservation.id_individual, id_individual)
+
+    date = dt.datetime.now().strftime("%d/%m/%Y")
+
+    df["footer"] = {
+        "url": current_app.config["URL_APPLICATION"] + "/#/cmr/module/" +module_code + "/individual/" + str(id_individual),
+        "date": date,
+    }
+    pdf_file = fm.generate_pdf("cmr/" + module_code + "/fiche_individu.html", df, "fiche_individu_" + individual['identifier'].replace(' ', '_') + ".pdf")
+    pdf_file_posix = Path(pdf_file)
+    return send_from_directory(str(pdf_file_posix.parent), pdf_file_posix.name, as_attachment=True)
 
 
 #############################

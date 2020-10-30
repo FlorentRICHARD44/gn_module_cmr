@@ -139,4 +139,8 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
       this.selected = [...this.selected];
       this.tableHistoric.offset = Math.floor((index_row_selected) / this.tableHistoric._limit);
     }
+
+    getFicheIndividual() {
+      this._cmrService.getFicheIndividual(this.route.snapshot.params.module, this.route.snapshot.params.id_individual);
+    }
 }

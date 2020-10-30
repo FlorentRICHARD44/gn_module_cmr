@@ -220,6 +220,11 @@
                 "type_widget": "select",
                 "values": ["ADN mitochondrial","ADN nucléaire","ADN mitochondrial + ADN nucléaire"],
                 "required": true
+            },
+            "typage_gen_resultat": {
+                "attribut_label": "Résultat",
+                "type_widget": "textarea",
+                "required": false
             }
         }
     },{

@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Fiche individu {{data.individual.identifier}}</title>
+    <link rel="stylesheet" type="text/css" href="../../static/css/cmr/{{data.module_code}}/fiche_individu_template_pdf.css">
+</head>
+
+<body>
+<div class="header">
+    <table><tr>
+       <td><img class="bandeau" src="../../static/images/cmr/test_cmr/LOGO_SHF_micro.png" alt="Bandeau"></td>
+        <td><p class="italic">Outil de saisie CMR Cistude - Fiche Individu</p></td>
+    </tr></table>
+</div>
+<div class="content">
+    <h1>Fiche Individu: {{data.individual.identifier}}</h1>
+    <div><strong>RFID: </strong>{{data.individual.rfid or ''}}</div>
+    <div><strong>Sexe: </strong>{{data.individual.sexe}}</div>
+    <div><strong>Marquage: </strong>{{data.individual.marker}}</div>
+    <div><strong>Nombre de captures: </strong>{{data.individual.nb_observations}}</div>
+    {% set first_observ = data.observations | sort(attribute='visit.date') | first %}
+    {% set observers = [] %}
+    {% for observer in first_observ.visit.observers %}
+        {{ observers.append(observer.nom_complet) or ''}}
+    {% endfor %}
+    <div><strong>Première capture: </strong>{{first_observ.visit.date.split(' ')[0].split('-') | reverse | join('/')}}</script> par {{ observers | join(', ') }}</div>
+    <div><strong>Commentaires: </strong><br>{{(data.individual.comments or '') | replace('\n','<br>') | safe }}</div>
+
+    <br>
+    <h2>Observations</h2>
+    <table class="bordered">
+    <tr>
+        <th>Date</th>
+        <th>Aire d'étude</th>
+        <th>Point de capture</th>
+        <th>Stade de développment</th>
+        <th>Âge</th>
+        <th>Etat</th>
+        <th>Poids</th>
+        <th>LOD</th>
+        <th>Observateur(s)</th>
+        <th>Commentaires</th>
+    </tr>
+    {% for obs in data.observations | sort(attribute='visit.date') %}
+        <tr>
+            <td>{{obs.visit.date.split(' ')[0].split('-') | reverse | join('/')}}</td>
+            <td>{{obs.visit.site.sitegroup.name}}</td>
+            <td>{{obs.visit.site.name}}</td>
+            <td>{{obs.developpement_stade}}</td>
+            <td style="text-align: right;">{{obs.age or '-'}}</td>
+            <td>{{obs.individual_state}}</td>
+            <td style="text-align: right;">{{obs.poids_g}}</td>
+            <td style="text-align: right;">{{obs.longueur_dossiere_mm}}</td>
+            <td>{% for observer in obs.visit.observers %}
+                {{observer.nom_complet}}<br>
+                {% endfor %}
+            </td>
+            <td>{{(obs.comments or '') | replace('\n', '<br>') | safe }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    <br>
+    <div class="analyses-container">
+        <div class="analyses">
+            <h3>Profil génétique</h3>
+            {% set ns = namespace(profil_genetique=false) %}
+            {% for obs in data.observations | sort(attribute='visit.date') %}
+                {% if obs.typage_gen_ouinon == 'Oui' %}
+                    {% set ns.profil_genetique = true %}
+                    <div><strong>Prélèvement effectué le: </strong>{{obs.typage_gen_date_prelevement.split('-') | reverse | join('/')}}</div>
+                    <div><strong>Type de prélèvement: </strong>{{obs.typage_gen_type_prelevement | join(', ')}}</div>
+                    <div><strong>Analyse effectuée par: </strong>{{obs.typage_gen_analyse_par}}</div>
+                    <div><strong>Type d'analyse: </strong>{{obs.typage_gen_type_analyse | join (', ')}}</div>
+                    <div><strong>Résultat: </strong><br>{{(obs.typage_gen_resultat or '') | replace('\n', '<br>') | safe }}</div>
+                {% endif %}
+            {% endfor %}
+            {% if not ns.profil_genetique %}
+                <p class="italic">Pas de profil génétique réalisé</p>
+            {% endif %}
+        </div>
+        <div class="analyses">
+            <h3>Prélèvements biologiques</h3>
+            {% set ns = namespace(prelev_bio=false) %}
+            {% for obs in data.observations | sort(attribute='visit.date') %}
+                {% if obs.analyse_comp_ouinon == 'Oui' %}
+                    {% set ns.prelev_bio = true %}
+                    <div><strong>Prélèvement effectué le: </strong>{{obs.analyse_comp_date_prelevement.split('-') | reverse | join('/')}}</div>
+                    <div><strong>Type de prélèvement: </strong>{{obs.analyse_comp_type_prelevement | join (', ')}}</div>
+                    <div><strong>Objectif du prélèvement: </strong>{{obs.analyse_comp_objectif or ''}}</div>
+                    <div><strong>Analyse effectuée par: </strong>{{obs.analyse_comp_analyse_par or ''}}</div>
+                    <div><strong>Type d'analyse: </strong>{{obs.analyse_comp_type_analyse or ''}}</div>
+                    <div><strong>Résultat: </strong><br>{{(obs.analyse_comp_resultats or '') | replace('\n', '<br>') | safe }}</div>
+                    <br>
+                {% endif %}
+            {% endfor %}
+            {% if not ns.prelev_bio %}
+                <p class="italic">Aucun prélèvement biologique réalisé</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+    <div class="footer">
+        <a target="_blank" href="{{data.footer['url']}}">{{data.footer['url']}}</a>
+        <span class="italic">Fiche générée le {{data.footer['date']}}</span>
+    </div>
+</body>

@@ -19,6 +19,7 @@ export interface SpecificService {
 })
 export class CmrService {
     private _modules= {};
+    private _specificModule;
     constructor(private _api: HttpClient) {}
 
     _paramsToHttpParams(params) {
@@ -44,7 +45,10 @@ export class CmrService {
      * @param module 
      */
     getSpecificService(module):SpecificService {
-        return require('../../../config/cmr/' + module + '/specific.service.js');
+        if (!this._specificModule) {
+            this._specificModule = require('../../../config/cmr/' + module + '/specific.service.js');
+        }
+        return this._specificModule;
     }
 
     /* MODULE QUERIES */
@@ -151,6 +155,11 @@ export class CmrService {
 
     saveIndividual(data) {
         return this._api.put<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/individual`, data);
+    }
+
+    getFicheIndividual(module_code, id_individual) {
+        let dt = new Date().toString();
+        window.open(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${module_code}/ficheindividual/${id_individual}?qt=${dt}`);
     }
 
     /* OBSERVATIONS QUERIES */
