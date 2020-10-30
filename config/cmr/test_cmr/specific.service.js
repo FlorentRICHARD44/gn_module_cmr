@@ -37,6 +37,19 @@ export function initObservation(form, formGroups, visit, individual) {
     if (individual.sexe != 'Femelle') {
         form.get('etat_femelle').disable();
     }
+    for (let fg of formGroups) {
+        if (fg['form'].get('analyse_comp_type_prelevement')) {
+            fg['form'].get('analyse_comp_type_prelevement').valueChanges.subscribe(
+                value => {
+                    if (!value || value.indexOf('Autre') == -1) {
+                        fg['form'].get('analyse_comp_type_prelevement_autre').disable();
+                    } else {
+                        fg['form'].get('analyse_comp_type_prelevement_autre').enable();
+                    }
+                }
+            )
+        }
+    }
     return {
         date_capture: visit.date,
         date_relache: visit.date

@@ -265,7 +265,7 @@
             "analyse_comp_type_prelevement_autre": {
                 "attribut_label": "Type Autre prélèvement",
                 "type_widget":"text",
-                "required": false
+                "required": true
             },
             "analyse_comp_objectif": {
                 "attribut_label": "Objectif du prélèvement",
