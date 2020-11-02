@@ -1,10 +1,11 @@
 import datetime as dt
-from flask import Blueprint, current_app, request
+from flask import Blueprint, current_app, request, render_template
 from geojson import FeatureCollection
 from utils_flask_sqla.generic import serializeQuery
 from utils_flask_sqla_geo.generic import GenericTableGeo
 from utils_flask_sqla.response import to_csv_resp, to_json_resp
-from geonature.utils.env import DB
+from geonature.utils.errors import GeonatureApiError
+from geonature.utils.env import DB, ROOT_DIR
 from geonature.utils.utilssqlalchemy import json_resp
 from pypnusershub.db.models import User
 from sqlalchemy import text
@@ -135,6 +136,27 @@ def export_all_observations_by_sitegroup(module_code, id_sitegroup, type):
     elif type == 'geojson':
         results = FeatureCollection([view.as_geofeature(d, columns=columns) for d in data])
         return to_json_resp(results, as_file=True, filename=filename, indent=4, extension='geojson')
+    elif type == 'shp':
+        try:
+            fm.delete_recursively(
+                str(ROOT_DIR / "backend/static/shapefiles"), excluded_files=[".gitkeep"]
+            )
+            db_cols = [db_col for db_col in view.db_cols if db_col.key in columns]
+            dir_path = str(ROOT_DIR / "backend/static/shapefiles")
+            view.as_shape(
+                db_cols=db_cols, data=data, dir_path=dir_path, file_name=filename
+            )
+
+            return send_from_directory(dir_path, filename + ".zip", as_attachment=True)
+
+        except GeonatureApiError as e:
+            message = str(e)
+
+        return render_template(
+            "error.html",
+            error=message,
+            redirect=current_app.config["URL_APPLICATION"] + "/#/cmr",
+        )
     else:
         raise NotFound("type export not found")
 
