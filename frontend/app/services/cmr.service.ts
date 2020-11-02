@@ -98,6 +98,11 @@ export class CmrService {
         return this._api.post<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/sitegroup/${id_sitegroup}/containssite`, geometry);
     }
 
+    exportSitegroupObservations(module_code, id_sitegroup, type) {
+        let dt = new Date().toString();
+        window.open(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${module_code}/sitegroup/${id_sitegroup}/${type}?qt=${dt}`);
+    }
+
     /* SITE QUERIES */
     getAllSitesGeometriesByModule(id_module, params) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sites`, this._paramsToHttpParams(params));

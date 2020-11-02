@@ -1,8 +1,12 @@
 import datetime as dt
 from flask import Blueprint, current_app, request
+from utils_flask_sqla.generic import serializeQuery, GenericTable
+from utils_flask_sqla.response import to_csv_resp
 from geonature.utils.env import DB
 from geonature.utils.utilssqlalchemy import json_resp
 from pypnusershub.db.models import User
+from sqlalchemy import text
+from werkzeug.exceptions import NotFound
 from .repositories import ModulesRepository, SiteGroupsRepository, SitesRepository, VisitsRepository, IndividualsRepository, ObservationsRepository, ConfigRepository
 from .models import TModuleComplement, TSiteGroup, TSite, TVisit, TIndividual, TObservation
 from .utils.transform import data_to_json, json_to_data
@@ -103,6 +107,25 @@ def check_if_sitegroup_contains_site(id_sitegroup):
     sitegroup_repo = SiteGroupsRepository()
     contains_site = sitegroup_repo.sitegroup_contains_site(id_sitegroup, request.json)
     return {"contains_site": contains_site[0]}
+
+# export CSV all observations
+@blueprint.route('/module/<module_code>/sitegroup/<int:id_sitegroup>/<type>', methods=['GET'])
+def export_all_observations_by_sitegroup(module_code, id_sitegroup, type):
+    view = GenericTable(
+        tableName="v_cmr_sitegroup_observations_" + module_code , schemaName="gn_cmr", engine=DB.engine,
+    )
+    columns = view.tableDef.columns
+    q = DB.session.query(*columns).filter(text('id_sitegroup='+ str(id_sitegroup)))
+
+    if type == 'csv':
+        return to_csv_resp(
+            dt.datetime.now().strftime("%Y_%m_%d_%Hh%Mm%S"),
+            data=serializeQuery(q.all(), q.column_descriptions),
+            separator=";",
+            columns=[db_col.key for db_col in columns],
+        )
+    else:
+        raise NotFound("type export not found")
 
 
 #############################

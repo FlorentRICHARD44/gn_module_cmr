@@ -6,6 +6,7 @@
                 <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.sitegroup.label + ': ' + sitegroup.name"></gn-cmr-breadcrumb>
                 <div class="toolbar clearfix">
                     <h3 class="float-left">{{ module.forms.sitegroup.label + ': ' + sitegroup.name}}</h3>
+                    <button class="btn btn-primary float-right mat-primary ml-2" color="primary" (click)="openModalDownload($event, modalDownload)"><i class="fa fa-arrow-down"></i>&nbsp;Téléchargements</button>
                     <button class="btn btn-primary float-right" [routerLink]="['..', {edit: sitegroup.id_sitegroup}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
                 </div>
                 <div class="">
@@ -61,7 +62,6 @@
                         <div class="toolbar clearfix"><!-- TODO add cruved -->
                             <button class="btn btn-success float-left" [routerLink]="['site']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.site.label}}</button>
                             <button class="btn btn-success float-left ml-2" *ngIf="module.forms.sitegroup.use_batch_visit_creation" [disabled]="sites.length < 1" (click)="onClickBatchVisit()">Ajouter une visite pour chaque {{module.forms.site.label}}</button>
-                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export</button>
                             <button class="btn btn-primary float-right" (click)="filterSiteDisplay = !filterSiteDisplay"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <gn-cmr-filter *ngIf="module.forms.site.search_filters.length > 0"
@@ -113,8 +113,7 @@
                         id="individuals-tab"
                         role="tabpanel"
                         attr.aria-labelledby="nav-individuals-tab">
-                        <div class="toolbar clearfix"><!-- TODO add cruved -->
-                            <button disabled class="btn btn-primary float-right ml-2"><i class="fa fa-arrow-down"></i>&nbsp;Export</button>
+                        <div class="toolbar clearfix">
                             <button class="btn btn-primary float-right" (click)="filterIndividualDisplay = !filterIndividualDisplay"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <gn-cmr-filter *ngIf="module.forms.individual.search_filters.length > 0"
@@ -158,4 +157,24 @@
             </nav>
         </div>
     </div>
+    <ng-template #modalDownload id="modal-download" let-c="close" let-d="dismiss" >
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"> {{'DownloadData' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalReference.close()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="alert alert-info" role="alert">
+                <i class="fa fa-info-circle"></i>&nbsp;Les données téléchargées sont filtrées avec les critères des {{module.forms.site.label_plural}}.
+            </div>
+            <br>
+            <h5 class="underlined second-color">Télécharger les observations</h5>
+            <div>
+                <button mat-raised-button (click)="downloadAllObservations('csv')" type="button" class="button-success mr-1" >Format CSV</button>
+                <button mat-raised-button disabled (click)="getCsvObservations('geojson')" type="button" class="button-success mr-1" >Format GeoJSON</button>
+                <button mat-raised-button disabled (click)="getCsvObservations('shp')" type="button" class="button-success mr-1" >Format ShapeFile</button>
+            </div>
+        </div>
+      </ng-template>
 </div>

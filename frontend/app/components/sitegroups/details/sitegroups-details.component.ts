@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild} from '@angular/core';
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { ActivatedRoute } from '@angular/router';
 import { DatatableComponent } from '@librairies/@swimlane/ngx-datatable';
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { MapListService } from '@geonature_common/map-list/map-list.service';
 import { CommonService } from "@geonature_common/service/common.service";
 import { CmrService } from './../../../services/cmr.service';
@@ -42,6 +43,9 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
     public waitControl = false;
     public filterSiteDisplay = false;
     public filterIndividualDisplay = false;
+    @ViewChild(NgbModal)
+    public modalCol: NgbModal;
+    public modalReference;
 
     @ViewChild(DatatableComponent) tableSite: DatatableComponent;
     public selected=[];
@@ -52,6 +56,7 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
         public dialog: MatDialog,
         private _mapListService: MapListService,
         private _commonService: CommonService,
+        public ngbModal: NgbModal,
         private _dataService: DataService // used in template
     ) {
       super();
@@ -272,5 +277,13 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
         this.individuals = [];
         this.showIndividuals();
       });
+    }
+
+    openModalDownload(event, modal) {
+      this.modalReference = this.ngbModal.open(modal, { size: "lg" });
+    }
+
+    downloadAllObservations(type) {
+      this._cmrService.exportSitegroupObservations(this.module.module_code, this._route.snapshot.params.id_sitegroup, type);
     }
 }
