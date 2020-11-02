@@ -17,6 +17,7 @@ CREATE OR REPLACE VIEW gn_cmr.v_cmr_sitegroup_observations_test_cmr
 	sg.id_sitegroup as "id_sitegroup",
     s.name AS "Point de Capture",
 	s.id_site as "id_site",
+	s.geom as "geom",
     s.data #>> '{piege_type}'::text[] AS "Type de Piège",
     NULLIF(s.data #>> '{habitat}'::text[], 'null'::text) AS "Habitat",
     NULLIF(s.data #>> '{conductivité}'::text[], 'null'::text) AS "Conductivité",

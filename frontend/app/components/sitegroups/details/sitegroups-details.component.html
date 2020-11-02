@@ -165,14 +165,11 @@
             </button>
         </div>
         <div class="modal-body">
-            <div class="alert alert-info" role="alert">
-                <i class="fa fa-info-circle"></i>&nbsp;Les données téléchargées sont filtrées avec les critères des {{module.forms.site.label_plural}}.
-            </div>
             <br>
             <h5 class="underlined second-color">Télécharger les observations</h5>
             <div>
                 <button mat-raised-button (click)="downloadAllObservations('csv')" type="button" class="button-success mr-1" >Format CSV</button>
-                <button mat-raised-button disabled (click)="getCsvObservations('geojson')" type="button" class="button-success mr-1" >Format GeoJSON</button>
+                <button mat-raised-button (click)="downloadAllObservations('geojson')" type="button" class="button-success mr-1" >Format GeoJSON</button>
                 <button mat-raised-button disabled (click)="getCsvObservations('shp')" type="button" class="button-success mr-1" >Format ShapeFile</button>
             </div>
         </div>

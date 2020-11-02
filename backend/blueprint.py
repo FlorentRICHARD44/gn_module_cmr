@@ -1,7 +1,9 @@
 import datetime as dt
 from flask import Blueprint, current_app, request
-from utils_flask_sqla.generic import serializeQuery, GenericTable
-from utils_flask_sqla.response import to_csv_resp
+from geojson import FeatureCollection
+from utils_flask_sqla.generic import serializeQuery
+from utils_flask_sqla_geo.generic import GenericTableGeo
+from utils_flask_sqla.response import to_csv_resp, to_json_resp
 from geonature.utils.env import DB
 from geonature.utils.utilssqlalchemy import json_resp
 from pypnusershub.db.models import User
@@ -111,19 +113,28 @@ def check_if_sitegroup_contains_site(id_sitegroup):
 # export CSV all observations
 @blueprint.route('/module/<module_code>/sitegroup/<int:id_sitegroup>/<type>', methods=['GET'])
 def export_all_observations_by_sitegroup(module_code, id_sitegroup, type):
-    view = GenericTable(
-        tableName="v_cmr_sitegroup_observations_" + module_code , schemaName="gn_cmr", engine=DB.engine,
+    view = GenericTableGeo(
+        tableName="v_cmr_sitegroup_observations_" + module_code , 
+        schemaName="gn_cmr", 
+        engine=DB.engine,
+        geometry_field="geom",
+        srid=4326
     )
     columns = view.tableDef.columns
     q = DB.session.query(*columns).filter(text('id_sitegroup='+ str(id_sitegroup)))
+    data = q.all()
+    filename = dt.datetime.now().strftime("%Y_%m_%d_%Hh%Mm%S")
 
     if type == 'csv':
         return to_csv_resp(
-            dt.datetime.now().strftime("%Y_%m_%d_%Hh%Mm%S"),
-            data=serializeQuery(q.all(), q.column_descriptions),
+            filename,
+            data=serializeQuery(data, q.column_descriptions),
             separator=";",
-            columns=[db_col.key for db_col in columns],
+            columns=[db_col.key for db_col in columns if db_col.key != 'geom'],
         )
+    elif type == 'geojson':
+        results = FeatureCollection([view.as_geofeature(d, columns=columns) for d in data])
+        return to_json_resp(results, as_file=True, filename=filename, indent=4, extension='geojson')
     else:
         raise NotFound("type export not found")
 
