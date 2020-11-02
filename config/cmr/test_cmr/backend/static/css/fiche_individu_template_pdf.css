@@ -1,6 +1,6 @@
 @page {
     size: 29.7cm 21.0cm !important;
-    margin: 2.5cm 0.5cm 0.3cm 0.5cm !important;
+    margin: 2.5cm 0.5cm 1.3cm 0.5cm !important;
 }
 * {
     font-family: Verdana, sans-serif !important;
@@ -18,7 +18,7 @@ div.header {
 }
 div.footer {
     position: fixed;
-    bottom: 10px;
+    bottom: -1cm;
     width: 99%;
     display: flex;
     justify-content: space-between;
