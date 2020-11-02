@@ -14,7 +14,7 @@
                         <span><strong>{{module.forms.visit.label}}: </strong><a [routerLink]="['../../..']">{{_dataService.formatProperty(visit.date, module.forms.visit.fields['date'])}}</a></span>
                     </div>
                     <div class="mb-2">
-                        <strong>{{module.forms.individual.label}}: </strong><a [routerLink]="['/' + _cmrService.getModuleUrl(),'module',module.module_code, 'individual', observation.individual.id_individual]">{{observation.individual.identifier}}</a>
+                        <strong>{{module.forms.individual.label}}: </strong><a [routerLink]="['/' + _cmrService.getModuleUrl(),'module',module.module_code, 'individual', (observation && observation.individual && observation.individual.id_individual) ? observation.individual.id_individual : '']">{{observation?.individual?.identifier}}</a>
                         <table class="table table-striped table-sm scrollable">
                             <tr *ngFor="let fieldName of individualProperties">
                                 <th>{{ individualFields[fieldName].attribut_label }}</th>
