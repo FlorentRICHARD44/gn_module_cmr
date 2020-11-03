@@ -14,19 +14,25 @@
     </tr></table>
 </div>
 <div class="content">
-    <h1>Fiche Individu: {{data.individual.identifier}}</h1>
-    <div><strong>RFID: </strong>{{data.individual.rfid or ''}}</div>
-    <div><strong>Sexe: </strong>{{data.individual.sexe}}</div>
-    <div><strong>Marquage: </strong>{{data.individual.marker}}</div>
-    <div><strong>Nombre de captures: </strong>{{data.individual.nb_observations}}</div>
-    {% set first_observ = data.observations | sort(attribute='visit.date') | first %}
-    {% set observers = [] %}
-    {% for observer in first_observ.visit.observers %}
-        {{ observers.append(observer.nom_complet) or ''}}
-    {% endfor %}
-    <div><strong>Première capture: </strong>{{first_observ.visit.date.split(' ')[0].split('-') | reverse | join('/')}}</script> par {{ observers | join(', ') }}</div>
-    <div><strong>Commentaires: </strong><br>{{(data.individual.comments or '') | replace('\n','<br>') | safe }}</div>
-
+    <div class="flex">
+        <div>
+            <h1>Fiche Individu: {{data.individual.identifier}}</h1>
+            <div><strong>RFID: </strong>{{data.individual.rfid or ''}}</div>
+            <div><strong>Sexe: </strong>{{data.individual.sexe}}</div>
+            <div><strong>Marquage: </strong>{{data.individual.marker}}</div>
+            <div><strong>Nombre de captures: </strong>{{data.individual.nb_observations}}</div>
+            {% set first_observ = data.observations | sort(attribute='visit.date') | first %}
+            {% set observers = [] %}
+            {% for observer in first_observ.visit.observers %}
+                {{ observers.append(observer.nom_complet) or ''}}
+            {% endfor %}
+            <div><strong>Première capture: </strong>{{first_observ.visit.date.split(' ')[0].split('-') | reverse | join('/')}}</script> par {{ observers | join(', ') }}</div>
+            <div><strong>Commentaires: </strong><br>{{(data.individual.comments or '') | replace('\n','<br>') | safe }}</div>
+        </div>
+        <div class="map">
+            <img src="{{data.map_image}}"/>
+        </div>
+    </div>
     <br>
     <h2>Observations</h2>
     <table class="bordered">
@@ -97,6 +103,17 @@
             {% if not ns.prelev_bio %}
                 <p class="italic">Aucun prélèvement biologique réalisé</p>
             {% endif %}
+        </div>
+    </div>
+    <div>
+        <h3>Photos</h3>
+        <div class="row">
+            {% for media in data.medias %}
+                <div class="column">
+                    <strong>{{media.title_fr}}</strong>{% if media.obs_visit_date %} (observation du {{media.obs_visit_date.split(' ')[0].split('-') | reverse | join('/')}}){% endif %}<br>
+                    <img class="media-img" src="{{media.media_path}}"/>
+                </div>
+            {% endfor %}
         </div>
     </div>
 </div>

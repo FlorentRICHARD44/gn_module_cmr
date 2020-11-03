@@ -60,3 +60,34 @@ table.bordered td {
     margin-right: 20px;
     background-color: #DFEFF6;
 }
+.flex {
+    display: flex;
+    width: 100%;
+}
+/*.flex div {
+    width: 50%;
+}*/
+.map {
+    text-align: right;
+}
+.map img {
+    max-width: 14cm;
+    max-height: 7cm;
+}
+.media-img {
+    display: block;
+    max-width:12cm;
+    max-height:8cm;
+    width: auto;
+    height: auto;
+}
+.column {
+    float: left;
+    width: 50%;
+}
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+ }

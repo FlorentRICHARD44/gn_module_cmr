@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { of } from '@librairies/rxjs';
 import { mergeMap } from '@librairies/rxjs/operators';
 import { AppConfig } from "@geonature_config/app.config";
@@ -162,9 +162,19 @@ export class CmrService {
         return this._api.put<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/individual`, data);
     }
 
-    getFicheIndividual(module_code, id_individual) {
+    getFicheIndividual(module_code, id_individual, map_image) {
         let dt = new Date().toString();
-        window.open(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${module_code}/ficheindividual/${id_individual}?qt=${dt}`);
+        const httpHeaders: HttpHeaders = new HttpHeaders({
+            'Accept': 'application/pdf'
+        });
+        return this._api.post(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${module_code}/ficheindividual/${id_individual}?qt=${dt}`, 
+            {map: map_image}, 
+            {responseType: 'arraybuffer',headers:httpHeaders} 
+           ).subscribe(file => {
+            let blob = new Blob([file] , {type: 'application/pdf'});
+            let url = window.URL.createObjectURL(blob);
+            window.open(url);
+        });
     }
 
     /* OBSERVATIONS QUERIES */

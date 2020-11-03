@@ -307,16 +307,28 @@ def save_individual():
     else:
         return ind_repo.create_one(data)
 
-@blueprint.route('/module/<module_code>/ficheindividual/<int:id_individual>', methods=['GET'])
+@blueprint.route('/module/<module_code>/ficheindividual/<int:id_individual>', methods=['POST'])
 def get_fiche_individu(module_code, id_individual):
     ind_repo = IndividualsRepository()
     individual = ind_repo.get_one(TIndividual.id_individual, id_individual)
     df = {}
     df['module_code'] = module_code
     df['individual'] = individual
+    df['medias'] = []
+    for media in individual['medias']:
+            if media['media_path'].split('.')[-1].lower() in ['png', 'jpg','jpeg','bmp', 'svg']:
+                media['media_path'] = str(ROOT_DIR / 'backend/') + '/' + media['media_path']
+                df['medias'].append(media)
     obs_repo = ObservationsRepository()
-    df['observations'] = obs_repo.get_all_filter_by(TObservation.id_individual, id_individual)
-
+    observations = obs_repo.get_all_filter_by(TObservation.id_individual, id_individual)
+    df['observations'] = observations
+    for obs in observations:
+        for media in obs['medias']:
+            if media['media_path'].split('.')[-1].lower() in ['png', 'jpg','jpeg','bmp', 'svg']:
+                media['media_path'] = str(ROOT_DIR / 'backend/') + '/' + media['media_path']
+                media['obs_visit_date'] = obs['visit']['date']
+                df['medias'].append(media)
+    df['map_image'] = request.json['map']
     date = dt.datetime.now().strftime("%d/%m/%Y")
 
     df["footer"] = {

@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatatableComponent } from '@librairies/@swimlane/ngx-datatable';
 import { MapListService } from '@geonature_common/map-list/map-list.service';
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import leafletImage from 'leaflet-image';
 import { Module } from '../../../class/module';
 import { BaseMapViewComponent } from '../../BaseMapViewComponent';
 import { CmrService } from './../../../services/cmr.service';
@@ -33,12 +35,16 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
     public mapFeaturesTemp: any = {};
 
     private _firstResizeDone = false;
+    @ViewChild(NgbModal)
+    public modalCol: NgbModal;
+    public modalReference;
     
 
     constructor(
         private _cmrService: CmrService,
         private route: ActivatedRoute,
         private _mapListService: MapListService,
+        public ngbModal: NgbModal,
         private _dataService: DataService // used in template
     ) {
       super();
@@ -140,7 +146,15 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
       this.tableHistoric.offset = Math.floor((index_row_selected) / this.tableHistoric._limit);
     }
 
+    openModalDownload(event, modal) {
+      document.getElementById('nav-historic-tab').click(); // force display of map when clicking on export
+      this.modalReference = this.ngbModal.open(modal, { size: "lg" });
+    }
+
     getFicheIndividual() {
-      this._cmrService.getFicheIndividual(this.route.snapshot.params.module, this.route.snapshot.params.id_individual);
+      var me = this;
+      leafletImage(this._mapService.map, function(err, canvas) {
+        me._cmrService.getFicheIndividual(me.route.snapshot.params.module, me.route.snapshot.params.id_individual, canvas.toDataURL('image/png'));
+      });
     }
 }
