@@ -64,7 +64,15 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
                 this.path = [...this.path];
                 this.initData = this._cmrService.getSpecificService(this.module.module_code).initSite(this.siteForm, sitegroup);
                 this.siteForm.patchValue(this._dataService.formatDataForBeforeEdition(this.initData, this.module.forms.site.fields));
-                setTimeout(function() {this.initFeatures(this._route, this.module);}.bind(this), 300);
+                setTimeout(function() {
+                  this.initFeatures(this._route, this.module);
+                  for (let ft of this.mapFeatures['features']) {
+                    var lyr = this.findFeatureLayer(sitegroup.id, 'sitegroup');
+                    if (lyr) {
+                      lyr.bringToBack(); // force the sitegroup in back, to not be in front of imported points from GPS.
+                    }
+                  }
+                }.bind(this), 300);
               }
             );
           }
@@ -179,6 +187,12 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
    onSitegroupLayerClick(sitegroup) {
      return (event) => {
        this.updateFeaturesStyle(this.mapFeatures, [sitegroup.id], 'sitegroup');
+       for (let ft of this.mapFeatures['features']) {
+        var lyr = this.findFeatureLayer(sitegroup.id, 'sitegroup');
+        if (lyr) {
+          lyr.bringToBack(); // force the sitegroup in back, to not be in front of imported points from GPS.
+        }
+      }
      }
    }
 }
