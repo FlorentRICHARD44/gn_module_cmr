@@ -106,14 +106,19 @@
             </button>
         </div>
         <div class="modal-body">
+            <h5 class="underlined second-color">Télécharger la fiche individu</h5>
             <div class="alert alert-warning">
-                <i class="fa fa-warning"></i>&nbsp;Assurez-vous d'avoir positionné la carte telle que vous voulez l'afficher dans la fiche!
+                <i class="fa fa-warning"></i>&nbsp;Assurez-vous d'avoir positionné la carte telle que vous voulez l'afficher dans la fiche avant de générer!
             </div>
+            <button mat-raised-button (click)="getFicheIndividual()" type="button" class="button-success mr-1" ><i class="fa fa-file-pdf-o"></i>&nbsp;Fiche individu</button>
             <br>
-            <div>
-                <button mat-raised-button (click)="getFicheIndividual()" type="button" class="button-success mr-1" ><i class="fa fa-file-pdf-o"></i>&nbsp;Fiche individu</button>
-                <button mat-raised-button disabled (click)="getMediaZip()" type="button" class="button-success mr-1" >Médias</button>
+            <br>
+            <h5 class="underlined second-color">Télécharger tous les médias</h5>
+            <div class="alert alert-info">
+                <i class="fa fa-info-circle"></i>&nbsp;Le zip contient tous les médias de l'individu ainsi que les médias de ses observations
             </div>
+            <button mat-raised-button *ngIf="nbMedias" (click)="getMediaZip()" type="button" class="button-success mr-1" ><i class="fa fa-file-archive-o"></i>&nbsp;Médias</button>
+            <p class="font-italic" *ngIf="!nbMedias">Aucun media disponible pour cet individu.</p>
         </div>
       </ng-template>
 </div>

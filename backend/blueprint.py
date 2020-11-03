@@ -1,4 +1,6 @@
 import datetime as dt
+import os
+import zipfile
 from flask import Blueprint, current_app, request, render_template
 from geojson import FeatureCollection
 from utils_flask_sqla.generic import serializeQuery
@@ -338,6 +340,44 @@ def get_fiche_individu(module_code, id_individual):
     pdf_file = fm.generate_pdf("cmr/" + module_code + "/fiche_individu.html", df, "fiche_individu_" + individual['identifier'].replace(' ', '_') + ".pdf")
     pdf_file_posix = Path(pdf_file)
     return send_from_directory(str(pdf_file_posix.parent), pdf_file_posix.name, as_attachment=True)
+
+@blueprint.route('/individual/<int:id_individual>/export/medias', methods=['GET'])
+def export_media_for_an_individual(id_individual):
+    ind_repo = IndividualsRepository()
+    individual = ind_repo.get_one(TIndividual.id_individual, id_individual)
+
+    filename = 'export_individual_' + str(id_individual) + '_' + dt.datetime.now().strftime("%Y_%m_%d_%Hh%Mm%S")
+    
+    #on crée le dossier s'il n'existe pas
+    dir_path = str(ROOT_DIR / "backend/static/medias/exports")
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+    #on le clean
+    fm.delete_recursively(dir_path)
+    featureCollection = []
+
+    zip_path = dir_path + "/" + filename + ".zip"
+    zp_file = zipfile.ZipFile(zip_path, mode="w")
+
+    # Add media for the individual
+    for media in individual['medias']:
+        if media['media_path'] is not None:
+            file_path = str(ROOT_DIR / "backend/" ) + "/" +  media['media_path']
+            if os.path.exists(file_path):
+                zp_file.write(file_path, os.path.basename(file_path))
+    
+    # Add media for all the observations of the individual
+    obs_repo = ObservationsRepository()
+    observations = obs_repo.get_all_filter_by(TObservation.id_individual, id_individual)
+    for obs in observations:
+        for media in obs['medias']:
+            if media['media_path'] is not None:
+                file_path = str(ROOT_DIR / "backend/" ) + "/" +  media['media_path']
+                if os.path.exists(file_path):
+                    zp_file.write(file_path, os.path.basename(file_path))
+
+    zp_file.close()
+    return send_from_directory(dir_path, filename + ".zip", as_attachment=True)
 
 
 #############################

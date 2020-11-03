@@ -177,6 +177,11 @@ export class CmrService {
         });
     }
 
+    getIndividualMediasZip(id_individual) {
+        let dt = new Date().toString();
+        window.open(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/individual/${id_individual}/export/medias?qt=${dt}`);
+    }
+
     /* OBSERVATIONS QUERIES */
     getAllObservationsByVisit(id_visit) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/visit/${id_visit}/observations`);

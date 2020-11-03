@@ -33,6 +33,7 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
     public graphs: Array<any> = [];
     public mapFeatures: any = {};
     public mapFeaturesTemp: any = {};
+    public nbMedias = 0; // Count the number of medias in individual and observation to know if show the export medias button
 
     private _firstResizeDone = false;
     @ViewChild(NgbModal)
@@ -60,6 +61,7 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
                 this.path = [...this.path];
                 this._cmrService.getOneIndividual(params.id_individual).subscribe((data) => {
                   this.individual = data;
+                  this.nbMedias = this.nbMedias + this.individual.medias.length;
                 });
 
                 this.historicListProperties = this.module.forms.observation.individual_historic_display_list;
@@ -73,6 +75,7 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
                   for (let item of this.module.forms.observation.individual_histogram_items) {
                     let histoData = [];
                     for (let obs of this.historic) {
+                      this.nbMedias = this.nbMedias + obs.medias.length;
                       histoData.push({
                         x: obs['visit_date'],
                         y: obs[item.field]
@@ -156,5 +159,9 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
       leafletImage(this._mapService.map, function(err, canvas) {
         me._cmrService.getFicheIndividual(me.route.snapshot.params.module, me.route.snapshot.params.id_individual, canvas.toDataURL('image/png'));
       });
+    }
+
+    getMediaZip() {
+      this._cmrService.getIndividualMediasZip(this.route.snapshot.params.id_individual);
     }
 }
