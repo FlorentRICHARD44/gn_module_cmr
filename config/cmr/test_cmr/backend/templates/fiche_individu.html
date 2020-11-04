@@ -113,6 +113,8 @@
                     <strong>{{media.title_fr}}</strong>{% if media.obs_visit_date %} (observation du {{media.obs_visit_date.split(' ')[0].split('-') | reverse | join('/')}}){% endif %}<br>
                     <img class="media-img" src="{{media.media_path}}"/>
                 </div>
+            {% else %}
+                <p class="italic">Aucune photo de cet individu</p>
             {% endfor %}
         </div>
     </div>
