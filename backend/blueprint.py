@@ -7,6 +7,8 @@ from geojson import FeatureCollection
 from utils_flask_sqla.generic import serializeQuery
 from utils_flask_sqla_geo.generic import GenericTableGeo
 from utils_flask_sqla.response import to_csv_resp, to_json_resp
+from geonature.core.gn_permissions import decorators as permissions
+from geonature.core.gn_permissions.tools import cruved_scope_for_user_in_module
 from geonature.utils.errors import GeonatureApiError
 from geonature.utils.env import DB, ROOT_DIR
 import geonature.utils.filemanager as fm
@@ -38,14 +40,21 @@ def test():
 
 # Get the list of all CMR modules
 @blueprint.route('/modules', methods=['GET'])
+@permissions.check_cruved_scope("R", True)
 @json_resp
-def get_modules():
+def get_modules(info_role):
     mod_repo = ModulesRepository()
     modules = mod_repo.get_all()
     cfg_repo = ConfigRepository()
+    valid_modules = []
     for module in modules:
-        module['config'] = cfg_repo.get_module_config(module['module_code'])
-    return modules
+        app_cruved = cruved_scope_for_user_in_module(
+            id_role=info_role.id_role, module_code=module['module_code']
+        )[0]
+        if app_cruved["R"] != "0":
+            valid_modules.append(module)
+            module['config'] = cfg_repo.get_module_config(module['module_code'])
+    return valid_modules
 
 # Get the details of one CMR module
 @blueprint.route('/module/<module_name>', methods=['GET'])
