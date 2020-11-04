@@ -1,6 +1,8 @@
-import { Component, OnInit} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { FormGroup } from '@angular/forms';
+import { CommonService } from "@geonature_common/service/common.service";
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { Module } from '../../../class/module';
@@ -24,11 +26,17 @@ export class ObservationDetailsComponent extends BaseMapViewComponent implements
     public observationFormDefinitions = [];
 
     public formGroups: Array<any> = [];
+    @ViewChild(NgbModal)
+    public modalCol: NgbModal;
+    public modalReference;
 
     constructor(
         private _cmrService: CmrService,
         private _dataService: DataService,
-        private _route: ActivatedRoute) {
+        private _router: Router,
+        private _route: ActivatedRoute,
+        public ngbModal: NgbModal,
+        private _commonService: CommonService) {
       super();
     }
 
@@ -66,5 +74,25 @@ export class ObservationDetailsComponent extends BaseMapViewComponent implements
                 });
             });
         });
+  }
+
+  openModalDownload(event, modal) {
+    this.modalReference = this.ngbModal.open(modal, { size: "lg" });
+  }
+
+  deleteObservation() {
+    this._cmrService.deleteObject('observation', this._route.snapshot.params.id_observation).subscribe(
+      (data) => {
+        this.modalReference.close()
+        this._router.navigate(['../..'],{relativeTo: this._route});
+      },
+      (error => {
+        this.modalReference.close()
+        this._commonService.regularToaster(
+          "error",
+          "Erreur lors de la suppression!"
+        );
+      })
+    )
   }
 }

@@ -3,6 +3,7 @@
         <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.individual.label + ': ' + individual.identifier"></gn-cmr-breadcrumb>
         <div class="toolbar clearfix">
             <h3 class="float-left">{{module.forms.individual.label}}: {{individual.identifier}}</h3>
+            <button class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
             <button class="btn btn-primary float-right ml-2" (click)="openModalDownload($event, modalDownload)"><i class="fa fa-arrow-down"></i>&nbsp;Exports</button>
             <button class="btn btn-primary float-right ml-2" [routerLink]="['..', {edit: individual.id_individual}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
         </div>
@@ -120,5 +121,23 @@
             <button mat-raised-button *ngIf="nbMedias" (click)="getMediaZip()" type="button" class="button-success mr-1" ><i class="fa fa-file-archive-o"></i>&nbsp;Médias</button>
             <p class="font-italic" *ngIf="!nbMedias">Aucun media disponible pour cet individu.</p>
         </div>
+      </ng-template>
+      <ng-template #modalDelete id="modal-delete" let-c="close" let-d="dismiss">
+          <div class="modal-header">
+              <h5 class="modal-title">Attention</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalReference.close()">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <p *ngIf="individual.nb_observations">Impossible de supprimer! Cet élément contient {{individual.nb_observations}} {{module.forms.observation.label_plural}}</p>
+              <div class="alert alert-danger" *ngIf="!individual.nb_observations">
+                  <i class="fa fa-warning fa-lg"></i>&nbsp;Êtes-vous sur de supprimer l'élément {{module.forms.individual.label}} {{individual.identifier}}?
+              </div>
+          </div>
+          <div class="modal-footer button-container">
+              <button class="btn btn-primary" (click)="modalReference.close()">Annuler</button>
+              <button class="btn btn-danger ml-5" [disabled]="individual.nb_observations" (click)="deleteIndividual()">Confirmer la suppression</button>
+          </div>
       </ng-template>
 </div>

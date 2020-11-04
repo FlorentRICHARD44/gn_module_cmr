@@ -121,7 +121,7 @@ class TVisit(DB.Model):
                       corVisitObserver.c.id_observer],
     )
     id_dataset = DB.Column(DB.Integer)
-    dataset = DB.relationship(TDatasets, primaryjoin=(TDatasets.id_dataset == id_dataset), foreign_keys=[TDatasets.id_dataset],uselist=False)
+    dataset = DB.relationship(TDatasets, primaryjoin=(TDatasets.id_dataset == id_dataset), foreign_keys=[TDatasets.id_dataset],uselist=False,viewonly=True)
     id_site = DB.Column(DB.Integer, foreign_key="TSite.id_site")
     observations = DB.relationship(TObservation, primaryjoin=(id_visit == TObservation.id_visit), foreign_keys=[TObservation.id_visit])
 
@@ -208,7 +208,8 @@ class TSite(DB.Model):
 TVisit.site = DB.relationship(TSite,
         primaryjoin=(TVisit.id_site == TSite.id_site),
         foreign_keys=[TSite.id_site],
-        uselist=False)
+        uselist=False,
+        viewonly=True)
 
 
 @serializable
@@ -269,7 +270,8 @@ class TSiteGroup(DB.Model):
 TSite.sitegroup = DB.relationship(TSiteGroup,
         primaryjoin=(TSiteGroup.id_sitegroup == TSite.id_sitegroup),
         foreign_keys=[TSiteGroup.id_sitegroup],
-        uselist=False)
+        uselist=False,
+        viewonly=True)
 
 
 @serializable
@@ -318,11 +320,13 @@ class TIndividual(DB.Model):
 TObservation.individual = DB.relationship(TIndividual,
         primaryjoin=(TObservation.id_individual == TIndividual.id_individual),
         foreign_keys=[TIndividual.id_individual],
-        uselist=False)
+        uselist=False,
+        viewonly=True)
 TObservation.visit = DB.relationship(TVisit,
         primaryjoin=(TObservation.id_visit == TVisit.id_visit),
         foreign_keys=[TVisit.id_visit],
-        uselist=False)
+        uselist=False,
+        viewonly=True)
 
 
 @serializable

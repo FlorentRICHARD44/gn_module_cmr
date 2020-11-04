@@ -71,6 +71,14 @@ class BaseRepository:
         DB.session.merge(data)
         DB.session.commit()
         return data.to_dict()
+
+    def delete_one(self, attribute, identifier):
+        q = DB.session.query(self.model).filter(attribute == identifier)
+        data = q.one_or_none()
+        if data is not None:
+            DB.session.delete(data)
+            DB.session.commit()
+        return {"success":True}
     
     def _compute_additional_filter_params(self, query, params):
         """

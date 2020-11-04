@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DatatableComponent } from '@librairies/@swimlane/ngx-datatable';
 import { MapListService } from '@geonature_common/map-list/map-list.service';
+import { CommonService } from "@geonature_common/service/common.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import leafletImage from 'leaflet-image';
 import { Module } from '../../../class/module';
@@ -43,9 +44,11 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
 
     constructor(
         private _cmrService: CmrService,
+        private _router: Router,
         private route: ActivatedRoute,
         private _mapListService: MapListService,
         public ngbModal: NgbModal,
+        private _commonService: CommonService,
         private _dataService: DataService // used in template
     ) {
       super();
@@ -163,5 +166,21 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
 
     getMediaZip() {
       this._cmrService.getIndividualMediasZip(this.route.snapshot.params.id_individual);
+    }
+
+    deleteIndividual() {
+      this._cmrService.deleteObject('individual', this.route.snapshot.params.id_individual).subscribe(
+        (data) => {
+          this.modalReference.close()
+          this._router.navigate(['../..'],{relativeTo: this.route});
+        },
+        (error => {
+          this.modalReference.close()
+          this._commonService.regularToaster(
+            "error",
+            "Erreur lors de la suppression!"
+          );
+        })
+      )
     }
 }

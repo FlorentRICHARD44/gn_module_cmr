@@ -1,5 +1,7 @@
-import { Component, OnInit} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { CommonService } from "@geonature_common/service/common.service";
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
 import { Module } from '../../../class/module';
@@ -31,17 +33,23 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
     public waitControl = false;
     public filterIndividualDisplay = false;
     public filterVisitDisplay = false;
+    @ViewChild(NgbModal)
+    public modalCol: NgbModal;
+    public modalReference;
 
     constructor(
         private _cmrService: CmrService,
-        private route: ActivatedRoute,
+        private _route: ActivatedRoute,
+        private _router: Router,
+        private _commonService: CommonService,
+        public ngbModal: NgbModal,
         private _dataService: DataService // used in template
     ) {
       super();
     }
 
     ngOnInit() {
-        this.route.params.subscribe(params => {
+        this._route.params.subscribe(params => {
             this._cmrService.loadOneModule(params.module).subscribe(() => {
                 this.module = this._cmrService.getModule(params.module);
                 this.properties = this.module.forms.site.display_properties;
@@ -56,11 +64,11 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
                   if (params.id_sitegroup) {
                     this._cmrService.getOneSiteGroupGeometry(params.id_sitegroup).subscribe((dataSitegroup) => {
                       this.mapFeatures = {'features': dataSitegroup.concat(data)};
-                      setTimeout(function() {this.initFeatures(this.route, this.module);}.bind(this), 300);
+                      setTimeout(function() {this.initFeatures(this._route, this.module);}.bind(this), 300);
                     });
                   } else {
                     this.mapFeatures = {'features': data};
-                    setTimeout(function() {this.initFeatures(this.route, this.module);}.bind(this), 300);
+                    setTimeout(function() {this.initFeatures(this._route, this.module);}.bind(this), 300);
                   }
                 });
                 this.individualListProperties = this.module.forms.individual.display_list;
@@ -74,7 +82,7 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
     applyIndividualSearch(event) {
       this.waitControl = true;
       var params = event ? event : {};
-      this._cmrService.getAllIndividualsBySite(this.route.snapshot.params.id_site, params).subscribe(
+      this._cmrService.getAllIndividualsBySite(this._route.snapshot.params.id_site, params).subscribe(
         (data) => {
           this.individuals = data;
           this.waitControl = false;
@@ -89,7 +97,7 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
       this.waitControl = true;
       var params = event ? event : {};
       
-      this._cmrService.getAllVisitsBySite(this.route.snapshot.params.id_site, params).subscribe(
+      this._cmrService.getAllVisitsBySite(this._route.snapshot.params.id_site, params).subscribe(
         (data) => {
           this.visits = data;
           this.waitControl = false;
@@ -98,5 +106,25 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
           this.visits = [];
           this.waitControl = false;
         });
+    }
+
+    openModalDownload(event, modal) {
+      this.modalReference = this.ngbModal.open(modal, { size: "lg" });
+    }
+
+    deleteSite() {
+      this._cmrService.deleteObject('site', this._route.snapshot.params.id_site).subscribe(
+        (data) => {
+          this.modalReference.close()
+          this._router.navigate(['../..'],{relativeTo: this._route});
+        },
+        (error => {
+          this.modalReference.close()
+          this._commonService.regularToaster(
+            "error",
+            "Erreur lors de la suppression!"
+          );
+        })
+      )
     }
 }

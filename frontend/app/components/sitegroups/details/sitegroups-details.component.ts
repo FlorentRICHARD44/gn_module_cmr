@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild} from '@angular/core';
 import { MatDialog, MatDialogConfig } from "@angular/material";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DatatableComponent } from '@librairies/@swimlane/ngx-datatable';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { MapListService } from '@geonature_common/map-list/map-list.service';
@@ -53,6 +53,7 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
     constructor(
         private _cmrService: CmrService,
         private _route: ActivatedRoute,
+        private _router: Router,
         public dialog: MatDialog,
         private _mapListService: MapListService,
         private _commonService: CommonService,
@@ -289,5 +290,21 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
 
     downloadMappingVisitIndividual() {
       this._cmrService.exportSitegroupMappingVisitIndividual(this._route.snapshot.params.id_sitegroup, this.module.forms.visit.mapping_visit_individual_additional_field);
+    }
+
+    deleteSitegroup() {
+      this._cmrService.deleteObject('sitegroup', this._route.snapshot.params.id_sitegroup).subscribe(
+        (data) => {
+          this.modalReference.close()
+          this._router.navigate(['../..'],{relativeTo: this._route});
+        },
+        (error => {
+          this.modalReference.close()
+          this._commonService.regularToaster(
+            "error",
+            "Erreur lors de la suppression!"
+          );
+        })
+      )
     }
 }

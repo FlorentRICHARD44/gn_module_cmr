@@ -5,6 +5,7 @@
                 <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.visit.label"></gn-cmr-breadcrumb>
                 <div class="toolbar clearfix">
                     <h3 class="float-left">{{module.forms.visit.label}}</h3>
+                    <button class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
                     <button class="btn btn-primary float-right" [routerLink]="['..', {edit: visit.id_visit}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
                 </div>
                 <div class="">
@@ -62,4 +63,22 @@
             </div>
         </div>
     </div>
+    <ng-template #modalDelete id="modal-delete" let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h5 class="modal-title">Attention</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalReference.close()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p *ngIf="visit.nb_observations">Impossible de supprimer! Cet élément contient {{visit.nb_observations}} {{module.forms.observation.label_plural}}</p>
+            <div class="alert alert-danger" *ngIf="!visit.nb_observations">
+                <i class="fa fa-warning fa-lg"></i>&nbsp;Êtes-vous sur de supprimer l'élément {{module.forms.visit.label}}?
+            </div>
+        </div>
+        <div class="modal-footer button-container">
+            <button class="btn btn-primary" (click)="modalReference.close()">Annuler</button>
+            <button class="btn btn-danger ml-5" [disabled]="visit.nb_observations" (click)="deleteVisit()">Confirmer la suppression</button>
+        </div>
+    </ng-template>
 </div>

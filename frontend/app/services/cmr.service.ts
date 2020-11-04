@@ -51,6 +51,11 @@ export class CmrService {
         return this._specificModule;
     }
 
+    /* GENERIC QUERIES */
+    deleteObject(type, id) {
+        return this._api.delete<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/${type}/${id}`);
+    }
+
     /* MODULE QUERIES */
     getAllModules() {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/modules`);

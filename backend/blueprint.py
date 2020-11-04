@@ -91,6 +91,17 @@ def save_sitegroup():
     else:
         return sitegroup_repo.create_one(data)
 
+# Delete a sitegroup
+@blueprint.route('/sitegroup/<int:id_sitegroup>', methods=['DELETE'])
+@json_resp
+def delete_sitegroup(id_sitegroup):
+    sitegroup_repo = SiteGroupsRepository()
+    sitegroup = sitegroup_repo.get_one(TSiteGroup.id_sitegroup, id_sitegroup)
+    if sitegroup['nb_sites'] > 0:
+        raise GeonatureApiError('Impossible de supprimer')
+    else:
+        return sitegroup_repo.delete_one(TSiteGroup.id_sitegroup, id_sitegroup)
+
 # Get the geometries of site groups by module with filter
 @blueprint.route('/module/<int:id_module>/sitegroups', methods=['GET'])
 @json_resp
@@ -233,6 +244,17 @@ def save_site():
     else:
         return site_repo.create_one(data)
 
+# Delete a site
+@blueprint.route('/site/<int:id_site>', methods=['DELETE'])
+@json_resp
+def delete_site(id_site):
+    site_repo = SitesRepository()
+    site = site_repo.get_one(TSite.id_site, id_site)
+    if site['nb_visits'] > 0:
+        raise GeonatureApiError('Impossible de supprimer')
+    else:
+        return site_repo.delete_one(TSite.id_site, id_site)
+
 # Get the list of geometries for sites by module with filter
 @blueprint.route('/module/<int:id_module>/sites', methods=['GET'])
 @json_resp
@@ -266,6 +288,17 @@ def get_all_visits_by_site(id_site):
     visit_repo = VisitsRepository()
     return visit_repo.get_all_filter_by(TVisit.id_site, id_site, request.args.to_dict())
 
+# Delete a visit
+@blueprint.route('/visit/<int:id_visit>', methods=['DELETE'])
+@json_resp
+def delete_visit(id_visit):
+    visit_repo = VisitsRepository()
+    visit = visit_repo.get_one(TVisit.id_visit, id_visit)
+    if visit['nb_observations'] > 0:
+        raise GeonatureApiError('Impossible de supprimer')
+    else:
+        return visit_repo.delete_one(TVisit.id_visit, id_visit)
+
 # Get one visit
 @blueprint.route('/visit/<int:id_visit>', methods=['GET'])
 @json_resp
@@ -294,6 +327,7 @@ def save_visit():
     else:
         return visit_repo.create_one(data)
 
+# Create visits in batch for many sites in a sitegroup
 @blueprint.route('/visits', methods=['POST'])
 @json_resp
 def create_visits_in_batch():
@@ -363,6 +397,17 @@ def save_individual():
         return ind_repo.update_one(data)
     else:
         return ind_repo.create_one(data)
+
+# Delete an individual
+@blueprint.route('/individual/<int:id_individual>', methods=['DELETE'])
+@json_resp
+def delete_individual(id_individual):
+    individual_repo = IndividualsRepository()
+    individual = individual_repo.get_one(TIndividual.id_individual, id_individual)
+    if individual['nb_observations'] > 0:
+        raise GeonatureApiError('Impossible de supprimer')
+    else:
+        return individual_repo.delete_one(TIndividual.id_individual, id_individual)
 
 @blueprint.route('/module/<module_code>/ficheindividual/<int:id_individual>', methods=['POST'])
 def get_fiche_individu(module_code, id_individual):
@@ -477,3 +522,10 @@ def save_observation():
         return obs_repo.update_one(data)
     else:
         return obs_repo.create_one(data)
+
+# Delete an observation
+@blueprint.route('/observation/<int:id_observation>', methods=['DELETE'])
+@json_resp
+def delete_observation(id_observation):
+    obs_repo = ObservationsRepository()
+    return obs_repo.delete_one(TObservation.id_observation, id_observation)

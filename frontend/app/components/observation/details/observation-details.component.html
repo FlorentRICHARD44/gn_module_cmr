@@ -5,6 +5,7 @@
                 <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.observation.label"></gn-cmr-breadcrumb>
                 <div class="toolbar clearfix">
                     <h3 class="float-left">{{module.forms.observation.label}}</h3>
+                    <button class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
                     <button class="btn btn-primary float-right" [routerLink]="['../..','individual', observation.id_individual, 'observation',{edit: observation.id_observation}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
                 </div>
                 <div class="">
@@ -67,4 +68,21 @@
             </div>
         </div>
     </div>
+    <ng-template #modalDelete id="modal-delete" let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h5 class="modal-title">Attention</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalReference.close()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="alert alert-danger">
+                <i class="fa fa-warning fa-lg"></i>&nbsp;Êtes-vous sur de supprimer l'élément {{module.forms.observation.label}}?
+            </div>
+        </div>
+        <div class="modal-footer button-container">
+            <button class="btn btn-primary" (click)="modalReference.close()">Annuler</button>
+            <button class="btn btn-danger ml-5" (click)="deleteObservation()">Confirmer la suppression</button>
+        </div>
+    </ng-template>
 </div>

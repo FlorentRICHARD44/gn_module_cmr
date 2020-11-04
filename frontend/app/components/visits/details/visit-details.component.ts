@@ -1,8 +1,10 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogConfig } from "@angular/material";
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { CommonService } from "@geonature_common/service/common.service";
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
-import { MatDialog, MatDialogConfig } from "@angular/material";
 import { IndividualFormObsComponent } from "./../../individuals/form-obs/individual-form-obs.component";
 import { Module } from '../../../class/module';
 import { BaseMapViewComponent } from '../../BaseMapViewComponent';
@@ -25,12 +27,17 @@ export class VisitDetailsComponent extends BaseMapViewComponent implements OnIni
     public observations: Array<any> = [];
     public observationListProperties: Array<String> = [];
     public observationFieldsDef: any = {};
+    @ViewChild(NgbModal)
+    public modalCol: NgbModal;
+    public modalReference;
 
     constructor(
         private _cmrService: CmrService,
         private _router: Router,
         private _route: ActivatedRoute,
         public dialog: MatDialog,
+        public ngbModal: NgbModal,
+        private _commonService: CommonService,
         private _dataService: DataService // used in template
     ) {
       super();
@@ -81,5 +88,25 @@ export class VisitDetailsComponent extends BaseMapViewComponent implements OnIni
             this._router.navigate(['individual',result,'observation'],{relativeTo: this._route});
           }
       });
+    }
+
+    openModalDownload(event, modal) {
+      this.modalReference = this.ngbModal.open(modal, { size: "lg" });
+    }
+
+    deleteVisit() {
+      this._cmrService.deleteObject('visit', this._route.snapshot.params.id_visit).subscribe(
+        (data) => {
+          this.modalReference.close()
+          this._router.navigate(['../..'],{relativeTo: this._route});
+        },
+        (error => {
+          this.modalReference.close()
+          this._commonService.regularToaster(
+            "error",
+            "Erreur lors de la suppression!"
+          );
+        })
+      )
     }
 }

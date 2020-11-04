@@ -6,6 +6,7 @@
                 <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.sitegroup.label + ': ' + sitegroup.name"></gn-cmr-breadcrumb>
                 <div class="toolbar clearfix">
                     <h3 class="float-left">{{ module.forms.sitegroup.label + ': ' + sitegroup.name}}</h3>
+                    <button class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
                     <button class="btn btn-primary float-right mat-primary ml-2" color="primary" (click)="openModalDownload($event, modalDownload)"><i class="fa fa-arrow-down"></i>&nbsp;Téléchargements</button>
                     <button class="btn btn-primary float-right" [routerLink]="['..', {edit: sitegroup.id_sitegroup}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
                 </div>
@@ -178,5 +179,23 @@
                 <button mat-raised-button (click)="downloadMappingVisitIndividual()" type="button" class="button-success mr-1">Format CSV</button>
             </div>
         </div>
-      </ng-template>
+    </ng-template>
+    <ng-template #modalDelete id="modal-delete" let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h5 class="modal-title">Attention</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalReference.close()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p *ngIf="sitegroup.nb_sites">Impossible de supprimer! Cet élément contient {{sitegroup.nb_sites}} {{module.forms.site.label_plural}}</p>
+            <div class="alert alert-danger" *ngIf="!sitegroup.nb_sites">
+                <i class="fa fa-warning fa-lg"></i>&nbsp;Êtes-vous sur de supprimer l'élément {{module.forms.sitegroup.label}} {{sitegroup.name}}?
+            </div>
+        </div>
+        <div class="modal-footer button-container">
+            <button class="btn btn-primary" (click)="modalReference.close()">Annuler</button>
+            <button class="btn btn-danger ml-5" [disabled]="sitegroup.nb_sites" (click)="deleteSitegroup()">Confirmer la suppression</button>
+        </div>
+    </ng-template>
 </div>
