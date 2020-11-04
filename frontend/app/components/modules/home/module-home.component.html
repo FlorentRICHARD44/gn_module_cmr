@@ -37,7 +37,8 @@
                         role="tabpanel"
                         attr.aria-labelledby="nav-module-tab">
                             <div class="clearfix">
-                                <button class="btn btn-primary float-right" [routerLink]="['module', {edit: module.module_code}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button><!-- TODO add cruved -->
+                                <!-- Allow edition of module only to user with Update right on ADMIN module -->
+                                <button *ngIf="_cruvedStore.cruved?.ADMIN?.cruved.U !== '0'" class="btn btn-primary float-right" [routerLink]="['module', {edit: module.module_code}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button><!-- TODO add cruved -->
                             </div>
                             <p *ngIf="module.config.welcome" id="welcome-msg">{{ module.config.welcome }}</p>
                             <div class="">

@@ -4,6 +4,7 @@ import { of } from '@librairies/rxjs';
 import { mergeMap } from '@librairies/rxjs/operators';
 import { DatatableComponent } from '@librairies/@swimlane/ngx-datatable';
 import { MapListService } from '@geonature_common/map-list/map-list.service';
+import { CruvedStoreService } from '@geonature_common/service/cruved-store.service';
 import { BaseMapViewComponent } from './../../BaseMapViewComponent';
 import { CmrService } from './../../../services/cmr.service';
 import { DataService } from './../../../services/data.service';
@@ -46,6 +47,7 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
     @ViewChild(DatatableComponent) tableSitegroup: DatatableComponent;
 
     constructor(
+        private _cruvedStore: CruvedStoreService,
         private _cmrService: CmrService,
         private route: ActivatedRoute,
         private _router: Router,
