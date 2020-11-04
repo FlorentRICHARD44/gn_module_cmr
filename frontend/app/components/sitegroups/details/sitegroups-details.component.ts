@@ -286,4 +286,8 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
     downloadAllObservations(type) {
       this._cmrService.exportSitegroupObservations(this.module.module_code, this._route.snapshot.params.id_sitegroup, type);
     }
+
+    downloadMappingVisitIndividual() {
+      this._cmrService.exportSitegroupMappingVisitIndividual(this._route.snapshot.params.id_sitegroup, this.module.forms.visit.mapping_visit_individual_additional_field);
+    }
 }

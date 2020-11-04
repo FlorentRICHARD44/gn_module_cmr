@@ -1,24 +1,24 @@
 import datetime as dt
 import os
+from pathlib import Path
 import zipfile
-from flask import Blueprint, current_app, request, render_template
+from flask import Blueprint, current_app, request, render_template, Response, send_from_directory
 from geojson import FeatureCollection
 from utils_flask_sqla.generic import serializeQuery
 from utils_flask_sqla_geo.generic import GenericTableGeo
 from utils_flask_sqla.response import to_csv_resp, to_json_resp
 from geonature.utils.errors import GeonatureApiError
 from geonature.utils.env import DB, ROOT_DIR
+import geonature.utils.filemanager as fm
 from geonature.utils.utilssqlalchemy import json_resp
 from pypnusershub.db.models import User
-from sqlalchemy import text
+from sqlalchemy import text, func, distinct
+from werkzeug.datastructures import Headers
 from werkzeug.exceptions import NotFound
 from .repositories import ModulesRepository, SiteGroupsRepository, SitesRepository, VisitsRepository, IndividualsRepository, ObservationsRepository, ConfigRepository
 from .models import TModuleComplement, TSiteGroup, TSite, TVisit, TIndividual, TObservation
 from .utils.transform import data_to_json, json_to_data
 
-from flask import send_from_directory
-import geonature.utils.filemanager as fm
-from pathlib import Path
 blueprint = Blueprint('cmr', __name__)
 
 
@@ -161,6 +161,61 @@ def export_all_observations_by_sitegroup(module_code, id_sitegroup, type):
         )
     else:
         raise NotFound("type export not found")
+
+# Export mapping between visits and individuals
+@blueprint.route('/sitegroup/<int:id_sitegroup>/export/mapping_visit_individual')
+def export_mapping_visit_individual_for_sitegroup(id_sitegroup):
+    additional_field = None
+    if 'additional_field' in request.args.to_dict():
+        additional_field = request.args.to_dict()['additional_field']
+    grouping_field = TVisit.id_visit
+    if additional_field is not None:
+        grouping_field = TVisit.data[additional_field]
+    q = DB.session.query(grouping_field, TVisit.date, func.string_agg(distinct(TIndividual.identifier), ',')).join(
+        TSite, (TSite.id_site == TVisit.id_site)).join(
+        TObservation, (TObservation.id_visit == TVisit.id_visit), isouter=True).join(
+        TIndividual, (TIndividual.id_individual == TObservation.id_individual), isouter=True).filter(
+            TSite.id_sitegroup == id_sitegroup
+        ).group_by(grouping_field, TVisit.date)
+    data = q.all()
+
+    # get the list of identifiers
+    identifiers_list = []
+    for add_field, date, identifiers in data:
+        if identifiers is not None:
+            for item in identifiers.split(','):
+                if item not in identifiers_list:
+                    identifiers_list.append(item)
+
+    rows = []
+    # Prepare headers
+    row_h1 = ['']
+    row_h2 = ['N° Individu']
+    for add_field, date, identifiers in data:
+        row_h1.append(str(add_field))
+        row_h2.append(date.strftime("%d/%m/%Y"))
+    if additional_field is not None:
+        rows.append(";".join(row_h1))
+    rows.append(";".join(row_h2))
+
+    # Prepare all lines
+    for individual in sorted(identifiers_list):
+        row = [individual]
+        for add_field, date, identifiers in data:
+            if identifiers is None or individual not in identifiers.split(','):
+                row.append('0')
+            else:
+                row.append('1')
+        rows.append(";".join(row))
+    
+
+    filename = dt.datetime.now().strftime("%Y_%m_%d_%Hh%Mm%S")
+    headers = Headers()
+    headers.add("Content-Type", "text/csv")
+    headers.add(
+        "Content-Disposition", "attachment", filename="export_%s.csv" % filename
+    )
+    return Response("\n".join(rows), headers=headers)
 
 
 #############################

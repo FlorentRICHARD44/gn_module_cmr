@@ -37,6 +37,7 @@
         "align": "right"
     }],
     "properties_to_keep_when_chaining": [],
+    "mapping_visit_individual_additional_field": "session",
     "specific": {
         "session": {
             "type_widget": "select",

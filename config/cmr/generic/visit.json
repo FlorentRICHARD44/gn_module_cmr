@@ -29,6 +29,7 @@
         "align": "right"
     }],
     "properties_to_keep_when_chaining": [],
+    "mapping_visit_individual_additional_field": false,
     "generic": {
         "id_visit": {
             "type_widget": "text",

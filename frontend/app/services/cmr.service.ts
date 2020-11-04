@@ -103,6 +103,15 @@ export class CmrService {
         window.open(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${module_code}/sitegroup/${id_sitegroup}/${type}?qt=${dt}`);
     }
 
+    exportSitegroupMappingVisitIndividual(id_sitegroup, mapping_visit_individual_additional_field) {
+        let dt = new Date().toString();
+        let params = ""
+        if (mapping_visit_individual_additional_field) {
+            params = "&additional_field=" + mapping_visit_individual_additional_field;
+        }
+        window.open(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/sitegroup/${id_sitegroup}/export/mapping_visit_individual?qt=${dt}${params}`);
+    }
+
     /* SITE QUERIES */
     getAllSitesGeometriesByModule(id_module, params) {
         return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/sites`, this._paramsToHttpParams(params));

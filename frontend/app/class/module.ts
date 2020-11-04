@@ -56,7 +56,8 @@ export class Module {
             display_properties:[],
             display_list: [],
             properties_to_keep_when_chaining: [],
-            search_filters: []
+            search_filters: [],
+            mapping_visit_individual_additional_field: false
         },
         observation : {
             medias: [],

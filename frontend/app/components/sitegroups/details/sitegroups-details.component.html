@@ -172,6 +172,11 @@
                 <button mat-raised-button (click)="downloadAllObservations('geojson')" type="button" class="button-success mr-1" >Format GeoJSON</button>
                 <button mat-raised-button (click)="downloadAllObservations('shp')" type="button" class="button-success mr-1" >Format ShapeFile</button>
             </div>
+            <br>
+            <h5 class="underlined second-color">Requête pour analyse statistique</h5>
+            <div>
+                <button mat-raised-button (click)="downloadMappingVisitIndividual()" type="button" class="button-success mr-1">Format CSV</button>
+            </div>
         </div>
       </ng-template>
 </div>
