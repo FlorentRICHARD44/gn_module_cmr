@@ -6,9 +6,9 @@
                 <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.sitegroup.label + ': ' + sitegroup.name"></gn-cmr-breadcrumb>
                 <div class="toolbar clearfix">
                     <h3 class="float-left">{{ module.forms.sitegroup.label + ': ' + sitegroup.name}}</h3>
-                    <button class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
-                    <button class="btn btn-primary float-right mat-primary ml-2" color="primary" (click)="openModalDownload($event, modalDownload)"><i class="fa fa-arrow-down"></i>&nbsp;Téléchargements</button>
-                    <button class="btn btn-primary float-right" [routerLink]="['..', {edit: sitegroup.id_sitegroup}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
+                    <button *ngIf="module?.cruved?.D !== '0'" class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
+                    <button *ngIf="module?.cruved?.E !== '0'" class="btn btn-primary float-right mat-primary ml-2" color="primary" (click)="openModalDownload($event, modalDownload)"><i class="fa fa-arrow-down"></i>&nbsp;Téléchargements</button>
+                    <button *ngIf="module?.cruved?.U !== '0'" class="btn btn-primary float-right" [routerLink]="['..', {edit: sitegroup.id_sitegroup}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
                 </div>
                 <div class="">
                     <nav>
@@ -60,9 +60,9 @@
                         id="sites-tab"
                         role="tabpanel"
                         attr.aria-labelledby="nav-sites-tab">
-                        <div class="toolbar clearfix"><!-- TODO add cruved -->
-                            <button class="btn btn-success float-left" [routerLink]="['site']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.site.label}}</button>
-                            <button class="btn btn-success float-left ml-2" *ngIf="module.forms.sitegroup.use_batch_visit_creation" [disabled]="sites.length < 1" (click)="onClickBatchVisit()">Ajouter une visite pour chaque {{module.forms.site.label}}</button>
+                        <div class="toolbar clearfix">
+                            <button *ngIf="module?.cruved?.C !== '0'" class="btn btn-success float-left" [routerLink]="['site']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.site.label}}</button>
+                            <button *ngIf="module?.cruved?.C !== '0' && module.forms.sitegroup.use_batch_visit_creation" class="btn btn-success float-left ml-2" [disabled]="sites.length < 1" (click)="onClickBatchVisit()">Ajouter une visite pour chaque {{module.forms.site.label}}</button>
                             <button class="btn btn-primary float-right" (click)="filterSiteDisplay = !filterSiteDisplay"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <gn-cmr-filter *ngIf="module.forms.site.search_filters.length > 0"
@@ -95,7 +95,7 @@
                                     <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['site', row.id_site]">
                                         <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations ' + module.forms.site.label + ' ' + row.name"></i>
                                     </a>
-                                    <a class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['site', {edit: row.id_site}]">
+                                    <a *ngIf="module?.cruved?.U !== '0'" class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['site', {edit: row.id_site}]">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true" [matTooltip]="'Editer ' + module.forms.site.label + ' ' + row.name"></i>
                                     </a>
                                 </ng-template>
@@ -142,7 +142,7 @@
                                     <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['../..','individual', row.id_individual]">
                                         <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations Individu ' + row.identifier"></i>
                                     </a>
-                                    <a class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['../..','individual', {edit: row.id_individual}]">
+                                    <a *ngIf="module?.cruved?.U !== '0'" class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['../..','individual', {edit: row.id_individual}]">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true" [matTooltip]="'Editer Individu' + row.identifier"></i>
                                     </a>
                                 </ng-template>

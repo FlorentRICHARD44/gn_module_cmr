@@ -5,8 +5,8 @@
                 <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.observation.label"></gn-cmr-breadcrumb>
                 <div class="toolbar clearfix">
                     <h3 class="float-left">{{module.forms.observation.label}}</h3>
-                    <button class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
-                    <button class="btn btn-primary float-right" [routerLink]="['../..','individual', observation.id_individual, 'observation',{edit: observation.id_observation}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
+                    <button *ngIf="module?.cruved?.D !== '0'" class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
+                    <button *ngIf="module?.cruved?.U !== '0'"class="btn btn-primary float-right" [routerLink]="['../..','individual', observation.id_individual, 'observation',{edit: observation.id_observation}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
                 </div>
                 <div class="">
                     <div class="mb-2">

@@ -59,8 +59,8 @@
 
                     <!-- TAB "Site Group" -->
                     <div class="tab-pane fade" id="sitegroups-tab" role="tabpanel" attr.aria-labelledby="nav-sitegroups-tab" *ngIf="module.config.use_sitegroup">
-                        <div class="toolbar clearfix"><!-- TODO add cruved -->
-                            <button class="btn btn-success float-left" [routerLink]="['sitegroup']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.sitegroup.label}}</button>
+                        <div class="toolbar clearfix">
+                            <button *ngIf="module?.cruved?.C !== '0'" class="btn btn-success float-left" [routerLink]="['sitegroup']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.sitegroup.label}}</button>
                             <button class="btn btn-primary float-right" (click)="filterDisplay = !filterDisplay" matTooltip="Afficher les critères de recherche"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <gn-cmr-filter *ngIf="module.forms.sitegroup.search_filters.length > 0"
@@ -88,7 +88,7 @@
                                     <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['sitegroup', row.id_sitegroup]">
                                         <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations ' + module.forms.sitegroup.label + ' ' + row.name"></i>
                                     </a>
-                                    <a class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['sitegroup', {edit: row.id_sitegroup}]">
+                                    <a *ngIf="module?.cruved?.U !== '0'"class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['sitegroup', {edit: row.id_sitegroup}]">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true" [matTooltip]="'Editer ' + module.forms.sitegroup.label + ' ' + row.name"></i>
                                     </a>
                                 </ng-template>
@@ -107,8 +107,8 @@
                         id="sites-tab"
                         role="tabpanel"
                         attr.aria-labelledby="nav-sites-tab" *ngIf="!module.config.use_sitegroup">
-                        <div class="toolbar clearfix"><!-- TODO add cruved -->
-                            <button class="btn btn-success float-left" [routerLink]="['site']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.site.label}}</button>
+                        <div class="toolbar clearfix">
+                            <button *ngIf="module?.cruved?.C !== '0'" class="btn btn-success float-left" [routerLink]="['site']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.site.label}}</button>
                             <button class="btn btn-primary float-right" (click)="filterSiteDisplay = !filterSiteDisplay"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <gn-cmr-filter *ngIf="module.forms.site.search_filters.length > 0"
@@ -141,7 +141,7 @@
                                     <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['site', row.id_site]">
                                         <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations ' + module.forms.site.label + ' ' + row.name"></i>
                                     </a>
-                                    <a class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['site', {edit: row.id_site}]">
+                                    <a *ngIf="module?.cruved?.U !== '0'" class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['site', {edit: row.id_site}]">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true" [matTooltip]="'Editer ' + module.forms.site.label + ' ' + row.name"></i>
                                     </a>
                                 </ng-template>
@@ -160,8 +160,8 @@
                         id="individuals-tab"
                         role="tabpanel"
                         attr.aria-labelledby="nav-individuals-tab">
-                        <div class="toolbar clearfix"><!-- TODO add cruved -->
-                            <button class="btn btn-success float-left" [routerLink]="['individual']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.individual.label}}</button>
+                        <div class="toolbar clearfix">
+                            <button *ngIf="module?.cruved?.C !== '0'" class="btn btn-success float-left" [routerLink]="['individual']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.individual.label}}</button>
                             <button class="btn btn-primary float-right" (click)="filterIndividualDisplay = !filterIndividualDisplay"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
                         </div>
                         <gn-cmr-filter *ngIf="module.forms.individual.search_filters.length > 0"
@@ -189,7 +189,7 @@
                                     <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['individual', row.id_individual]">
                                         <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations ' + module.forms.individual.label + ' ' + row.identifier"></i>
                                     </a>
-                                    <a class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['individual', {edit: row.id_individual}]">
+                                    <a *ngIf="module?.cruved?.U !== '0'" class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['individual', {edit: row.id_individual}]">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true" [matTooltip]="'Editer ' + module.forms.individual.label + ' ' + row.identifier"></i>
                                     </a>
                                 </ng-template>
@@ -201,10 +201,6 @@
                             </ngx-datatable-column>
                         </ngx-datatable>
                     </div>
-
-                    <!-- TAB "Statistiques" -->
-                    <!--<div class="tab-pane fade" id="stats-tab" role="tabpanel" attr.aria-labelledby="nav-stats-tab">
-                    </div>-->
                 </div>
             </nav>
         </div>

@@ -58,13 +58,17 @@ def get_modules(info_role):
 
 # Get the details of one CMR module
 @blueprint.route('/module/<module_name>', methods=['GET'])
+@permissions.check_cruved_scope("R", True)
 @json_resp
-def get_specific_module(module_name):
+def get_specific_module(module_name, info_role):
     mod_repo = ModulesRepository()
     module = mod_repo.get_one(module_name, TModuleComplement.module_code)
     cfg_repo = ConfigRepository()
     module['config'] = cfg_repo.get_module_config(module['module_code'])
     module['forms'] = cfg_repo.get_module_forms_config(module['module_code'])
+    module['cruved'] = cruved_scope_for_user_in_module(
+        id_role=info_role.id_role, module_code=module['module_code']
+    )[0]
     return module
 
 @blueprint.route('/module/<module_name>', methods=['PUT'])

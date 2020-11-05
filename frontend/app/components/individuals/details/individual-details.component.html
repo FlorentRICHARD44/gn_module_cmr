@@ -3,9 +3,9 @@
         <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.individual.label + ': ' + individual.identifier"></gn-cmr-breadcrumb>
         <div class="toolbar clearfix">
             <h3 class="float-left">{{module.forms.individual.label}}: {{individual.identifier}}</h3>
-            <button class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
-            <button class="btn btn-primary float-right ml-2" (click)="openModalDownload($event, modalDownload)"><i class="fa fa-arrow-down"></i>&nbsp;Exports</button>
-            <button class="btn btn-primary float-right ml-2" [routerLink]="['..', {edit: individual.id_individual}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
+            <button *ngIf="module?.cruved?.D !== '0'" class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
+            <button *ngIf="module?.cruved?.E !== '0'" class="btn btn-primary float-right ml-2" (click)="openModalDownload($event, modalDownload)"><i class="fa fa-arrow-down"></i>&nbsp;Exports</button>
+            <button *ngIf="module?.cruved?.U !== '0'" class="btn btn-primary float-right ml-2" [routerLink]="['..', {edit: individual.id_individual}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
         </div>
         <div class="">
             <span><strong>Identifier: </strong>{{individual.identifier}}</span>
