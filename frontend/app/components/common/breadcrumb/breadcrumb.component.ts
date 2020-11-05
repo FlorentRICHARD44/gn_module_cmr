@@ -81,16 +81,26 @@ export class BreadcrumbComponent implements OnInit{
                 "text": module.forms.site.label + ": " + object.site.name,
                 "link": basePath.concat(basePathLvl2.concat(['site', object.site.id_site]))
             });
+        } else if (objectType == "visit-individual") {
+            // home / module: module name / individual: identifier / visit
+            if (object.individual) {
+                path.push({
+                    "text": module.forms.individual.label + ": " + object.individual.identifier,
+                    "link": basePath.concat(['individual', object.individual.id_individual])
+                });
+            }
         } else if (objectType == "observation") {
             // home / module: module name / sitegroup: sitegroup name / site: site name / visit / observation
             // home / module: module name / sitegroup: sitegroup name / visit / observation
             let basePathLvl2 = [];
-            if (object.visit && object.visit.site && object.visit.site.sitegroup) {
-                basePathLvl2 = ['sitegroup', object.visit.site.sitegroup.id_sitegroup];
-                path.push({
-                    "text": module.forms.sitegroup.label + ": " + object.visit.site.sitegroup.name,
-                    "link": basePath.concat(basePathLvl2)
-                });
+            if (object.visit && object.visit.site) {
+                if (object.visit.site.sitegroup) {
+                    basePathLvl2 = ['sitegroup', object.visit.site.sitegroup.id_sitegroup];
+                    path.push({
+                        "text": module.forms.sitegroup.label + ": " + object.visit.site.sitegroup.name,
+                        "link": basePath.concat(basePathLvl2)
+                    });
+                }
                 path.push({
                     "text": module.forms.site.label + ": " + object.visit.site.name,
                     "link": basePath.concat(basePathLvl2.concat(['site', object.visit.site.id_site]))

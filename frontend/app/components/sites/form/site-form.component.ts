@@ -2,7 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CommonService } from "@geonature_common/service/common.service";
-import { CmrService, SpecificService } from './../../../services/cmr.service';
+import { CmrService } from './../../../services/cmr.service';
 import { CmrMapService } from './../../../services/cmr-map.service';
 import { DataService } from '../../../services/data.service';
 import { Module } from '../../../class/module';

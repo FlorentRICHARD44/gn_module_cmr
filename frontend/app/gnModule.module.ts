@@ -14,6 +14,7 @@ import { SiteGroupDetailsComponent } from "./components/sitegroups/details/siteg
 import { SiteFormComponent } from "./components/sites/form/site-form.component";
 import { SiteDetailsComponent } from "./components/sites/details/site-details.component";
 import { VisitFormComponent } from "./components/visits/form/visit-form.component";
+import { VisitFormIndComponent } from "./components/visits/form-ind/visit-form-ind.component";
 import { VisitDetailsComponent } from "./components/visits/details/visit-details.component";
 import { IndividualFormObsComponent } from "./components/individuals/form-obs/individual-form-obs.component";
 import { IndividualDetailsComponent } from "./components/individuals/details/individual-details.component";
@@ -55,6 +56,9 @@ const routes: Routes = [
   { path: "module/:module/site/:id_site/visit/:id_visit/observation/:id_observation", component: ObservationDetailsComponent},
   { path: "module/:module/sitegroup/:id_sitegroup/site/:id_site/visit/:id_visit/observation/:id_observation", component: ObservationDetailsComponent},
 
+  /* Create visit from individual */
+  { path: "module/:module/individual/:id_individual/visit", component: VisitFormIndComponent },
+  
   { path: "module/:module/individual/:id_individual", component: IndividualDetailsComponent },
   { path: "module/:module/individual", component: IndividualFormComponent}
 ];
@@ -64,7 +68,7 @@ const routes: Routes = [
     ModuleListComponent, ModuleHomeComponent, ModuleDisclaimerComponent, ModuleFormComponent,
     SiteGroupFormComponent, SiteGroupDetailsComponent, SitegroupBatchVisitComponent,
     SiteFormComponent, SiteDetailsComponent,
-    VisitFormComponent, VisitDetailsComponent,
+    VisitFormComponent, VisitDetailsComponent, VisitFormIndComponent,
     IndividualFormObsComponent, IndividualFormComponent, IndividualDetailsComponent,
     ObservationFormComponent, ObservationDetailsComponent
   ],
