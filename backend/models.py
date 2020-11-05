@@ -306,6 +306,10 @@ class TIndividual(DB.Model):
         data = self.as_dict()
         data['nb_observations'] = self.nb_observations
         data['medias'] = [media.as_dict() for media in self.medias]
+        data['last_visit_date'] = None
+        if self.observations:
+            last_obs = sorted(self.observations, key=lambda x: x.visit.date)[-1]
+            data['last_visit_date'] = last_obs.visit.as_dict()['date']
         return data_to_json(data)
 
     @staticmethod

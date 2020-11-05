@@ -9,7 +9,7 @@
     },{
         "field": "marker"
     }],
-    "display_properties": ["identifier","rfid","sexe","marker","comments"],
+    "display_properties": ["identifier","rfid","sexe","marker","last_visit_date","comments"],
     "display_list": [{
         "field":"identifier",
         "width": 150
@@ -26,6 +26,9 @@
         "field": "nb_observations",
         "width": 120,
         "align": "right"
+    }, {
+        "field": "last_visit_date",
+        "width": 140
     }],
     "properties_to_keep_when_chaining": [],
     "specific": {
