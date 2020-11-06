@@ -3,12 +3,14 @@ Configuration du module de CMR
 
 Organisation des fichiers de configuration
 ------------------------------------------
+
 - ``config contient`` les fichiers classique de configuration d'un module GeoNature
     - ``cmr``
         - ``generic`` Contient la configuration minimale générique de la CMR commune à tous les sous-modules
         - ``mon_module_specific`` Détaille la configuration spécifique à un sous-module de CMR à renommer avec le nom de votre sous-module. Pour le créer vous pouvez copier-coller le dossier ``generic``
 
 dans chaque partie, on retrouve les dossiers et fichiers suivants:
+
 - ``backend`` Dossier contenant des fichiers pour la génération d'une fiche individu en PDF.
     - ``static`` 
         - ``css`` Dossier contenant le style CSS à appliquer à la fiche individu
@@ -35,13 +37,15 @@ config.json
 """""""""""
 
 **Paramètres:**
+
 - ``"disclaimer"``: si ``true`` affiche un message d'avertissement à l'utilisateur lorsqu'il rentre dans le sous-module. si ``"false"`` n'affiche rien
 - ``"disclaimer_text"``: le texte d'avertissement affiché à l'utilisateur si "disclaimer"="true". Ce paramètre est une liste dont chaque élément est une nouvelle ligne.
 - ``"welcome"``: Message de bienvenue dans la page d'accueil du sous-module
 - ``"use_sitegroup"``: si ``true``, le sous-module utilisera les groupes de site.
 
 **Exemple:**
-.. code-block:: json
+
+.. code-block:: json-object
    {
       "disclaimer" : true,
       "disclaimer_text": [
@@ -56,6 +60,7 @@ config.json
 
 Autres fichiers de configuration json
 """""""""""""""""""""""""""""""""""""
+
 Les autres fichiers de configuration json permettent de définir:
 - les champs utilisés dans les formulaires
 - les champs affichés dans les tableaux
@@ -70,12 +75,14 @@ Ils fonctionnent sur le même principe:
 - dans le dossier du sous-module, le paramètre "specific" permet de lister les champs additionnels qui seront ajoutés au formulaire.
 
 **Définition des champs:**
+
 Voir la définition des champs de formulaire dynamique dans la documentation de GeoNature.
 On définit pour chaque champ: son type (type_widget), son label (attribut_label), si il est requis (required) et différents autres paramètres selon le type de widget.
 
 **Exemple 1:**
-Fichier generic/module.json
-.. code-block:: json
+
+.. code-block:: json-object
+   :name: generic/module.json
      "generic": {
          "comments": {
             "type_widget": "textarea",
@@ -85,7 +92,8 @@ Fichier generic/module.json
       }
    
 Fichier mon_module_cmr/module.json
-.. code-block:: json
+.. code-block:: json-object
+   :name: mon_module_cmr/module.json
      "specific": {
          "mon_champ_perso": {
             "type_widget": "select",
@@ -97,9 +105,10 @@ Fichier mon_module_cmr/module.json
 Dans cet exemple, il y aura 2 champs dans le formulaire: un champ "Commentaires" et un champ "Champ perso".
 
 
-**Exemple 1:**
-Fichier generic/module.json
-.. code-block:: json
+**Exemple 2:**
+
+.. code-block:: json-object
+   :name: generic/module.json
      "generic": {
          "entite": {
             "type_widget": "text",
@@ -117,9 +126,9 @@ Fichier generic/module.json
             "required": false
          }
       }
-   
-Fichier mon_module_cmr/module.json
-.. code-block:: json
+
+.. code-block:: json-object
+   :name: mon_module_cmr/module.json
    "generic": {
          "entite": {
             "type_widget": "text",
@@ -145,18 +154,22 @@ Dans cet exemple, il y aura 3 champs dans le formulaire: un champ "Entité" (obl
 
 module.json
 """""""""""
+
 Ce fichier permet de configurer les champs additionnels utilisé dans l'onglet "Module" de la page d'accueil du sous-module.
 
 **Paramètres:**
+
 - ``"display_properties"``: liste des champs qui seront affiché à l'utilisateur.
 - ``"generic"/"specific"``: définition des champs du formulaire module (accessible uniquement à un administrateur).
 
 
 individual.json
 """""""""""""""
+
 Ce fichier permet de configurer tout ce qui concerne un individu (formulaire, tableaux, liste de propriété, ...).
 
 **Paramètres:**
+
 - ``"label"``: Label utilisé pour l'individu au singulier
 - ``"label_plural"``: Label utilisé pour l'individu au pluriel
 - ``"search_filters"``: Champs utilisé pour le filtre de recherche par individus
@@ -168,7 +181,9 @@ Ce fichier permet de configurer tout ce qui concerne un individu (formulaire, ta
 - ``"generic"/"specific"``: définition des champs du formulaire individu   
 
 **Champs calculés:**
+
 Les champs calculés suivants sont disponibles pour être affiché dans les colonnes ou propriétés d'un individu.
+
 - ``"nb_observations"``: Nombre total d'observation de l'individu.
 - ``"last_visit_date"``: Date de dernière observation de l'individu.
 
@@ -179,6 +194,7 @@ Ce fichier permet de configurer tout ce qui concerne un groupe de sites (formula
 Il doit être présent même si le sous-module n'utilise pas les groupes de sites.
 
 **Paramètres:**
+
 - ``"label"``: Label utilisé pour le groupe de site au singulier
 - ``"label_plural"``: Label utilisé pour le groupe de site au pluriel
 - ``"search_filters"``: Champs utilisé pour le filtre de recherche par groupe de site
@@ -192,6 +208,7 @@ Il doit être présent même si le sous-module n'utilise pas les groupes de site
 - ``"use_batch_visit_creation"``: si ``true`` affiche un bouton permettant de créer une visite pour tous les sites sélectionnés.
 
 **Champs calculés:**
+
 Les champs calculés suivants sont disponibles pour être affiché dans les colonnes ou propriétés d'un groupe de site.
 - ``"nb_sites"``: nombre de sites sur ce groupe de site.
 - ``"nb_observations"``: nombre d'observations ayant eu lieu sur ce groupe de site
@@ -203,6 +220,7 @@ site.json
 Ce fichier permet de configurer tout ce qui concerne un site (formulaire, tableaux, liste de propriété, ...).
 
 **Paramètres:**
+
 - ``"label"``: Label utilisé pour le site au singulier
 - ``"label_plural"``: Label utilisé pour le site au pluriel
 - ``"search_filters"``: Champs utilisé pour le filtre de recherche par site
@@ -217,7 +235,9 @@ Ce fichier permet de configurer tout ce qui concerne un site (formulaire, tablea
 - ``"batch_visit_display_list"``: Liste des colonnes de site à afficher dans la popup de création de visite pour tous les sites.
 
 **Champs calculés:**
+
 Les champs calculés suivants sont disponibles pour être affiché dans les colonnes ou propriétés d'un site.
+
 - ``"nb_visits"``: nombre de visites ayant eu lieu sur ce site.
 - ``"nb_observations"``: nombre d'observations ayant eu lieu sur ce site
 - ``"nb_individuals"``: nombre d'individus observés sur ce site
@@ -229,6 +249,7 @@ visit.json
 Ce fichier permet de configurer tout ce qui concerne une visite (formulaire, tableaux, liste de propriété, ...).
 
 **Paramètres:**
+
 - ``"label"``: Label utilisé pour la visite au singulier
 - ``"label_plural"``: Label utilisé pour la visite au pluriel
 - ``"search_filters"``: Champs utilisé pour le filtre de recherche par visite
@@ -240,7 +261,9 @@ Ce fichier permet de configurer tout ce qui concerne une visite (formulaire, tab
 - ``"generic"/"specific"``: définition des champs du formulaire visite
 
 **Champs calculés:**
+
 Les champs calculés suivants sont disponibles pour être affiché dans les colonnes ou propriétés d'une visite.
+
 - ``"nb_observations"``: nombre d'observations ayant eu lieu pendant cette visite
 
 observation.json
@@ -249,6 +272,7 @@ observation.json
 Ce fichier permet de configurer tout ce qui concerne une observation (formulaire, tableaux, liste de propriété, ...).
 
 **Paramètres:**
+
 - ``"label"``: Label utilisé pour l'observation au singulier
 - ``"label_plural"``: Label utilisé pour l'observation au pluriel
 - ``"display_properties"``: Champs affichés dans la liste des propriétés d'une observation
@@ -269,17 +293,21 @@ Ce fichier permet de configurer tout ce qui concerne une observation (formulaire
    - ``"color"`` : la couleur à utiliser pour la courbe. Utiliser une valeur HTML/CSS (https://www.w3schools.com/cssref/css_colors_legal.asp) 
 
 **Champs calculés:**
+
 Aucun champ calculé pour l'observation.
 
 specific.service.js
 """""""""""""""""""
+
 Ce fichier permet de définir des comportements spécifiques pour chaque formulaire (initialisation du formulaire et/ou inter-dépendence de champs).
 
 Les fonctions suivantes doivent être impérativement présentes:
+
 .. code-block:: javascript
    export function initSitegroup(form) {
       return {};
    }
+   
 Cette fonction initialise le formulaire de groupe de site. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 
@@ -287,6 +315,7 @@ L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez fai
    export function initSite(form, sitegroup) {
       return {};
    }
+   
 Cette fonction initialise le formulaire de site. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 L'objet "sitegroup" est passé en paramètre si vous voulez en récupérer des valeurs.
@@ -295,6 +324,7 @@ L'objet "sitegroup" est passé en paramètre si vous voulez en récupérer des v
    export function initVisit(form, site) {
       return {};
    }
+   
 Cette fonction initialise le formulaire de visite. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 L'objet "site" est passé en paramètre si vous voulez en récupérer des valeurs (site.sitegroup vous donnera les valeurs du groupe de site si nécessaire).
@@ -303,15 +333,18 @@ L'objet "site" est passé en paramètre si vous voulez en récupérer des valeur
    export function initObservation(form, formGroups, visit, individual) {
       return {};
    }
+   
 Cette fonction initialise le formulaire de l'observation. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 L'objet "formGroup" définit la liste des FormGroup de chaque groupe de champs, vous pouvez itérer sur chacun et récupérer un champ de la manière suivante
+
 .. code-block:: javascript
    for (let fg of formGroups) {
         if (fg['form'].get('analyse_comp_type_prelevement')) {
             // Votre action sur ce champ...
         }
    }
+   
 L'objet "visit" est passé en paramètre si vous voulez en récupérer des valeurs (visit.site et visit.site.sitegroup vous donnera les valeurs du site et du groupe de site si nécessaire).
 L'objet "individual" est passé en paramètre si vous voulez en récupérer des valeurs.
 
@@ -320,17 +353,20 @@ L'objet "individual" est passé en paramètre si vous voulez en récupérer des 
    export function initIndividual(form) {
       return {};
    }
+   
 Cette fonction initialise le formulaire de l'individu. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 
 
 Vues SQL
 --------
+
 Mettre un fichier "cmr.sql" dans data/ et qui contient les requêtes pour créer des vues spécifiques.
 Le dossier "generic" contient la vue minimale ainsi qu'un exemple avec une vue plus complexe pour afficher les champs additionnels.
 
 Vue "Observations par groupe de site"
 """""""""""""""""""""""""""""""""""""
+
 Nommer la vue "gn_cmr.v_cmr_sitegroup_observations_nomdusousmodule" en remplaçant "nomdusousmodule" par le nom de votre sous-module.
 Cette vue est utilisée pour l'export de toutes les observations d'un groupe de site.
 Elle contient des informations sur le groupe de site, les sites, toutes les visites (y compris dans observations), les observations et les individus observés.
@@ -338,13 +374,16 @@ Elle contient des informations sur le groupe de site, les sites, toutes les visi
 
 Templates de Rapport
 --------------------
+
 Pour les rapports PDF, il faut créer un template de rapport personnalisé.
 Le template se compose:
+
 - d'un fichier HTML (qui définit la structure et le contenu du rapport)
 - d'un fichier CSS (qui définit le style du rapport)
 - éventuellement d'images qui seront insérées dans le rapport
 
 Ces fichiers sont répartis dans plusieurs sous-dossiers
+
 - backend: le dossier principal
    - templates: le dossier contenant le fichier HTML
    - static:
@@ -354,31 +393,39 @@ Ces fichiers sont répartis dans plusieurs sous-dossiers
 
 Notions génériques
 """"""""""""""""""
+
 **Format page**
+
 Il est défini dans le fichier CSS, dans la balise ``@page``
 
 **En-tête et Pied de page**
+
 Il est possible de définir une en-tête dans une balise HTML ``<div class="header">`` et un pied de page dans une balise HTML ``<div class="footer">``. 
 Ainsi ils seront répété à chaque page. Attention à définir correctement la taille de la marge dans le CSS (dans la balise ``@page``) et les positions des header/footer toujours dans le CSS pour éviter les superpositions avec le contenu de la page.
 
 **Police**
+
 La police de caractère est définie dans le fichier CSS.
 Il est également possible d'utiliser plusieurs police via l'utilisation de règles CSS sur une balise HTML ou une classe
 
 **Images**
+
 Toutes les images doivent être rangées dans le dossier backend/static/images.
 Attention à fixer la grandeur des images dans le HTML/CSS ou au moins leur grandeur maximale pour éviter que l'image soit trop grande.
 
 **Style**
+
 Tout le style peut être redéfini via l'utilisation de règles CSS sur une balise HTML ou une classe
 
 
 Rapport "Fiche Individu"
 """"""""""""""""""""""""
+
 Ce rapport permet de créer une fiche pour l'individu.
 Le fichier template HTML doit s'appeler ``fiche_individu.html``
 Le fichier CSS doit d'appeler ``fiche_individu_template.css``
 Ce rapport peut contenir:
+
 - Les informations de l'individu
 - L'historique des observations de l'individu
 - Une carte affichant tous les géométries des captures de l'individu (zone de la carte selon le placement fait par l'utilisateur dans l'application)
