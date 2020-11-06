@@ -27,7 +27,6 @@
         "width": 140
     }],
     "properties_to_keep_when_chaining": [],
-    "required_medias": [],
     "generic": {
         "id_individual": {
             "type_widget": "text",

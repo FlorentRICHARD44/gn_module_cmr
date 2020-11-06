@@ -26,7 +26,8 @@
     },{
         "field":"largeur_arriere_plastron_mm",
         "color": "rgba(50,0,255,0.5)"
-    }],"generic": {
+    }],
+    "generic": {
         "id_observation": {
             "type_widget": "text",
             "attribut_label": "Id Observation",
