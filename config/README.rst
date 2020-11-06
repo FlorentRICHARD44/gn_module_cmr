@@ -45,7 +45,7 @@ config.json
 
 **Exemple:**
 
-.. code-block:: json-object
+.. code-block:: 
    {
       "disclaimer" : true,
       "disclaimer_text": [
@@ -62,6 +62,7 @@ Autres fichiers de configuration json
 """""""""""""""""""""""""""""""""""""
 
 Les autres fichiers de configuration json permettent de définir:
+
 - les champs utilisés dans les formulaires
 - les champs affichés dans les tableaux
 - les champs affichés dans une liste de propriété
@@ -69,6 +70,7 @@ Les autres fichiers de configuration json permettent de définir:
 - les noms utilisés pour nommer chaque objet (individu, sitegroup, site, visit, observation). Tout le monde n'utilisant pas toujours les mêmes termes, chaque sous-module peut ainsi avoir son propre vocabulaire avec une valeur au singulier ``"label"`` et une valeur au pluriel ``"label_plural"``.
 
 Ils fonctionnent sur le même principe:
+
 - dans le dossier "generic" on configure un comportement générique à tous les sous-modules de CMR.
 - dans ce dossier "generic", le paramètre "generic" liste tous les champs qui seront disponibles dans les formulaires. On y définit également tous les Label de certains champs calculés pour qu'ils apparaissent dans les tableaux.
 - dans le dossier du sous-module, si le paramètre "generic" est défini, alors il écrase la définition des champs du dossier "generic". Attention à ne pas supprimer un champ obligatoire.
@@ -81,8 +83,9 @@ On définit pour chaque champ: son type (type_widget), son label (attribut_label
 
 **Exemple 1:**
 
-.. code-block:: json-object
-   :name: generic/module.json
+Fichier generic/module.json
+
+  ::
      "generic": {
          "comments": {
             "type_widget": "textarea",
@@ -92,8 +95,8 @@ On définit pour chaque champ: son type (type_widget), son label (attribut_label
       }
    
 Fichier mon_module_cmr/module.json
-.. code-block:: json-object
-   :name: mon_module_cmr/module.json
+
+  ::
      "specific": {
          "mon_champ_perso": {
             "type_widget": "select",
@@ -102,13 +105,15 @@ Fichier mon_module_cmr/module.json
             "required": true
          }
       }
+
 Dans cet exemple, il y aura 2 champs dans le formulaire: un champ "Commentaires" et un champ "Champ perso".
 
 
 **Exemple 2:**
 
-.. code-block:: json-object
-   :name: generic/module.json
+Fichier generic/module.json
+
+  ::
      "generic": {
          "entite": {
             "type_widget": "text",
@@ -127,8 +132,9 @@ Dans cet exemple, il y aura 2 champs dans le formulaire: un champ "Commentaires"
          }
       }
 
-.. code-block:: json-object
-   :name: mon_module_cmr/module.json
+Fichier mon_module_cmr/module.json
+
+  ::
    "generic": {
          "entite": {
             "type_widget": "text",
@@ -149,6 +155,7 @@ Dans cet exemple, il y aura 2 champs dans le formulaire: un champ "Commentaires"
             "required": true
          }
       }
+
 Dans cet exemple, il y aura 3 champs dans le formulaire: un champ "Entité" (obligatoire), un champ "Commentaires" (qui devient obligatoire) et un champ "Champ perso". Le champ "Administré par" ne sera pas utilisé pour ce sous-module.
 
 
@@ -210,6 +217,7 @@ Il doit être présent même si le sous-module n'utilise pas les groupes de site
 **Champs calculés:**
 
 Les champs calculés suivants sont disponibles pour être affiché dans les colonnes ou propriétés d'un groupe de site.
+
 - ``"nb_sites"``: nombre de sites sur ce groupe de site.
 - ``"nb_observations"``: nombre d'observations ayant eu lieu sur ce groupe de site
 - ``"nb_individuals"``: nombre d'individus observés sur ce groupe de site
@@ -303,7 +311,7 @@ Ce fichier permet de définir des comportements spécifiques pour chaque formula
 
 Les fonctions suivantes doivent être impérativement présentes:
 
-.. code-block:: javascript
+  ::
    export function initSitegroup(form) {
       return {};
    }
@@ -311,7 +319,7 @@ Les fonctions suivantes doivent être impérativement présentes:
 Cette fonction initialise le formulaire de groupe de site. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 
-.. code-block:: javascript
+  ::
    export function initSite(form, sitegroup) {
       return {};
    }
@@ -320,7 +328,7 @@ Cette fonction initialise le formulaire de site. L'objet retourné sera utilisé
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 L'objet "sitegroup" est passé en paramètre si vous voulez en récupérer des valeurs.
 
-.. code-block:: javascript
+  ::
    export function initVisit(form, site) {
       return {};
    }
@@ -329,7 +337,7 @@ Cette fonction initialise le formulaire de visite. L'objet retourné sera utilis
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 L'objet "site" est passé en paramètre si vous voulez en récupérer des valeurs (site.sitegroup vous donnera les valeurs du groupe de site si nécessaire).
 
-.. code-block:: javascript
+  ::
    export function initObservation(form, formGroups, visit, individual) {
       return {};
    }
@@ -338,7 +346,7 @@ Cette fonction initialise le formulaire de l'observation. L'objet retourné sera
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 L'objet "formGroup" définit la liste des FormGroup de chaque groupe de champs, vous pouvez itérer sur chacun et récupérer un champ de la manière suivante
 
-.. code-block:: javascript
+  ::
    for (let fg of formGroups) {
         if (fg['form'].get('analyse_comp_type_prelevement')) {
             // Votre action sur ce champ...
@@ -349,7 +357,7 @@ L'objet "visit" est passé en paramètre si vous voulez en récupérer des valeu
 L'objet "individual" est passé en paramètre si vous voulez en récupérer des valeurs.
 
 
-.. code-block:: javascript
+  ::
    export function initIndividual(form) {
       return {};
    }
