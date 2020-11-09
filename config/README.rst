@@ -51,19 +51,19 @@ config.json
 
 **Exemple:**
 
-  :: 
+  ::
 
-  {
-    "disclaimer" : true,
-    "disclaimer_text": [
-      "La Cistude d'Europe est une espèce protégée,",
-      "sa manipulation requiert une autorisation spécifique (CERFA n°131616*01).",
-      "",
-      "Avez-vous connaissance de la réglementation?"
-    ],
-    "welcome": "Bienvenue dans le module de saisie de la CMR Cistude",
-    "use_sitegroup": true
-  }
+    {
+      "disclaimer" : true,
+      "disclaimer_text": [
+        "La Cistude d'Europe est une espèce protégée,",
+        "sa manipulation requiert une autorisation spécifique (CERFA n°131616*01).",
+        "",
+        "Avez-vous connaissance de la réglementation?"
+      ],
+      "welcome": "Bienvenue dans le module de saisie de la CMR Cistude",
+      "use_sitegroup": true
+    }
 
 Autres fichiers de configuration json
 """""""""""""""""""""""""""""""""""""
@@ -94,30 +94,30 @@ On définit pour chaque champ: son type (type_widget), son label (attribut_label
 
   ::
 
-  {
-    "generic": {
-      "comments": {
-        "type_widget": "textarea",
-        "attribut_label": "Commentaires",
-        "required": false
+    {
+      "generic": {
+        "comments": {
+          "type_widget": "textarea",
+          "attribut_label": "Commentaires",
+          "required": false
+        }
       }
     }
-  }
-  
+
   Fichier mon_module_cmr/module.json
 
   ::
 
-  {
-    "specific": {
-      "mon_champ_perso": {
-        "type_widget": "select",
-        "attribut_label": "Champ perso",
-        "values": ["Valeur 1", "Valeur 2"]
-        "required": true
+    {
+      "specific": {
+        "mon_champ_perso": {
+          "type_widget": "select",
+          "attribut_label": "Champ perso",
+          "values": ["Valeur 1", "Valeur 2"]
+          "required": true
+        }
       }
     }
-  }
 
   Dans cet exemple, il y aura 2 champs dans le formulaire: un champ "Commentaires" et un champ "Champ perso".
 
@@ -128,52 +128,52 @@ On définit pour chaque champ: son type (type_widget), son label (attribut_label
 
   ::
 
-  {
-    "generic": {
-      "entite": {
-        "type_widget": "text",
-        "attribut_label": "Entité",
-        "required": true
-      },
-      "nom_administrateur": {
-        "type_widget": "text",
-        "attribut_label": "Administré par",
-        "required": true
-      },
-      "comments": {
-        "type_widget": "textarea",
-        "attribut_label": "Commentaires",
-        "required": false
+    {
+      "generic": {
+        "entite": {
+          "type_widget": "text",
+          "attribut_label": "Entité",
+          "required": true
+        },
+        "nom_administrateur": {
+          "type_widget": "text",
+          "attribut_label": "Administré par",
+          "required": true
+        },
+        "comments": {
+          "type_widget": "textarea",
+          "attribut_label": "Commentaires",
+          "required": false
+        }
       }
     }
-  }
 
   Fichier mon_module_cmr/module.json
 
   ::
 
-   {
-     "generic": {
-       "entite": {
-         "type_widget": "text",
-         "attribut_label": "Entité",
-         "required": true
-       },
-       "comments": {
-         "type_widget": "textarea",
-         "attribut_label": "Commentaires",
-         "required": true
-       }
-     },
-     "specific": {
-       "mon_champ_perso": {
-         "type_widget": "select",
-         "attribut_label": "Champ perso",
-         "values": ["Valeur 1", "Valeur 2"]
-         "required": true
-       }
-     }
-   }
+    {
+      "generic": {
+        "entite": {
+          "type_widget": "text",
+          "attribut_label": "Entité",
+          "required": true
+        },
+        "comments": {
+          "type_widget": "textarea",
+          "attribut_label": "Commentaires",
+          "required": true
+        }
+      },
+      "specific": {
+        "mon_champ_perso": {
+          "type_widget": "select",
+          "attribut_label": "Champ perso",
+          "values": ["Valeur 1", "Valeur 2"]
+          "required": true
+        }
+      }
+    }
 
   Dans cet exemple, il y aura 3 champs dans le formulaire: un champ "Entité" (obligatoire), un champ "Commentaires" (qui devient obligatoire) et un champ "Champ perso". Le champ "Administré par" ne sera pas utilisé pour ce sous-module.
 
@@ -347,18 +347,18 @@ Les fonctions suivantes doivent être impérativement présentes:
 
   ::
 
-  export function initSitegroup(form) {
-    return {};
-  }
+    export function initSitegroup(form) {
+      return {};
+    }
 
 Cette fonction initialise le formulaire de groupe de site. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 
   ::
 
-  export function initSite(form, sitegroup) {
-    return {};
-  }
+    export function initSite(form, sitegroup) {
+      return {};
+    }
 
 Cette fonction initialise le formulaire de site. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
@@ -366,9 +366,9 @@ L'objet "sitegroup" est passé en paramètre si vous voulez en récupérer des v
 
   ::
 
-  export function initVisit(form, site) {
-    return {};
-  }
+    export function initVisit(form, site) {
+      return {};
+    }
 
 Cette fonction initialise le formulaire de visite. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
@@ -376,9 +376,9 @@ L'objet "site" est passé en paramètre si vous voulez en récupérer des valeur
 
   ::
 
-  export function initObservation(form, formGroups, visit, individual) {
-    return {};
-  }
+    export function initObservation(form, formGroups, visit, individual) {
+      return {};
+    }
 
 Cette fonction initialise le formulaire de l'observation. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
@@ -386,20 +386,20 @@ L'objet "formGroup" définit la liste des FormGroup de chaque groupe de champs, 
 
   ::
 
-  for (let fg of formGroups) {
-    if (fg['form'].get('analyse_comp_type_prelevement')) {
-      // Votre action sur ce champ...
+    for (let fg of formGroups) {
+      if (fg['form'].get('analyse_comp_type_prelevement')) {
+        // Votre action sur ce champ...
+      }
     }
-  }
 
 L'objet "visit" est passé en paramètre si vous voulez en récupérer des valeurs (visit.site et visit.site.sitegroup vous donnera les valeurs du site et du groupe de site si nécessaire).
 L'objet "individual" est passé en paramètre si vous voulez en récupérer des valeurs.
 
   ::
 
-  export function initIndividual(form) {
-    return {};
-  }
+    export function initIndividual(form) {
+      return {};
+    }
 
 Cette fonction initialise le formulaire de l'individu. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
