@@ -51,7 +51,7 @@ config.json
 
 **Exemple:**
 
-  ::
+  Configuration du sous-module::
 
     {
       "disclaimer" : true,
@@ -345,7 +345,7 @@ Ce fichier permet de définir des comportements spécifiques pour chaque formula
 
 Les fonctions suivantes doivent être impérativement présentes:
 
-  ::
+- Initialisation du formulaire sitegroup::
 
     export function initSitegroup(form) {
       return {};
@@ -354,7 +354,7 @@ Les fonctions suivantes doivent être impérativement présentes:
 Cette fonction initialise le formulaire de groupe de site. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 
-  ::
+- Initialisation du formulaire site::
 
     export function initSite(form, sitegroup) {
       return {};
@@ -364,7 +364,7 @@ Cette fonction initialise le formulaire de site. L'objet retourné sera utilisé
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 L'objet "sitegroup" est passé en paramètre si vous voulez en récupérer des valeurs.
 
-  ::
+- Initialisation du formulaire visite::
 
     export function initVisit(form, site) {
       return {};
@@ -374,7 +374,7 @@ Cette fonction initialise le formulaire de visite. L'objet retourné sera utilis
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 L'objet "site" est passé en paramètre si vous voulez en récupérer des valeurs (site.sitegroup vous donnera les valeurs du groupe de site si nécessaire).
 
-  ::
+- Initialisation du formulaire observation::
 
     export function initObservation(form, formGroups, visit, individual) {
       return {};
@@ -384,7 +384,7 @@ Cette fonction initialise le formulaire de l'observation. L'objet retourné sera
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 L'objet "formGroup" définit la liste des FormGroup de chaque groupe de champs, vous pouvez itérer sur chacun et récupérer un champ de la manière suivante
 
-  ::
+- Utilisation de champs dans un formulaire de groupe de champs::
 
     for (let fg of formGroups) {
       if (fg['form'].get('analyse_comp_type_prelevement')) {
@@ -395,7 +395,7 @@ L'objet "formGroup" définit la liste des FormGroup de chaque groupe de champs, 
 L'objet "visit" est passé en paramètre si vous voulez en récupérer des valeurs (visit.site et visit.site.sitegroup vous donnera les valeurs du site et du groupe de site si nécessaire).
 L'objet "individual" est passé en paramètre si vous voulez en récupérer des valeurs.
 
-  ::
+- Initialisation du formulaire individu::
 
     export function initIndividual(form) {
       return {};
