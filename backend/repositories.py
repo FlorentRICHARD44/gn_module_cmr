@@ -6,7 +6,7 @@ from geonature.core.gn_commons.models import TMedias
 from geonature.core.gn_meta.models import TDatasets
 from pypnusershub.db.models import User
 from geonature.core.ref_geo.models import LAreas, LiMunicipalities
-from sqlalchemy import distinct, func, String, Date, or_
+from sqlalchemy import distinct, func, String, Date, or_, and_, text
 from sqlalchemy.orm import joinedload, subqueryload
 from sqlalchemy.orm.relationships import RelationshipProperty
 from sqlalchemy.inspection import inspect
@@ -97,8 +97,8 @@ class BaseRepository:
             # Check suffix to manage date min/max
             suffix = None
             if k.endswith('_minfilter') or k.endswith('_maxfilter'):
-                suffix = k[-4:]
-                k = k[0:-4]
+                suffix = k[-10:]
+                k = k[0:-10]
             
             # Check if attribute is a column or a JSON
             if hasattr(self.model, k):  # can be a column attribute
@@ -115,8 +115,10 @@ class BaseRepository:
 
                 else:
                     if suffix == '_minfilter':
+                        query = query.filter(getattr(self.model, k) != None)
                         query = query.filter(getattr(self.model, k) >= v)
                     elif suffix == '_maxfilter':
+                        query = query.filter(getattr(self.model, k) != None)
                         query = query.filter(getattr(self.model, k) <= v)
                     elif str(getattr(self.model, k).property.columns[0].type) == 'BOOLEAN':
                         query = query.filter(getattr(self.model, k).is_(True if v == "true" else False))
@@ -124,9 +126,9 @@ class BaseRepository:
                         query = query.filter(getattr(self.model, k).ilike('%{}%'.format(v)))
             else:  # or can be an attribute inside json column
                 if suffix == '_minfilter':
-                    query = query.filter(self.model.data[k].cast(String).cast(Date) >= v)
+                    query = query.filter(text("CAST(CAST(" + self.model.__table__.fullname + ".data#>>'{" + k + "}' as varchar) as date) >= CAST('" + v + "' as date)"))
                 elif suffix == '_maxfilter':
-                    query = query.filter(self.model.data[k].cast(String).cast(Date) <= v)
+                    query = query.filter(text("CAST(CAST(" + self.model.__table__.fullname + ".data#>>'{" + k + "}' as varchar) as date) <= CAST('" + v + "' as date)"))
                 else:
                     query = query.filter(self.model.data[k].cast(String).ilike('%{}%'.format(v)))
         return query
