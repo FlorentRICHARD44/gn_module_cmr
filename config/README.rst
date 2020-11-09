@@ -5,17 +5,23 @@ Organisation des fichiers de configuration
 ------------------------------------------
 
 - ``config contient`` les fichiers classique de configuration d'un module GeoNature
+
     - ``cmr``
+    
         - ``generic`` Contient la configuration minimale générique de la CMR commune à tous les sous-modules
         - ``mon_module_specific`` Détaille la configuration spécifique à un sous-module de CMR à renommer avec le nom de votre sous-module. Pour le créer vous pouvez copier-coller le dossier ``generic``
 
 dans chaque partie, on retrouve les dossiers et fichiers suivants:
 
 - ``backend`` Dossier contenant des fichiers pour la génération d'une fiche individu en PDF.
+
     - ``static`` 
+    
         - ``css`` Dossier contenant le style CSS à appliquer à la fiche individu
         - ``images`` Dossier contenant les images à insérer dans le template de la fiche individu
+        
     - ``templates`` Dossier contenant le template HTML de la fiche individu
+    
 - ``data`` Dossier contenant les fichiers SQL de vue à exécuter pour créer certaines vues
 - ``images`` Dossier contenant toutes les images pouvant être utilisées dans le sous-module. Il doit au moins contenir l'image du sous-module sous le nom "cmr.jpg"
 - ``config.json`` Fichier de configuration générale du sous-module
@@ -45,7 +51,7 @@ config.json
 
 **Exemple:**
 
-:: 
+  :: 
 
    {
       "disclaimer" : true,
@@ -79,15 +85,16 @@ Ils fonctionnent sur le même principe:
 
 **Définition des champs:**
 
-Voir la définition des champs de formulaire dynamique dans la documentation de GeoNature.
+Voir la définition des champs de formulaire dynamique dans la `documentation de GeoNature <http://pnx-si.github.io/GeoNature/frontend/modules/GN2CommonModule.html>`_.
 On définit pour chaque champ: son type (type_widget), son label (attribut_label), si il est requis (required) et différents autres paramètres selon le type de widget.
 
-**Exemple 1:**
+- **Exemple 1:**
 
-Fichier generic/module.json
+  Fichier generic/module.json
 
   ::
 
+   {
      "generic": {
          "comments": {
             "type_widget": "textarea",
@@ -95,11 +102,13 @@ Fichier generic/module.json
             "required": false
          }
       }
+   }
    
-Fichier mon_module_cmr/module.json
+  Fichier mon_module_cmr/module.json
 
   ::
 
+   {
      "specific": {
          "mon_champ_perso": {
             "type_widget": "select",
@@ -108,16 +117,18 @@ Fichier mon_module_cmr/module.json
             "required": true
          }
       }
+   }
 
-Dans cet exemple, il y aura 2 champs dans le formulaire: un champ "Commentaires" et un champ "Champ perso".
+  Dans cet exemple, il y aura 2 champs dans le formulaire: un champ "Commentaires" et un champ "Champ perso".
 
 
-**Exemple 2:**
+- **Exemple 2:**
 
-Fichier generic/module.json
+  Fichier generic/module.json
 
   ::
 
+   {
      "generic": {
          "entite": {
             "type_widget": "text",
@@ -135,11 +146,13 @@ Fichier generic/module.json
             "required": false
          }
       }
+   }
 
-Fichier mon_module_cmr/module.json
+  Fichier mon_module_cmr/module.json
 
   ::
 
+   {
    "generic": {
          "entite": {
             "type_widget": "text",
@@ -160,8 +173,9 @@ Fichier mon_module_cmr/module.json
             "required": true
          }
       }
+   }
 
-Dans cet exemple, il y aura 3 champs dans le formulaire: un champ "Entité" (obligatoire), un champ "Commentaires" (qui devient obligatoire) et un champ "Champ perso". Le champ "Administré par" ne sera pas utilisé pour ce sous-module.
+  Dans cet exemple, il y aura 3 champs dans le formulaire: un champ "Entité" (obligatoire), un champ "Commentaires" (qui devient obligatoire) et un champ "Champ perso". Le champ "Administré par" ne sera pas utilisé pour ce sous-module.
 
 
 module.json
@@ -187,8 +201,10 @@ Ce fichier permet de configurer tout ce qui concerne un individu (formulaire, ta
 - ``"search_filters"``: Champs utilisé pour le filtre de recherche par individus
 - ``"display_properties"``: Champs affichés dans la liste des propriétés d'un individu
 - ``"display_list"``: Champs utilisés dans les colonnes d'un tableau d'individus. 
+
    - Pour chaque colonne, indiquer le nom du champ ``"field"`` et la largeur de la colonne en pixel ``"width"``. 
    - il est aussi possible de renseigner l'alignement avec ``"align"`` ("left", "center" ou "right", aligné à gauche par défaut).
+   
 - ``"properties_to_keep_when_chaining"``: dans le formulaire, si l'utilisateur enchaîne les créations, les champs listés dans ce paramètre seront pré-rempli avec les valeurs précédentes à chaque réinitialisation de formulaire.
 - ``"generic"/"specific"``: définition des champs du formulaire individu   
 
@@ -212,8 +228,10 @@ Il doit être présent même si le sous-module n'utilise pas les groupes de site
 - ``"search_filters"``: Champs utilisé pour le filtre de recherche par groupe de site
 - ``"display_properties"``: Champs affichés dans la liste des propriétés d'un groupe de site
 - ``"display_list"``: Champs utilisés dans les colonnes d'un tableau de groupes de sites.
+
    - Pour chaque colonne, indiquer le nom du champ ``"field"`` et la largeur de la colonne en pixel ``"width"``. 
    - il est aussi possible de renseigner l'alignement avec ``"align"`` ("left", "center" ou "right", aligné à gauche par défaut).
+   
 - ``"properties_to_keep_when_chaining"``: dans le formulaire, si l'utilisateur enchaîne les créations, les champs listés dans ce paramètre seront pré-rempli avec les valeurs précédentes à chaque réinitialisation de formulaire.
 - ``"generic"/"specific"``: définition des champs du formulaire groupe de site
 - ``"geometry_types"``: types de géométries à utiliser pour dessiner le groupe de site. Valeurs possible: "Point", "LineString", "Polygon". Seul le polygon est recommandé car il permet de contrôler que tous les sites créés sont inclus dans le polygone.
@@ -239,12 +257,14 @@ Ce fichier permet de configurer tout ce qui concerne un site (formulaire, tablea
 - ``"search_filters"``: Champs utilisé pour le filtre de recherche par site
 - ``"display_properties"``: Champs affichés dans la liste des propriétés d'un site
 - ``"display_list"``: Champs utilisés dans les colonnes d'un tableau de sites.
+
    - Pour chaque colonne, indiquer le nom du champ ``"field"`` et la largeur de la colonne en pixel ``"width"``. 
    - il est aussi possible de renseigner l'alignement avec ``"align"`` ("left", "center" ou "right", aligné à gauche par défaut).
+   
 - ``"properties_to_keep_when_chaining"``: dans le formulaire, si l'utilisateur enchaîne les créations, les champs listés dans ce paramètre seront pré-rempli avec les valeurs précédentes à chaque réinitialisation de formulaire.
 - ``"generic"/"specific"``: définition des champs du formulaire site
 - ``"geometry_types"``: types de géométries à utiliser pour dessiner le site. Valeurs possible: "Point", "LineString", "Polygon"
-- ``"check_site_within_sitegroup"``: si le module utilise des groupes de sites et si ce paramètre est à ``true`` le système vérifie que la géométrie du site créé est bien dans la géométrie du groupe de site. Si ce paramètre est à ``"false"`` il n'y a pas de vérification.
+- ``"check_site_within_sitegroup"``: si le module utilise des groupes de sites et si ce paramètre est à ``true`` le système vérifie que la géométrie du site créé est bien dans la géométrie du groupe de site. Si ce paramètre est à ``false`` il n'y a pas de vérification.
 - ``"batch_visit_display_list"``: Liste des colonnes de site à afficher dans la popup de création de visite pour tous les sites.
 
 **Champs calculés:**
@@ -268,8 +288,10 @@ Ce fichier permet de configurer tout ce qui concerne une visite (formulaire, tab
 - ``"search_filters"``: Champs utilisé pour le filtre de recherche par visite
 - ``"display_properties"``: Champs affichés dans la liste des propriétés d'une visite
 - ``"display_list"``: Champs utilisés dans les colonnes d'un tableau de visites.
+
    - Pour chaque colonne, indiquer le nom du champ ``"field"`` et la largeur de la colonne en pixel ``"width"``. 
    - il est aussi possible de renseigner l'alignement avec ``"align"`` ("left", "center" ou "right", aligné à gauche par défaut).
+   
 - ``"properties_to_keep_when_chaining"``: dans le formulaire, si l'utilisateur enchaîne les créations, les champs listés dans ce paramètre seront pré-rempli avec les valeurs précédentes à chaque réinitialisation de formulaire.
 - ``"generic"/"specific"``: définition des champs du formulaire visite
 
@@ -290,18 +312,25 @@ Ce fichier permet de configurer tout ce qui concerne une observation (formulaire
 - ``"label_plural"``: Label utilisé pour l'observation au pluriel
 - ``"display_properties"``: Champs affichés dans la liste des propriétés d'une observation
 - ``"display_list"``: Champs utilisés dans les colonnes d'un tableau d'observations.
+
    - Pour chaque colonne, indiquer le nom du champ ``"field"`` et la largeur de la colonne en pixel ``"width"``. 
    - il est aussi possible de renseigner l'alignement avec ``"align"`` ("left", "center" ou "right", aligné à gauche par défaut).
+   
 - ``"properties_to_keep_when_chaining"``: dans le formulaire, si l'utilisateur enchaîne les créations, les champs listés dans ce paramètre seront pré-rempli avec les valeurs précédentes à chaque réinitialisation de formulaire.
 - ``"generic"/"specific"``: définition des champs du formulaire observation
 - ``"groups"``: ce paramètre permet de définir des groupes de champs par thème dans le formulaire pour en améliorer la visibilité. A l'affichage, chaque groupe est un panneau rétractable.
+
    - ``"label"``: le titre du groupe
    - ``"fields"``: Définition des champs du groupe, de la même façon que les champs de formulaire classique définis dans "generic"/"specific"
    - ``"defaults"``:
+
       - ``"opened"``: ``true`` pour que le panneau du groupe soit ouvert par défault. ``false`` pour qu'il soit fermé par défaut.
+
    - ``"yesno_field"``: Si présent, tous les champs de ce groupe peuvent être activés/désactivés avec un bouton radio "Oui"/"Non". Pour cela il faut mettre en premier dans les champs du groupe un widget de type "radio" en donner le nom ici.
    - ``"yesno_yesvalue"``: Si le "yesno_field" est présent, donner ici la valeur considérée comme un "Oui"
+
 - ``"individual_histogram_items"``: liste des champs utilisé pour créer les courbes d'évolution dans les détails de l'individu. Chaque champ créé une nouvelle courbe
+
    - ``"field"`` : le nom du champ à utiliser
    - ``"color"`` : la couleur à utiliser pour la courbe. Utiliser une valeur HTML/CSS (https://www.w3schools.com/cssref/css_colors_legal.asp) 
 
@@ -404,8 +433,10 @@ Le template se compose:
 Ces fichiers sont répartis dans plusieurs sous-dossiers
 
 - backend: le dossier principal
+
    - templates: le dossier contenant le fichier HTML
    - static:
+   
       - css: le dossier contenant le fichier css
       - images: le dossier contenant la/les image(s)
 
@@ -415,11 +446,12 @@ Notions génériques
 
 **Format page**
 
-Il est défini dans le fichier CSS, dans la balise ``@page``
+Il est défini dans le fichier CSS, dans la balise ``@page``.
+Utiliser les tailles en centimètre pour définir la taille de la page. Inverser width et height pour basculer de portrait à paysage ou vice versa.
 
 **En-tête et Pied de page**
 
-Il est possible de définir une en-tête dans une balise HTML ``<div class="header">`` et un pied de page dans une balise HTML ``<div class="footer">``. 
+Il est possible de définir un en-tête dans une balise HTML ``<div class="header">`` et un pied de page dans une balise HTML ``<div class="footer">``. 
 Ainsi ils seront répété à chaque page. Attention à définir correctement la taille de la marge dans le CSS (dans la balise ``@page``) et les positions des header/footer toujours dans le CSS pour éviter les superpositions avec le contenu de la page.
 
 **Police**
