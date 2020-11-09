@@ -6,22 +6,22 @@ Organisation des fichiers de configuration
 
 - ``config contient`` les fichiers classique de configuration d'un module GeoNature
 
-    - ``cmr``
-    
-        - ``generic`` Contient la configuration minimale générique de la CMR commune à tous les sous-modules
-        - ``mon_module_specific`` Détaille la configuration spécifique à un sous-module de CMR à renommer avec le nom de votre sous-module. Pour le créer vous pouvez copier-coller le dossier ``generic``
+  - ``cmr``
+  
+    - ``generic`` Contient la configuration minimale générique de la CMR commune à tous les sous-modules
+    - ``mon_module_specific`` Détaille la configuration spécifique à un sous-module de CMR à renommer avec le nom de votre sous-module. Pour le créer vous pouvez copier-coller le dossier ``generic``
 
 dans chaque partie, on retrouve les dossiers et fichiers suivants:
 
 - ``backend`` Dossier contenant des fichiers pour la génération d'une fiche individu en PDF.
 
-    - ``static`` 
+  - ``static`` 
+  
+    - ``css`` Dossier contenant le style CSS à appliquer à la fiche individu
+    - ``images`` Dossier contenant les images à insérer dans le template de la fiche individu
     
-        - ``css`` Dossier contenant le style CSS à appliquer à la fiche individu
-        - ``images`` Dossier contenant les images à insérer dans le template de la fiche individu
-        
-    - ``templates`` Dossier contenant le template HTML de la fiche individu
-    
+  - ``templates`` Dossier contenant le template HTML de la fiche individu
+  
 - ``data`` Dossier contenant les fichiers SQL de vue à exécuter pour créer certaines vues
 - ``images`` Dossier contenant toutes les images pouvant être utilisées dans le sous-module. Il doit au moins contenir l'image du sous-module sous le nom "cmr.jpg"
 - ``config.json`` Fichier de configuration générale du sous-module
@@ -53,17 +53,17 @@ config.json
 
   :: 
 
-   {
-      "disclaimer" : true,
-      "disclaimer_text": [
-        "La Cistude d'Europe est une espèce protégée,",
-        "sa manipulation requiert une autorisation spécifique (CERFA n°131616*01).",
-        "",
-        "Avez-vous connaissance de la réglementation?"
-      ],
-      "welcome": "Bienvenue dans le module de saisie de la CMR Cistude",
-      "use_sitegroup": true
-   }
+  {
+    "disclaimer" : true,
+    "disclaimer_text": [
+      "La Cistude d'Europe est une espèce protégée,",
+      "sa manipulation requiert une autorisation spécifique (CERFA n°131616*01).",
+      "",
+      "Avez-vous connaissance de la réglementation?"
+    ],
+    "welcome": "Bienvenue dans le module de saisie de la CMR Cistude",
+    "use_sitegroup": true
+  }
 
 Autres fichiers de configuration json
 """""""""""""""""""""""""""""""""""""
@@ -94,30 +94,30 @@ On définit pour chaque champ: son type (type_widget), son label (attribut_label
 
   ::
 
-   {
-     "generic": {
-         "comments": {
-            "type_widget": "textarea",
-            "attribut_label": "Commentaires",
-            "required": false
-         }
+  {
+    "generic": {
+      "comments": {
+        "type_widget": "textarea",
+        "attribut_label": "Commentaires",
+        "required": false
       }
-   }
-   
+    }
+  }
+  
   Fichier mon_module_cmr/module.json
 
   ::
 
-   {
-     "specific": {
-         "mon_champ_perso": {
-            "type_widget": "select",
-            "attribut_label": "Champ perso",
-            "values": ["Valeur 1", "Valeur 2"]
-            "required": true
-         }
+  {
+    "specific": {
+      "mon_champ_perso": {
+        "type_widget": "select",
+        "attribut_label": "Champ perso",
+        "values": ["Valeur 1", "Valeur 2"]
+        "required": true
       }
-   }
+    }
+  }
 
   Dans cet exemple, il y aura 2 champs dans le formulaire: un champ "Commentaires" et un champ "Champ perso".
 
@@ -128,51 +128,51 @@ On définit pour chaque champ: son type (type_widget), son label (attribut_label
 
   ::
 
-   {
-     "generic": {
-         "entite": {
-            "type_widget": "text",
-            "attribut_label": "Entité",
-            "required": true
-         },
-         "nom_administrateur": {
-            "type_widget": "text",
-            "attribut_label": "Administré par",
-            "required": true
-         },
-         "comments": {
-            "type_widget": "textarea",
-            "attribut_label": "Commentaires",
-            "required": false
-         }
+  {
+    "generic": {
+      "entite": {
+        "type_widget": "text",
+        "attribut_label": "Entité",
+        "required": true
+      },
+      "nom_administrateur": {
+        "type_widget": "text",
+        "attribut_label": "Administré par",
+        "required": true
+      },
+      "comments": {
+        "type_widget": "textarea",
+        "attribut_label": "Commentaires",
+        "required": false
       }
-   }
+    }
+  }
 
   Fichier mon_module_cmr/module.json
 
   ::
 
    {
-   "generic": {
-         "entite": {
-            "type_widget": "text",
-            "attribut_label": "Entité",
-            "required": true
-         },
-         "comments": {
-            "type_widget": "textarea",
-            "attribut_label": "Commentaires",
-            "required": true
-         }
+     "generic": {
+       "entite": {
+         "type_widget": "text",
+         "attribut_label": "Entité",
+         "required": true
+       },
+       "comments": {
+         "type_widget": "textarea",
+         "attribut_label": "Commentaires",
+         "required": true
+       }
      },
      "specific": {
-         "mon_champ_perso": {
-            "type_widget": "select",
-            "attribut_label": "Champ perso",
-            "values": ["Valeur 1", "Valeur 2"]
-            "required": true
-         }
-      }
+       "mon_champ_perso": {
+         "type_widget": "select",
+         "attribut_label": "Champ perso",
+         "values": ["Valeur 1", "Valeur 2"]
+         "required": true
+       }
+     }
    }
 
   Dans cet exemple, il y aura 3 champs dans le formulaire: un champ "Entité" (obligatoire), un champ "Commentaires" (qui devient obligatoire) et un champ "Champ perso". Le champ "Administré par" ne sera pas utilisé pour ce sous-module.
@@ -202,9 +202,9 @@ Ce fichier permet de configurer tout ce qui concerne un individu (formulaire, ta
 - ``"display_properties"``: Champs affichés dans la liste des propriétés d'un individu
 - ``"display_list"``: Champs utilisés dans les colonnes d'un tableau d'individus. 
 
-   - Pour chaque colonne, indiquer le nom du champ ``"field"`` et la largeur de la colonne en pixel ``"width"``. 
-   - il est aussi possible de renseigner l'alignement avec ``"align"`` ("left", "center" ou "right", aligné à gauche par défaut).
-   
+  - Pour chaque colonne, indiquer le nom du champ ``"field"`` et la largeur de la colonne en pixel ``"width"``. 
+  - il est aussi possible de renseigner l'alignement avec ``"align"`` ("left", "center" ou "right", aligné à gauche par défaut).
+  
 - ``"properties_to_keep_when_chaining"``: dans le formulaire, si l'utilisateur enchaîne les créations, les champs listés dans ce paramètre seront pré-rempli avec les valeurs précédentes à chaque réinitialisation de formulaire.
 - ``"generic"/"specific"``: définition des champs du formulaire individu   
 
@@ -229,9 +229,9 @@ Il doit être présent même si le sous-module n'utilise pas les groupes de site
 - ``"display_properties"``: Champs affichés dans la liste des propriétés d'un groupe de site
 - ``"display_list"``: Champs utilisés dans les colonnes d'un tableau de groupes de sites.
 
-   - Pour chaque colonne, indiquer le nom du champ ``"field"`` et la largeur de la colonne en pixel ``"width"``. 
-   - il est aussi possible de renseigner l'alignement avec ``"align"`` ("left", "center" ou "right", aligné à gauche par défaut).
-   
+  - Pour chaque colonne, indiquer le nom du champ ``"field"`` et la largeur de la colonne en pixel ``"width"``. 
+  - il est aussi possible de renseigner l'alignement avec ``"align"`` ("left", "center" ou "right", aligné à gauche par défaut).
+  
 - ``"properties_to_keep_when_chaining"``: dans le formulaire, si l'utilisateur enchaîne les créations, les champs listés dans ce paramètre seront pré-rempli avec les valeurs précédentes à chaque réinitialisation de formulaire.
 - ``"generic"/"specific"``: définition des champs du formulaire groupe de site
 - ``"geometry_types"``: types de géométries à utiliser pour dessiner le groupe de site. Valeurs possible: "Point", "LineString", "Polygon". Seul le polygon est recommandé car il permet de contrôler que tous les sites créés sont inclus dans le polygone.
@@ -258,9 +258,9 @@ Ce fichier permet de configurer tout ce qui concerne un site (formulaire, tablea
 - ``"display_properties"``: Champs affichés dans la liste des propriétés d'un site
 - ``"display_list"``: Champs utilisés dans les colonnes d'un tableau de sites.
 
-   - Pour chaque colonne, indiquer le nom du champ ``"field"`` et la largeur de la colonne en pixel ``"width"``. 
-   - il est aussi possible de renseigner l'alignement avec ``"align"`` ("left", "center" ou "right", aligné à gauche par défaut).
-   
+  - Pour chaque colonne, indiquer le nom du champ ``"field"`` et la largeur de la colonne en pixel ``"width"``. 
+  - il est aussi possible de renseigner l'alignement avec ``"align"`` ("left", "center" ou "right", aligné à gauche par défaut).
+  
 - ``"properties_to_keep_when_chaining"``: dans le formulaire, si l'utilisateur enchaîne les créations, les champs listés dans ce paramètre seront pré-rempli avec les valeurs précédentes à chaque réinitialisation de formulaire.
 - ``"generic"/"specific"``: définition des champs du formulaire site
 - ``"geometry_types"``: types de géométries à utiliser pour dessiner le site. Valeurs possible: "Point", "LineString", "Polygon"
@@ -289,8 +289,8 @@ Ce fichier permet de configurer tout ce qui concerne une visite (formulaire, tab
 - ``"display_properties"``: Champs affichés dans la liste des propriétés d'une visite
 - ``"display_list"``: Champs utilisés dans les colonnes d'un tableau de visites.
 
-   - Pour chaque colonne, indiquer le nom du champ ``"field"`` et la largeur de la colonne en pixel ``"width"``. 
-   - il est aussi possible de renseigner l'alignement avec ``"align"`` ("left", "center" ou "right", aligné à gauche par défaut).
+  - Pour chaque colonne, indiquer le nom du champ ``"field"`` et la largeur de la colonne en pixel ``"width"``. 
+  - il est aussi possible de renseigner l'alignement avec ``"align"`` ("left", "center" ou "right", aligné à gauche par défaut).
    
 - ``"properties_to_keep_when_chaining"``: dans le formulaire, si l'utilisateur enchaîne les créations, les champs listés dans ce paramètre seront pré-rempli avec les valeurs précédentes à chaque réinitialisation de formulaire.
 - ``"generic"/"specific"``: définition des champs du formulaire visite
@@ -313,26 +313,26 @@ Ce fichier permet de configurer tout ce qui concerne une observation (formulaire
 - ``"display_properties"``: Champs affichés dans la liste des propriétés d'une observation
 - ``"display_list"``: Champs utilisés dans les colonnes d'un tableau d'observations.
 
-   - Pour chaque colonne, indiquer le nom du champ ``"field"`` et la largeur de la colonne en pixel ``"width"``. 
-   - il est aussi possible de renseigner l'alignement avec ``"align"`` ("left", "center" ou "right", aligné à gauche par défaut).
+  - Pour chaque colonne, indiquer le nom du champ ``"field"`` et la largeur de la colonne en pixel ``"width"``. 
+  - il est aussi possible de renseigner l'alignement avec ``"align"`` ("left", "center" ou "right", aligné à gauche par défaut).
    
 - ``"properties_to_keep_when_chaining"``: dans le formulaire, si l'utilisateur enchaîne les créations, les champs listés dans ce paramètre seront pré-rempli avec les valeurs précédentes à chaque réinitialisation de formulaire.
 - ``"generic"/"specific"``: définition des champs du formulaire observation
 - ``"groups"``: ce paramètre permet de définir des groupes de champs par thème dans le formulaire pour en améliorer la visibilité. A l'affichage, chaque groupe est un panneau rétractable.
 
-   - ``"label"``: le titre du groupe
-   - ``"fields"``: Définition des champs du groupe, de la même façon que les champs de formulaire classique définis dans "generic"/"specific"
-   - ``"defaults"``:
+  - ``"label"``: le titre du groupe
+  - ``"fields"``: Définition des champs du groupe, de la même façon que les champs de formulaire classique définis dans "generic"/"specific"
+  - ``"defaults"``:
 
-      - ``"opened"``: ``true`` pour que le panneau du groupe soit ouvert par défault. ``false`` pour qu'il soit fermé par défaut.
+    - ``"opened"``: ``true`` pour que le panneau du groupe soit ouvert par défault. ``false`` pour qu'il soit fermé par défaut.
 
-   - ``"yesno_field"``: Si présent, tous les champs de ce groupe peuvent être activés/désactivés avec un bouton radio "Oui"/"Non". Pour cela il faut mettre en premier dans les champs du groupe un widget de type "radio" en donner le nom ici.
-   - ``"yesno_yesvalue"``: Si le "yesno_field" est présent, donner ici la valeur considérée comme un "Oui"
+  - ``"yesno_field"``: Si présent, tous les champs de ce groupe peuvent être activés/désactivés avec un bouton radio "Oui"/"Non". Pour cela il faut mettre en premier dans les champs du groupe un widget de type "radio" en donner le nom ici.
+  - ``"yesno_yesvalue"``: Si le "yesno_field" est présent, donner ici la valeur considérée comme un "Oui"
 
 - ``"individual_histogram_items"``: liste des champs utilisé pour créer les courbes d'évolution dans les détails de l'individu. Chaque champ créé une nouvelle courbe
 
-   - ``"field"`` : le nom du champ à utiliser
-   - ``"color"`` : la couleur à utiliser pour la courbe. Utiliser une valeur HTML/CSS (https://www.w3schools.com/cssref/css_colors_legal.asp) 
+  - ``"field"`` : le nom du champ à utiliser
+  - ``"color"`` : la couleur à utiliser pour la courbe. Utiliser une valeur HTML/CSS (https://www.w3schools.com/cssref/css_colors_legal.asp) 
 
 **Champs calculés:**
 
@@ -347,61 +347,60 @@ Les fonctions suivantes doivent être impérativement présentes:
 
   ::
 
-   export function initSitegroup(form) {
-      return {};
-   }
-   
+  export function initSitegroup(form) {
+    return {};
+  }
+
 Cette fonction initialise le formulaire de groupe de site. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 
   ::
 
-   export function initSite(form, sitegroup) {
-      return {};
-   }
-   
+  export function initSite(form, sitegroup) {
+    return {};
+  }
+
 Cette fonction initialise le formulaire de site. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 L'objet "sitegroup" est passé en paramètre si vous voulez en récupérer des valeurs.
 
   ::
 
-   export function initVisit(form, site) {
-      return {};
-   }
-   
+  export function initVisit(form, site) {
+    return {};
+  }
+
 Cette fonction initialise le formulaire de visite. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 L'objet "site" est passé en paramètre si vous voulez en récupérer des valeurs (site.sitegroup vous donnera les valeurs du groupe de site si nécessaire).
 
   ::
 
-   export function initObservation(form, formGroups, visit, individual) {
-      return {};
-   }
-   
+  export function initObservation(form, formGroups, visit, individual) {
+    return {};
+  }
+
 Cette fonction initialise le formulaire de l'observation. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 L'objet "formGroup" définit la liste des FormGroup de chaque groupe de champs, vous pouvez itérer sur chacun et récupérer un champ de la manière suivante
 
   ::
 
-   for (let fg of formGroups) {
-        if (fg['form'].get('analyse_comp_type_prelevement')) {
-            // Votre action sur ce champ...
-        }
-   }
-   
+  for (let fg of formGroups) {
+    if (fg['form'].get('analyse_comp_type_prelevement')) {
+      // Votre action sur ce champ...
+    }
+  }
+
 L'objet "visit" est passé en paramètre si vous voulez en récupérer des valeurs (visit.site et visit.site.sitegroup vous donnera les valeurs du site et du groupe de site si nécessaire).
 L'objet "individual" est passé en paramètre si vous voulez en récupérer des valeurs.
 
-
   ::
 
-   export function initIndividual(form) {
-      return {};
-   }
-   
+  export function initIndividual(form) {
+    return {};
+  }
+
 Cette fonction initialise le formulaire de l'individu. L'objet retourné sera utilisé pour initialiser les champs qui y sont remplis.
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 
@@ -434,11 +433,11 @@ Ces fichiers sont répartis dans plusieurs sous-dossiers
 
 - backend: le dossier principal
 
-   - templates: le dossier contenant le fichier HTML
-   - static:
+  - templates: le dossier contenant le fichier HTML
+  - static:
    
-      - css: le dossier contenant le fichier css
-      - images: le dossier contenant la/les image(s)
+    - css: le dossier contenant le fichier css
+    - images: le dossier contenant la/les image(s)
 
 
 Notions génériques

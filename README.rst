@@ -9,8 +9,8 @@ Les mots-clés suivants sont utilisés dans ce module. Dans l'application, ils p
 
 - **site** *(site)*: un emplacement plus ou moins large sur lequel seront faites des visites. Il peut être inclus ou non dans un groupe de sites.
 
-    - Sur une CMR sans groupe de site, il peut s'agir d'un point, d'une ligne ou d'un polygone.
-    - Sur une CMR dans un groupe de site, il s'agit généralement d'un point précis (piège ou capture manuelle).
+  - Sur une CMR sans groupe de site, il peut s'agir d'un point, d'une ligne ou d'un polygone.
+  - Sur une CMR dans un groupe de site, il s'agit généralement d'un point précis (piège ou capture manuelle).
 
 - **sitegroup** *(groupe de site)*: un groupe de sites, pouvant être appelé "aire d'étude" par certains. Il est généralement représenté par un polygone.
 
@@ -18,7 +18,7 @@ Les mots-clés suivants sont utilisés dans ce module. Dans l'application, ils p
   
   Dans la CMR, c'est la visite qui supporte le jeu de données.
 
-- **individual** *(individu): un individu qui a été capturé (et marqué) lors d'une visite, et qui peut être recapturé lors d'une ou plusieurs visites ultérieures. L'individu contient tous les détails ne changeant pas au fur et à mesure de ses observations.
+- **individual** *(individu)*: un individu qui a été capturé (et marqué) lors d'une visite, et qui peut être recapturé lors d'une ou plusieurs visites ultérieures. L'individu contient tous les détails ne changeant pas au fur et à mesure de ses observations.
 
 - **observation** *(observation)*: l'observation d'un individu pendant une visite. L'observation contient tous les détails de l'individu a un instant T. 
 
