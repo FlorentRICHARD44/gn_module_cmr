@@ -32,6 +32,9 @@ class BaseRepository:
         return [m.to_dict() for m in q.all()]
     
     def get_all_filter_by(self, filter_column, value):
+        """
+        Return all items where filter_column = value.
+        """
         q = DB.session.query(self.model).filter(filter_column == value)
         return [d.to_dict() for d in q.all()]
     
@@ -73,6 +76,9 @@ class BaseRepository:
         return data.to_dict()
 
     def delete_one(self, attribute, identifier):
+        """
+        Delete one item if exists.
+        """
         q = DB.session.query(self.model).filter(attribute == identifier)
         data = q.one_or_none()
         if data is not None:
@@ -90,7 +96,7 @@ class BaseRepository:
         for k,v in params.items():
             # Check suffix to manage date min/max
             suffix = None
-            if k.endswith('_min') or k.endswith('_max'):
+            if k.endswith('_minfilter') or k.endswith('_maxfilter'):
                 suffix = k[-4:]
                 k = k[0:-4]
             
@@ -108,18 +114,18 @@ class BaseRepository:
                         query = query.filter(getattr(self.model, k).has(id_dataset=v))
 
                 else:
-                    if suffix == '_min':
+                    if suffix == '_minfilter':
                         query = query.filter(getattr(self.model, k) >= v)
-                    elif suffix == '_max':
+                    elif suffix == '_maxfilter':
                         query = query.filter(getattr(self.model, k) <= v)
                     elif str(getattr(self.model, k).property.columns[0].type) == 'BOOLEAN':
                         query = query.filter(getattr(self.model, k).is_(True if v == "true" else False))
                     else: 
                         query = query.filter(getattr(self.model, k).ilike('%{}%'.format(v)))
             else:  # or can be an attribute inside json column
-                if suffix == '_min':
+                if suffix == '_minfilter':
                     query = query.filter(self.model.data[k].cast(String).cast(Date) >= v)
-                elif suffix == '_max':
+                elif suffix == '_maxfilter':
                     query = query.filter(self.model.data[k].cast(String).cast(Date) <= v)
                 else:
                     query = query.filter(self.model.data[k].cast(String).ilike('%{}%'.format(v)))
@@ -131,11 +137,17 @@ class BaseGeomRepository(BaseRepository):
     Second level of generic repository with geometries methods.
     """
     def get_geometry(self, filter):
+        """
+        Get details of one item with geometry, as GeoJSON
+        """
         q = DB.session.query(self.model, func.ST_AsGEOJSON(self.model.geom)).filter(filter)
         (data,geom) = q.one()
         return [data.to_geojson(geom)]
 
     def get_all_geometries_filter_by(self, filter_column, value):
+        """
+        Get list of details with their geometries, as GeoJSON.
+        """
         q = DB.session.query(self.model, func.ST_AsGEOJSON(self.model.geom)).filter(filter_column == value)
         return [data.to_geojson(geom) for (data, geom) in q.all()]
 
@@ -176,6 +188,10 @@ class SiteGroupsRepository(BaseGeomRepository):
         super().__init__(TSiteGroup)
 
     def get_all_geometries_filter_by_params(self, filter_column, value, params):
+        """
+        Get the list of sitegroup and geometry with filter. Computes some statistics about child objects.
+        Returns details as GeoJSON.
+        """
         result = []
         q = DB.session.query(TSiteGroup, 
                             func.ST_AsGEOJSON(self.model.geom), 
@@ -197,13 +213,19 @@ class SiteGroupsRepository(BaseGeomRepository):
         return result
     
     def sitegroup_contains_site(self, id_sitegroup, geom):
+        """
+        Checks if a sitegroup geometry contains another geometry.
+        """
         q = DB.session.query(func.ST_Contains(TSiteGroup.geom, 
                                             func.ST_SetSRID(func.ST_GeomFromGeoJSON(json.dumps(geom)), 
                                                         4326))).filter(
                 TSiteGroup.id_sitegroup == id_sitegroup)
         return q.one()
     
-    def find_municipalities(self, geom):
+    def _find_municipalities(self, geom):
+        """
+        Get the name of municipalities that contains a sitegroup.
+        """
         q = DB.session.query(LiMunicipalities).join(
             LAreas, (LAreas.id_area == LiMunicipalities.id_area)).filter(
                 func.ST_Intersects(func.ST_Transform(LAreas.geom, 4326), 
@@ -214,7 +236,7 @@ class SiteGroupsRepository(BaseGeomRepository):
         """
         If some params are to be computed from municipality area, compute them here.
         """
-        munis = self.find_municipalities(data['geom'])
+        munis = self._find_municipalities(data['geom'])
         for key, value in params.items():  # initialize variable list
             data[key] = []
         for muni in munis:
@@ -233,6 +255,9 @@ class SitesRepository(BaseGeomRepository):
         super().__init__(TSite)
 
     def get_all_filter_by(self, filter_attribute, value):
+        """
+        Overrides the predefined method to add some statistics count.
+        """
         result = []
         q = DB.session.query(TSite, 
                 func.count(distinct(TVisit.id_visit)),
@@ -251,6 +276,9 @@ class SitesRepository(BaseGeomRepository):
         return result
 
     def get_all_geometries_filter_by(self, filter_column, value, params):
+        """
+        Overrides the predefined method to add some statistics count.
+        """
         result = []
         q = DB.session.query(TSite, 
                 func.ST_AsGEOJSON(TSite.geom), 
@@ -290,20 +318,6 @@ class IndividualsRepository(BaseRepository):
     """
     def __init__(self):
         super().__init__(TIndividual)
-# TODO need to apply the count of observations inside a sitegroup.
-#    def get_all_by_sitegroup(self, id_sitegroup):
-#        result = []
-#        q = DB.session.query(self.model, func.count(TObservation.id_observation)).join(
-#            TObservation, (TObservation.id_individual == TIndividual.id_individual), isouter=True).join(
-#            TVisit, (TVisit.id_visit == TObservation.id_visit), isouter=True).join(
-#            TSite, (TVisit.id_site == TSite.id_site), isouter=True).filter(
-#                TSite.id_sitegroup == id_sitegroup).group_by(TIndividual.id_individual)
-#        data = q.all()
-#        for (item, count) in data:
-#            r = item.to_dict()
-#            r['nb_observations'] = count  # replace the overall nb_observations by nb observations on the site.
-#            result.append(r)
-#        return result
 
     def get_all_geometries_filter_by(self, filter, params):
         """
@@ -322,8 +336,10 @@ class IndividualsRepository(BaseRepository):
             result.append(r)
         return result
 
-
     def get_all_by_site(self, id_site, params):
+        """
+        Get all the visits by site, with filter params.
+        """
         result = []
         q = DB.session.query(self.model, func.count(TObservation.id_observation)).join(
             TObservation, (TObservation.id_individual == TIndividual.id_individual), isouter=True).join(

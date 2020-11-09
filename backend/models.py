@@ -142,6 +142,20 @@ class TVisit(DB.Model):
     def from_dict(data):
         data = json_to_data(data, TVisit)
         return TVisit(**data)
+    
+    @staticmethod
+    def synchro_visit_observers(data):
+        observers_list = []
+        if data['observers']:
+            observers = (
+                    DB.session.query(User).filter(
+                        User.id_role.in_(data['observers'])
+                        ).all()
+                )
+            for o in observers:
+                observers_list.append(o)
+        data['observers'] = observers_list
+        return data
 
 
 @serializable

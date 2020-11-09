@@ -19,8 +19,8 @@
                         <option [value]="false">Non</option>
                     </select>
                     <!-- type date (2 fields: min & max) -->
-                    <pnx-date *ngIf="filter?.type == 'date'" [label]="fieldsDef[filter.field].attribut_label + ' Min.'" [parentFormControl]="filterForm.get(filter.field + '_min')"></pnx-date>
-                    <pnx-date *ngIf="filter?.type == 'date'" [label]="fieldsDef[filter.field].attribut_label + ' Max.'" [parentFormControl]="filterForm.get(filter.field + '_max')"></pnx-date>
+                    <pnx-date *ngIf="filter?.type == 'date'" [label]="fieldsDef[filter.field].attribut_label + ' Min.'" [parentFormControl]="filterForm.get(filter.field + '_minfilter')"></pnx-date>
+                    <pnx-date *ngIf="filter?.type == 'date'" [label]="fieldsDef[filter.field].attribut_label + ' Max.'" [parentFormControl]="filterForm.get(filter.field + '_maxfilter')"></pnx-date>
                     <!-- type observer -->
                     <pnx-observers
                         *ngIf="filter?.type == 'observers'"

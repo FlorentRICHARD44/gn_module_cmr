@@ -31,8 +31,8 @@ export class FilterComponent implements OnInit{
             if (filter && filter.type != 'date') {
               this.filterForm.addControl(filter.field, new FormControl());
             } else {
-                this.filterForm.addControl(filter.field + '_min', new FormControl());
-                this.filterForm.addControl(filter.field + '_max', new FormControl());
+                this.filterForm.addControl(filter.field + '_minfilter', new FormControl());
+                this.filterForm.addControl(filter.field + '_maxfilter', new FormControl());
             }
         }
     }

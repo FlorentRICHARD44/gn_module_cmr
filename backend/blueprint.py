@@ -19,7 +19,7 @@ from werkzeug.datastructures import Headers
 from werkzeug.exceptions import NotFound
 from .repositories import ModulesRepository, SiteGroupsRepository, SitesRepository, VisitsRepository, IndividualsRepository, ObservationsRepository, ConfigRepository
 from .models import TModuleComplement, TSiteGroup, TSite, TVisit, TIndividual, TObservation
-from .utils.transform import data_to_json, json_to_data
+from .utils.transform import json_to_data
 
 blueprint = Blueprint('cmr', __name__)
 
@@ -43,6 +43,9 @@ def test():
 @permissions.check_cruved_scope("R", True)
 @json_resp
 def get_modules(info_role):
+    """
+    List all CMR sub-module, only if the connected user has at least the Read right on it.
+    """
     mod_repo = ModulesRepository()
     modules = mod_repo.get_all()
     cfg_repo = ConfigRepository()
@@ -61,6 +64,12 @@ def get_modules(info_role):
 @permissions.check_cruved_scope("R", True)
 @json_resp
 def get_specific_module(module_name, info_role):
+    """
+    Get the details on a CMR sub-module.
+    * Details in database
+    * json configuration for sub-module and forms
+    * cruved access for connected user
+    """
     mod_repo = ModulesRepository()
     module = mod_repo.get_one(module_name, TModuleComplement.module_code)
     cfg_repo = ConfigRepository()
@@ -74,6 +83,9 @@ def get_specific_module(module_name, info_role):
 @blueprint.route('/module/<module_name>', methods=['PUT'])
 @json_resp
 def update_module(module_name):
+    """
+    Update details about module (specific form details).
+    """
     data = request.json
     mod_repo = ModulesRepository()
     return mod_repo.update_one(module_name, json_to_data(data, TModuleComplement))
@@ -87,6 +99,9 @@ def update_module(module_name):
 @blueprint.route('/sitegroup', methods=['PUT'])
 @json_resp
 def save_sitegroup():
+    """
+    Save details about a sitegroup from form (Create or Update).
+    """
     data = request.json
     sitegroup_repo = SiteGroupsRepository()
 
@@ -108,6 +123,10 @@ def save_sitegroup():
 @blueprint.route('/sitegroup/<int:id_sitegroup>', methods=['DELETE'])
 @json_resp
 def delete_sitegroup(id_sitegroup):
+    """
+    Delete an existing sitegroup.
+    Do it only if no child element (no site).
+    """
     sitegroup_repo = SiteGroupsRepository()
     sitegroup = sitegroup_repo.get_one(TSiteGroup.id_sitegroup, id_sitegroup)
     if sitegroup['nb_sites'] > 0:
@@ -119,6 +138,10 @@ def delete_sitegroup(id_sitegroup):
 @blueprint.route('/module/<int:id_module>/sitegroups', methods=['GET'])
 @json_resp
 def get_all_sitegroups_by_module_geometries_filtered(id_module):
+    """
+    Returns the list of the sitegroups in module, with filters if some given by params.
+    Details returned as GeoJSON.
+    """
     sitegroup_repo = SiteGroupsRepository()
     return sitegroup_repo.get_all_geometries_filter_by_params(TSiteGroup.id_module, id_module, request.args.to_dict())
 
@@ -126,6 +149,10 @@ def get_all_sitegroups_by_module_geometries_filtered(id_module):
 @blueprint.route('/sitegroup/<int:id_sitegroup>/geometries', methods=['GET'])
 @json_resp
 def get_one_sitegroup_geometries(id_sitegroup):
+    """
+    Get one sitegroup with its geometry.
+    Details returned as GeoJSON.
+    """
     sitegroup_repo = SiteGroupsRepository()
     return sitegroup_repo.get_geometry(TSiteGroup.id_sitegroup == id_sitegroup)
 
@@ -133,13 +160,25 @@ def get_one_sitegroup_geometries(id_sitegroup):
 @blueprint.route('/sitegroup/<int:id_sitegroup>/containssite', methods=['POST'])
 @json_resp
 def check_if_sitegroup_contains_site(id_sitegroup):
+    """
+    Check if the sitegroup contains a geometry.
+    The site shall be entirely inside sitegroup, it can be at the sitegroup boundary.
+    Use the Postgis function ST_Contains https://postgis.net/docs/ST_Contains.html.
+    """
     sitegroup_repo = SiteGroupsRepository()
     contains_site = sitegroup_repo.sitegroup_contains_site(id_sitegroup, request.json)
     return {"contains_site": contains_site[0]}
 
-# export CSV all observations
+# export all observations
 @blueprint.route('/module/<module_code>/sitegroup/<int:id_sitegroup>/<type>', methods=['GET'])
 def export_all_observations_by_sitegroup(module_code, id_sitegroup, type):
+    """
+    Export all the observations made on a site group.
+    Following formats are available:
+    * csv
+    * geojson
+    * shapefile
+    """
     view = GenericTableGeo(
         tableName="v_cmr_sitegroup_observations_" + module_code , 
         schemaName="gn_cmr", 
@@ -157,7 +196,7 @@ def export_all_observations_by_sitegroup(module_code, id_sitegroup, type):
             filename,
             data=serializeQuery(data, q.column_descriptions),
             separator=";",
-            columns=[db_col.key for db_col in columns if db_col.key != 'geom'],
+            columns=[db_col.key for db_col in columns if db_col.key != 'geom'], # Exclude the geom column from CSV
         )
     elif type == 'geojson':
         results = FeatureCollection([view.as_geofeature(d, columns=columns) for d in data])
@@ -172,23 +211,25 @@ def export_all_observations_by_sitegroup(module_code, id_sitegroup, type):
             view.as_shape(
                 db_cols=db_cols, data=data, dir_path=dir_path, file_name=filename
             )
-
             return send_from_directory(dir_path, filename + ".zip", as_attachment=True)
 
         except GeonatureApiError as e:
-            message = str(e)
-
-        return render_template(
-            "error.html",
-            error=message,
-            redirect=current_app.config["URL_APPLICATION"] + "/#/cmr",
-        )
+            return render_template(
+                "error.html",
+                error=str(e),
+                redirect=current_app.config["URL_APPLICATION"] + "/#/cmr",
+            )
     else:
         raise NotFound("type export not found")
 
 # Export mapping between visits and individuals
 @blueprint.route('/sitegroup/<int:id_sitegroup>/export/mapping_visit_individual')
 def export_mapping_visit_individual_for_sitegroup(id_sitegroup):
+    """
+    Export file with mapping between visits and individual as CSV file.
+    Contains the visits in columns (by date) and the individuals in rows.
+    One additional field can be added to group by visit (in addition to visit date) and to be displayed in first header row if necessary.
+    """
     additional_field = None
     if 'additional_field' in request.args.to_dict():
         additional_field = request.args.to_dict()['additional_field']
@@ -250,6 +291,9 @@ def export_mapping_visit_individual_for_sitegroup(id_sitegroup):
 @blueprint.route('/site', methods=['PUT'])
 @json_resp
 def save_site():
+    """
+    Save the details of a site from form. Create or Update.
+    """
     data = request.json
     site_repo = SitesRepository()
     if data['id_site']:
@@ -261,6 +305,10 @@ def save_site():
 @blueprint.route('/site/<int:id_site>', methods=['DELETE'])
 @json_resp
 def delete_site(id_site):
+    """
+    Delete an existing site.
+    Do it only if no child element (no visit).
+    """
     site_repo = SitesRepository()
     site = site_repo.get_one(TSite.id_site, id_site)
     if site['nb_visits'] > 0:
@@ -272,6 +320,10 @@ def delete_site(id_site):
 @blueprint.route('/module/<int:id_module>/sites', methods=['GET'])
 @json_resp
 def get_all_sites_geometries_by_module(id_module):
+    """
+    Get all sites for a sub-module. Optionally some given filters applied.
+    Return details as GeoJSON.
+    """
     site_repo = SitesRepository()
     return site_repo.get_all_geometries_filter_by(TSite.id_module, id_module, request.args.to_dict())
 
@@ -279,6 +331,10 @@ def get_all_sites_geometries_by_module(id_module):
 @blueprint.route('/sitegroup/<int:id_sitegroup>/sites', methods=['GET'])
 @json_resp
 def get_all_sites_geometries_by_sitegroup(id_sitegroup):
+    """
+    Get all sites for a sitegroup. Optionally some given filters applied.
+    Return details as GeoJSON.
+    """
     site_repo = SitesRepository()
     return site_repo.get_all_geometries_filter_by(TSite.id_sitegroup, id_sitegroup, request.args.to_dict())
 
@@ -286,6 +342,10 @@ def get_all_sites_geometries_by_sitegroup(id_sitegroup):
 @blueprint.route('/site/<int:id_site>/geometries', methods=['GET'])
 @json_resp
 def get_one_site_geometries(id_site):
+    """
+    Get one specific site.
+    Return details as GeoJSON.
+    """
     site_repo = SitesRepository()
     return site_repo.get_geometry(TSite.id_site == id_site)
 
@@ -298,6 +358,9 @@ def get_one_site_geometries(id_site):
 @blueprint.route('/site/<int:id_site>/visits', methods=['GET'])
 @json_resp
 def get_all_visits_by_site(id_site):
+    """
+    Get all the visits for a specific site, with optionally some given filters applied.
+    """
     visit_repo = VisitsRepository()
     return visit_repo.get_all_filter_by(TVisit.id_site, id_site, request.args.to_dict())
 
@@ -305,6 +368,10 @@ def get_all_visits_by_site(id_site):
 @blueprint.route('/visit/<int:id_visit>', methods=['DELETE'])
 @json_resp
 def delete_visit(id_visit):
+    """
+    Delete an existing visit.
+    Do it only if no child (no observation).
+    """
     visit_repo = VisitsRepository()
     visit = visit_repo.get_one(TVisit.id_visit, id_visit)
     if visit['nb_observations'] > 0:
@@ -316,6 +383,9 @@ def delete_visit(id_visit):
 @blueprint.route('/visit/<int:id_visit>', methods=['GET'])
 @json_resp
 def get_one_visit(id_visit):
+    """
+    Get the details of a visit.
+    """
     visit_repo = VisitsRepository()
     return visit_repo.get_one(TVisit.id_visit, id_visit)
 
@@ -323,18 +393,12 @@ def get_one_visit(id_visit):
 @blueprint.route('/visit', methods=['PUT'])
 @json_resp
 def save_visit():
+    """
+    Save the details of a visit from form. Create or Update.
+    """
     data = request.json
     visit_repo = VisitsRepository()
-    observers_list = []
-    if data['observers']:
-        observers = (
-                DB.session.query(User).filter(
-                    User.id_role.in_(data['observers'])
-                    ).all()
-            )
-        for o in observers:
-            observers_list.append(o)
-    data['observers'] = observers_list
+    data = TVisit.synchro_visit_observers(data)
     if data['id_visit']:
         return visit_repo.update_one(data)
     else:
@@ -344,19 +408,13 @@ def save_visit():
 @blueprint.route('/visits', methods=['POST'])
 @json_resp
 def create_visits_in_batch():
+    """
+    Create many visits in batch.
+    """
     data = request.json
     visit_repo = VisitsRepository()
     for d in data['visits']:
-        observers_list = []
-        if d['observers']:
-            observers = (
-                DB.session.query(User).filter(
-                    User.id_role.in_(d['observers'])
-                    ).all()
-            )
-            for o in observers:
-                observers_list.append(o)
-        d['observers'] = observers_list
+        d = TVisit.synchro_visit_observers(d)
     result = visit_repo.create_all(data['visits'])
     return {'visits': result}
 
@@ -369,6 +427,9 @@ def create_visits_in_batch():
 @blueprint.route('/module/<int:id_module>/individuals', methods=['GET'])
 @json_resp
 def get_all_individuals_by_module(id_module):
+    """
+    Get the details of all individuals for a submodule.
+    """
     ind_repo = IndividualsRepository()
     return ind_repo.get_all_filter_by(TIndividual.id_module, id_module)
 
@@ -376,6 +437,10 @@ def get_all_individuals_by_module(id_module):
 @blueprint.route('/module/<int:id_module>/individuals/filtered', methods=['GET'])
 @json_resp
 def get_all_individuals_geometries_by_module(id_module):
+    """
+    Get details of all individuals for a module, with observations positions, and optionally filtered.
+    Return details as GeoJSON.
+    """
     ind_repo = IndividualsRepository()
     return ind_repo.get_all_geometries_filter_by(TSite.id_module == id_module, request.args.to_dict())
 
@@ -383,6 +448,10 @@ def get_all_individuals_geometries_by_module(id_module):
 @blueprint.route('/sitegroup/<int:id_sitegroup>/individuals', methods=['GET'])
 @json_resp
 def get_all_individuals_by_sitegroup(id_sitegroup):
+    """
+    Get details of all individuals for a sitegroup, with observations positions, and optionally filtered.
+    Return details as GeoJSON.
+    """
     ind_repo = IndividualsRepository()
     return ind_repo.get_all_geometries_filter_by(TSite.id_sitegroup == id_sitegroup, request.args.to_dict())
 
@@ -390,6 +459,9 @@ def get_all_individuals_by_sitegroup(id_sitegroup):
 @blueprint.route('/site/<int:id_site>/individuals', methods=['GET'])
 @json_resp
 def get_all_individuals_by_site(id_site):
+    """
+    Get details of all individuals for a site, optionally filtered.
+    """
     ind_repo = IndividualsRepository()
     return ind_repo.get_all_by_site(id_site, request.args.to_dict())
 
@@ -397,6 +469,9 @@ def get_all_individuals_by_site(id_site):
 @blueprint.route('/individual/<int:id_individual>', methods=['GET'])
 @json_resp
 def get_one_individual(id_individual):
+    """
+    Get the details of an individual.
+    """
     ind_repo = IndividualsRepository()
     return ind_repo.get_one(TIndividual.id_individual, id_individual)
 
@@ -404,6 +479,9 @@ def get_one_individual(id_individual):
 @blueprint.route('/individual', methods=['PUT'])
 @json_resp
 def save_individual():
+    """
+    Save the details of an individual. Create or Update.
+    """
     data = request.json
     ind_repo = IndividualsRepository()
     if data['id_individual']:
@@ -415,6 +493,10 @@ def save_individual():
 @blueprint.route('/individual/<int:id_individual>', methods=['DELETE'])
 @json_resp
 def delete_individual(id_individual):
+    """
+    Delete an existing individual.
+    Only if no child (no observation).
+    """
     individual_repo = IndividualsRepository()
     individual = individual_repo.get_one(TIndividual.id_individual, id_individual)
     if individual['nb_observations'] > 0:
@@ -424,6 +506,11 @@ def delete_individual(id_individual):
 
 @blueprint.route('/module/<module_code>/ficheindividual/<int:id_individual>', methods=['POST'])
 def get_fiche_individu(module_code, id_individual):
+    """
+    Export the fiche individu as a PDF file.
+    Need to push the map image in the post data to be present in PDF.
+    Need to set a template in sub-module.
+    """
     ind_repo = IndividualsRepository()
     individual = ind_repo.get_one(TIndividual.id_individual, id_individual)
     df = {}
@@ -456,16 +543,19 @@ def get_fiche_individu(module_code, id_individual):
 
 @blueprint.route('/individual/<int:id_individual>/export/medias', methods=['GET'])
 def export_media_for_an_individual(id_individual):
+    """
+    Export all the media files for an individual in a ZIP file.
+    """
     ind_repo = IndividualsRepository()
     individual = ind_repo.get_one(TIndividual.id_individual, id_individual)
 
     filename = 'export_individual_' + str(id_individual) + '_' + dt.datetime.now().strftime("%Y_%m_%d_%Hh%Mm%S")
     
-    #on crée le dossier s'il n'existe pas
+    # on crée le dossier s'il n'existe pas
     dir_path = str(ROOT_DIR / "backend/static/medias/exports")
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
-    #on le clean
+    # on le clean
     fm.delete_recursively(dir_path)
     featureCollection = []
 
@@ -501,6 +591,9 @@ def export_media_for_an_individual(id_individual):
 @blueprint.route('/observation/<int:id_observation>', methods=['GET'])
 @json_resp
 def get_one_observation(id_observation):
+    """
+    Get the details of one observation.
+    """
     obs_repo = ObservationsRepository()
     return obs_repo.get_one(TObservation.id_observation, id_observation)
 
@@ -508,6 +601,9 @@ def get_one_observation(id_observation):
 @blueprint.route('/visit/<int:id_visit>/observations', methods=['GET'])
 @json_resp
 def get_all_observations_of_a_visit(id_visit):
+    """
+    Get the details of all observations for a visit;
+    """
     obs_repo = ObservationsRepository()
     return obs_repo.get_all_filter_by(TObservation.id_visit, id_visit)
 
@@ -515,6 +611,9 @@ def get_all_observations_of_a_visit(id_visit):
 @blueprint.route('/individual/<int:id_individual>/observations')
 @json_resp
 def get_all_observations_of_an_individual(id_individual):
+    """
+    Get the details of all observations for an individual;
+    """
     obs_repo = ObservationsRepository()
     return obs_repo.get_all_filter_by(TObservation.id_individual, id_individual)
 
@@ -522,6 +621,10 @@ def get_all_observations_of_an_individual(id_individual):
 @blueprint.route('/individual/<int:id_individual>/observations/geometries')
 @json_resp
 def get_all_observations_geometries_of_an_individual(id_individual):
+    """
+    Get the details of all observations for an individual, with geometries.
+    Return details as GeoJSON.
+    """
     obs_repo = ObservationsRepository()
     return obs_repo.get_all_geometries_filter_by(TObservation.id_individual, id_individual)
 
@@ -529,6 +632,9 @@ def get_all_observations_geometries_of_an_individual(id_individual):
 @blueprint.route('/observation', methods=['PUT'])
 @json_resp
 def save_observation():
+    """
+    Save the details of an observation. Create or Update.
+    """
     data = request.json
     obs_repo = ObservationsRepository()
     if data['id_observation']:
@@ -540,5 +646,8 @@ def save_observation():
 @blueprint.route('/observation/<int:id_observation>', methods=['DELETE'])
 @json_resp
 def delete_observation(id_observation):
+    """
+    Delete an existing observation.
+    """
     obs_repo = ObservationsRepository()
     return obs_repo.delete_one(TObservation.id_observation, id_observation)
