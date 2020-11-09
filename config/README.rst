@@ -51,7 +51,7 @@ config.json
 
 **Exemple:**
 
-  Configuration du sous-module::
+::
 
     {
       "disclaimer" : true,
