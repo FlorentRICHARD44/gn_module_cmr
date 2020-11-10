@@ -12,119 +12,119 @@ import { BreadcrumbComponent } from '../../common/breadcrumb/breadcrumb.componen
  * This component is the home page of a CMR Site.
  */
 @Component({
-    selector : 'pnx-cmr-site-details',
-    templateUrl: './site-details.component.html',
-    styleUrls: ['./../../../../style.scss', './site-details.component.scss']
+  selector : 'pnx-cmr-site-details',
+  templateUrl: './site-details.component.html',
+  styleUrls: ['./../../../../style.scss', './site-details.component.scss']
 })
 export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit {
-    public path: Array<any> = [];
-    public module: Module = new Module();
-    public site: any = {};
-    public medias: Array<any> = [];
-    public visits: Array<any> = [];
-    public visitListProperties: Array<any> = [];
-    public visitFieldsDef: any = {};
-    public individuals: Array<any> = [];
-    public properties: Array<any> = [];
-    public fields: Array<any> = [];
-    public individualListProperties: Array<any> = [];
-    public individualFieldsDef: any = {};
+  public path: Array<any> = [];
+  public module: Module = new Module();
+  public site: any = {};
+  public medias: Array<any> = [];
+  public visits: Array<any> = [];
+  public visitListProperties: Array<any> = [];
+  public visitFieldsDef: any = {};
+  public individuals: Array<any> = [];
+  public properties: Array<any> = [];
+  public fields: Array<any> = [];
+  public individualListProperties: Array<any> = [];
+  public individualFieldsDef: any = {};
 
-    public waitControl = false;
-    public filterIndividualDisplay = false;
-    public filterVisitDisplay = false;
-    @ViewChild(NgbModal)
-    public modalCol: NgbModal;
-    public modalReference;
+  public waitControl = false;
+  public filterIndividualDisplay = false;
+  public filterVisitDisplay = false;
+  @ViewChild(NgbModal)
+  public modalCol: NgbModal;
+  public modalReference;
 
-    constructor(
-        private _cmrService: CmrService,
-        private _route: ActivatedRoute,
-        private _router: Router,
-        private _commonService: CommonService,
-        public ngbModal: NgbModal,
-        private _dataService: DataService // used in template
-    ) {
-      super();
-    }
+  constructor(
+    private _cmrService: CmrService,
+    private _route: ActivatedRoute,
+    private _router: Router,
+    private _commonService: CommonService,
+    public ngbModal: NgbModal,
+    private _dataService: DataService // used in template
+  ) {
+    super();
+  }
 
-    ngOnInit() {
-        this._route.params.subscribe(params => {
-            this._cmrService.loadOneModule(params.module).subscribe(() => {
-                this.module = this._cmrService.getModule(params.module);
-                this.properties = this.module.forms.site.display_properties;
-                this.fields = this.module.forms.site.fields;
-                this.visitListProperties = this.module.forms.visit.display_list;
-                this.visitFieldsDef = this.module.forms.visit.fields;
-                this._cmrService.getOneSiteGeometry(params.id_site).subscribe((data) => {
-                  this.site = data[0].properties;
-                  this.medias = this.site.medias;
-                  this.path = BreadcrumbComponent.buildPath("site", this.module, this.site);
-                  this.path = [...this.path];
-                  if (params.id_sitegroup) {
-                    this._cmrService.getOneSiteGroupGeometry(params.id_sitegroup).subscribe((dataSitegroup) => {
-                      this.mapFeatures = {'features': dataSitegroup.concat(data)};
-                      setTimeout(function() {this.initFeatures(this._route, this.module);}.bind(this), 300);
-                    });
-                  } else {
-                    this.mapFeatures = {'features': data};
-                    setTimeout(function() {this.initFeatures(this._route, this.module);}.bind(this), 300);
-                  }
-                });
-                this.individualListProperties = this.module.forms.individual.display_list;
-                this.individualFieldsDef = this.module.forms.individual.fields;
-                this.applyVisitSearch({});
-                this.applyIndividualSearch({});
-            })
+  ngOnInit() {
+    this._route.params.subscribe(params => {
+      this._cmrService.loadOneModule(params.module).subscribe(() => {
+        this.module = this._cmrService.getModule(params.module);
+        this.properties = this.module.forms.site.display_properties;
+        this.fields = this.module.forms.site.fields;
+        this.visitListProperties = this.module.forms.visit.display_list;
+        this.visitFieldsDef = this.module.forms.visit.fields;
+        this._cmrService.getOneSiteGeometry(params.id_site).subscribe((data) => {
+          this.site = data[0].properties;
+          this.medias = this.site.medias;
+          this.path = BreadcrumbComponent.buildPath("site", this.module, this.site);
+          this.path = [...this.path];
+          if (params.id_sitegroup) {
+            this._cmrService.getOneSiteGroupGeometry(params.id_sitegroup).subscribe((dataSitegroup) => {
+              this.mapFeatures = {'features': dataSitegroup.concat(data)};
+              setTimeout(function() {this.initFeatures(this._route, this.module);}.bind(this), 300);
+            });
+          } else {
+            this.mapFeatures = {'features': data};
+            setTimeout(function() {this.initFeatures(this._route, this.module);}.bind(this), 300);
+          }
         });
-    }
+        this.individualListProperties = this.module.forms.individual.display_list;
+        this.individualFieldsDef = this.module.forms.individual.fields;
+        this.applyVisitSearch({});
+        this.applyIndividualSearch({});
+      });
+    });
+  }
 
-    applyIndividualSearch(event) {
-      this.waitControl = true;
-      var params = event ? event : {};
-      this._cmrService.getAllIndividualsBySite(this._route.snapshot.params.id_site, params).subscribe(
-        (data) => {
-          this.individuals = data;
-          this.waitControl = false;
-        },
-        (error) => {
-          this.individuals = [];
-          this.waitControl = false;
-        });
-    }
+  applyIndividualSearch(event) {
+    this.waitControl = true;
+    var params = event ? event : {};
+    this._cmrService.getAllIndividualsBySite(this._route.snapshot.params.id_site, params).subscribe(
+      (data) => {
+        this.individuals = data;
+        this.waitControl = false;
+      },
+      (error) => {
+        this.individuals = [];
+        this.waitControl = false;
+      });
+  }
 
-    applyVisitSearch(event) {
-      this.waitControl = true;
-      var params = event ? event : {};
-      
-      this._cmrService.getAllVisitsBySite(this._route.snapshot.params.id_site, params).subscribe(
-        (data) => {
-          this.visits = data;
-          this.waitControl = false;
-        },
-        (error) => {
-          this.visits = [];
-          this.waitControl = false;
-        });
-    }
+  applyVisitSearch(event) {
+    this.waitControl = true;
+    var params = event ? event : {};
 
-    openModalDownload(event, modal) {
-      this.modalReference = this.ngbModal.open(modal, { size: "lg" });
-    }
+    this._cmrService.getAllVisitsBySite(this._route.snapshot.params.id_site, params).subscribe(
+      (data) => {
+        this.visits = data;
+        this.waitControl = false;
+      },
+      (error) => {
+        this.visits = [];
+        this.waitControl = false;
+      });
+  }
 
-    deleteSite() {
-      this._cmrService.deleteObject('site', this._route.snapshot.params.id_site).subscribe(
-        (data) => {
-          this.modalReference.close()
-          this._router.navigate(['../..'],{relativeTo: this._route});
-        },
-        (error => {
-          this.modalReference.close()
-          this._commonService.regularToaster(
-            "error",
-            "Erreur lors de la suppression!"
-          );
-        })
-      )
-    }
+  openModalDownload(event, modal) {
+    this.modalReference = this.ngbModal.open(modal, { size: "lg" });
+  }
+
+  deleteSite() {
+    this._cmrService.deleteObject('site', this._route.snapshot.params.id_site).subscribe(
+      (data) => {
+        this.modalReference.close()
+        this._router.navigate(['../..'],{relativeTo: this._route});
+      },
+      (error => {
+        this.modalReference.close()
+        this._commonService.regularToaster(
+          "error",
+          "Erreur lors de la suppression!"
+        );
+      })
+    )
+  }
 }

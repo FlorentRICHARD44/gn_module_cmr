@@ -1,17 +1,17 @@
 .filter-container {
-    border: solid 1px #999999;
-    border-radius: 3px;
+  border: solid 1px #999999;
+  border-radius: 3px;
 
-    padding: 10px;
+  padding: 10px;
 
 }
 
 select,
 .input-group-text,
 input[type=date] {
-    height: calc(1.5em + .5rem + 2px);
-    padding: .25rem .5rem;
-    font-size: .875rem;
-    line-height: 1.5;
-    border-radius: .2rem;
+  height: calc(1.5em + .5rem + 2px);
+  padding: .25rem .5rem;
+  font-size: .875rem;
+  line-height: 1.5;
+  border-radius: .2rem;
 }

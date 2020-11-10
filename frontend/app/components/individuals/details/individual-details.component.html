@@ -1,144 +1,143 @@
 <div class="main">
-    <div class="cadre">
-        <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.individual.label + ': ' + individual.identifier"></gn-cmr-breadcrumb>
-        <div class="toolbar clearfix">
-            <h3 class="float-left">{{module.forms.individual.label}}: {{individual.identifier}}</h3>
-            <button *ngIf="module?.cruved?.D !== '0'" class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
-            <button *ngIf="module?.cruved?.C !== '0'" class="btn btn-success float-right ml-2" [routerLink]="['visit']"><i class="fa fa-plus"></i>&nbsp;Ajouter visite</button>
-            <button *ngIf="module?.cruved?.E !== '0'" class="btn btn-primary float-right ml-2" (click)="openModalDownload($event, modalDownload)"><i class="fa fa-arrow-down"></i>&nbsp;Exports</button>
-            <button *ngIf="module?.cruved?.U !== '0'" class="btn btn-primary float-right ml-2" [routerLink]="['..', {edit: individual.id_individual}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
-        </div>
-        <div class="">
-            <span><strong>Identifier: </strong>{{individual.identifier}}</span>
-        </div>
-        <div class="" *ngIf="individual.rfid">
-            <span><strong>RFID: </strong>{{individual.rfid}}</span>
-        </div>
-        <div class="">
-            <span><strong>Marquage: </strong>{{individual.marker}}</span>
-        </div>
-        <div class="mt-2">
-            <nav>
-                <div class="nav nav-tabs" id="nav-tabs" role="tablist">
-                    <a class="nav-item nav-link active" data-toggle="tab" aria-selected="true" id="nav-info-tab" href="#info-tab">Informations</a>
-                    <a class="nav-item nav-link" data-toggle="tab" aria-selected="true" id="nav-historic-tab" href="#historic-tab" (click)="refreshMapSize()">Historique des actions<span class="badge badge-pill badge-primary ml-2">{{historic.length}}</span></a>
-                </div>
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade active show" id="info-tab" role="tabpanel" attr.aria-labelledby="nav-info-tab">
-                        <div class="flex-container">
-                            <div class="">
-                                <h5>Détails</h5>
-                                <table class="table table-striped table-sm scrollable">
-                                    <tr *ngFor="let fieldName of properties">
-                                        <th>{{ fields[fieldName].attribut_label }}</th>
-                                        <td class="text-in-area">{{ _dataService.formatProperty(individual[fieldName], fields[fieldName])}}</td>
-                                    </tr>
-                                </table>
-                                <hr class="mt-3 mb-3">
-                                <h5>Médias</h5>
-                                <gn-cmr-media-list [medias]="individual.medias"></gn-cmr-media-list>
-                                <div *ngFor="let observation of historic">
-                                    <div *ngIf="observation.medias && observation.medias.length > 0">
-                                        <hr>
-                                        <p><strong>Observation:</strong> {{_dataService.formatProperty(observation.visit.date, {type_column:'date'})}}</p>
-                                        <gn-cmr-media-list [medias]="observation.medias"></gn-cmr-media-list>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="graph-list" class="">
-                                <h5>Courbes d'évolutions</h5>
-                                <gn-cmr-graph *ngFor="let graph of graphs" [options]="graph"></gn-cmr-graph>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="historic-tab" role="tabpanel" attr.aria-labelledby="nav-historic-tab">
-                        <div class="flex-container">
-                            <div class="">
-                                <pnx-map height="60vh" class="map-card">
-                                    <pnx-geojson
-                                        *ngIf="mapFeatures && mapFeatures['features']"
-                                        [geojson]="mapFeatures"
-                                        [zoomOnLayer]="true"
-                                        [zoomOnFirstTime]="true"
-                                    ></pnx-geojson>
-                                </pnx-map>
-                            </div>
-                            <div class="">
-                                <div class="details">
-                                    <ngx-datatable #tableHistoric
-                                        class="material striped margin-top-xs"
-                                        [rows]="historic"
-                                        [rowHeight]="40"
-                                        [draggable]="false"
-                                        [count]="historic.length"
-                                        [limit]="15"
-                                        [headerHeight]="50"
-                                        [footerHeight]="50"
-                                        [sorts]="[{prop: 'visit_date',dir:'desc'}]"
-                                        [selectionType]="'single'"
-                                        [selected]="selected"
-                                        (activate)="onHistoricRowClick($event)">
-                                        
-                                        <ngx-datatable-column width="15">
-                                            <ng-template let-row="row" ngx-datatable-cell-template>
-                                                <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['../..','site', row.visit.id_site, 'visit', row.id_visit, 'observation', row.id_observation]">
-                                                    <i class="fa fa-info-circle" aria-hidden="true" matTooltip="Détails {{module.forms.observation.label}}"></i>
-                                                </a>
-                                            </ng-template>
-                                        </ngx-datatable-column>
-                                        <ngx-datatable-column *ngFor="let prop of historicListProperties" [width]="prop.width" [name]="historicFieldsDef[prop.field].attribut_label" [prop]="prop.field" [cellClass]="'text-' + (prop['align'] ? prop['align'] : 'left')" >
-                                            <ng-template let-row="row" ngx-datatable-cell-template>
-                                                <span>{{_dataService.formatProperty(row[prop.field], historicFieldsDef[prop.field])}}</span>
-                                            </ng-template>
-                                        </ngx-datatable-column>
-                                    </ngx-datatable>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
+  <div class="cadre">
+    <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.individual.label + ': ' + individual.identifier"></gn-cmr-breadcrumb>
+    <div class="toolbar clearfix">
+      <h3 class="float-left">{{module.forms.individual.label}}: {{individual.identifier}}</h3>
+      <button *ngIf="module?.cruved?.D !== '0'" class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
+      <button *ngIf="module?.cruved?.C !== '0'" class="btn btn-success float-right ml-2" [routerLink]="['visit']"><i class="fa fa-plus"></i>&nbsp;Ajouter visite</button>
+      <button *ngIf="module?.cruved?.E !== '0'" class="btn btn-primary float-right ml-2" (click)="openModalDownload($event, modalDownload)"><i class="fa fa-arrow-down"></i>&nbsp;Exports</button>
+      <button *ngIf="module?.cruved?.U !== '0'" class="btn btn-primary float-right ml-2" [routerLink]="['..', {edit: individual.id_individual}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
     </div>
-    <ng-template #modalDownload id="modal-download" let-c="close" let-d="dismiss" >
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel"> {{'DownloadData' | translate }}</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalReference.close()">
-              <span aria-hidden="true">&times;</span>
-            </button>
+    <div class="">
+      <span><strong>Identifier: </strong>{{individual.identifier}}</span>
+    </div>
+    <div class="" *ngIf="individual.rfid">
+      <span><strong>RFID: </strong>{{individual.rfid}}</span>
+    </div>
+    <div class="">
+      <span><strong>Marquage: </strong>{{individual.marker}}</span>
+    </div>
+    <div class="mt-2">
+      <nav>
+        <div class="nav nav-tabs" id="nav-tabs" role="tablist">
+          <a class="nav-item nav-link active" data-toggle="tab" aria-selected="true" id="nav-info-tab" href="#info-tab">Informations</a>
+          <a class="nav-item nav-link" data-toggle="tab" aria-selected="true" id="nav-historic-tab" href="#historic-tab" (click)="refreshMapSize()">Historique des actions<span class="badge badge-pill badge-primary ml-2">{{historic.length}}</span></a>
         </div>
-        <div class="modal-body">
-            <h5 class="underlined second-color">Télécharger la fiche individu</h5>
-            <div class="alert alert-warning">
-                <i class="fa fa-warning"></i>&nbsp;Assurez-vous d'avoir positionné la carte telle que vous voulez l'afficher dans la fiche avant de générer!
-            </div>
-            <button mat-raised-button (click)="getFicheIndividual()" type="button" class="button-success mr-1" ><i class="fa fa-file-pdf-o"></i>&nbsp;Fiche individu</button>
-            <br>
-            <br>
-            <h5 class="underlined second-color">Télécharger tous les médias</h5>
-            <div class="alert alert-info">
-                <i class="fa fa-info-circle"></i>&nbsp;Le zip contient tous les médias de l'individu ainsi que les médias de ses observations
-            </div>
-            <button mat-raised-button *ngIf="nbMedias" (click)="getMediaZip()" type="button" class="button-success mr-1" ><i class="fa fa-file-archive-o"></i>&nbsp;Médias</button>
-            <p class="font-italic" *ngIf="!nbMedias">Aucun media disponible pour cet individu.</p>
-        </div>
-      </ng-template>
-      <ng-template #modalDelete id="modal-delete" let-c="close" let-d="dismiss">
-          <div class="modal-header">
-              <h5 class="modal-title">Attention</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalReference.close()">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-              <p *ngIf="individual.nb_observations">Impossible de supprimer! Cet élément contient {{individual.nb_observations}} {{module.forms.observation.label_plural}}</p>
-              <div class="alert alert-danger" *ngIf="!individual.nb_observations">
-                  <i class="fa fa-warning fa-lg"></i>&nbsp;Êtes-vous sur de supprimer l'élément {{module.forms.individual.label}} {{individual.identifier}}?
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade active show" id="info-tab" role="tabpanel" attr.aria-labelledby="nav-info-tab">
+            <div class="flex-container">
+              <div class="">
+                <h5>Détails</h5>
+                <table class="table table-striped table-sm scrollable">
+                  <tr *ngFor="let fieldName of properties">
+                    <th>{{ fields[fieldName].attribut_label }}</th>
+                    <td class="text-in-area">{{ _dataService.formatProperty(individual[fieldName], fields[fieldName])}}</td>
+                  </tr>
+                </table>
+                <hr class="mt-3 mb-3">
+                <h5>Médias</h5>
+                <gn-cmr-media-list [medias]="individual.medias"></gn-cmr-media-list>
+                <div *ngFor="let observation of historic">
+                  <div *ngIf="observation.medias && observation.medias.length > 0">
+                    <hr>
+                    <p><strong>Observation:</strong> {{_dataService.formatProperty(observation.visit.date, {type_column:'date'})}}</p>
+                    <gn-cmr-media-list [medias]="observation.medias"></gn-cmr-media-list>
+                  </div>
+                </div>
               </div>
+              <div id="graph-list" class="">
+                <h5>Courbes d'évolutions</h5>
+                <gn-cmr-graph *ngFor="let graph of graphs" [options]="graph"></gn-cmr-graph>
+              </div>
+            </div>
           </div>
-          <div class="modal-footer button-container">
-              <button class="btn btn-primary" (click)="modalReference.close()">Annuler</button>
-              <button class="btn btn-danger ml-5" [disabled]="individual.nb_observations" (click)="deleteIndividual()">Confirmer la suppression</button>
+          <div class="tab-pane fade" id="historic-tab" role="tabpanel" attr.aria-labelledby="nav-historic-tab">
+            <div class="flex-container">
+              <div class="">
+                <pnx-map height="60vh" class="map-card">
+                  <pnx-geojson
+                    *ngIf="mapFeatures && mapFeatures['features']"
+                    [geojson]="mapFeatures"
+                    [zoomOnLayer]="true"
+                    [zoomOnFirstTime]="true"
+                  ></pnx-geojson>
+                </pnx-map>
+              </div>
+              <div class="">
+                <div class="details">
+                  <ngx-datatable #tableHistoric
+                    class="material striped margin-top-xs"
+                    [rows]="historic"
+                    [rowHeight]="40"
+                    [draggable]="false"
+                    [count]="historic.length"
+                    [limit]="15"
+                    [headerHeight]="50"
+                    [footerHeight]="50"
+                    [sorts]="[{prop: 'visit_date',dir:'desc'}]"
+                    [selectionType]="'single'"
+                    [selected]="selected"
+                    (activate)="onHistoricRowClick($event)">
+                    <ngx-datatable-column width="15">
+                      <ng-template let-row="row" ngx-datatable-cell-template>
+                        <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['../..','site', row.visit.id_site, 'visit', row.id_visit, 'observation', row.id_observation]">
+                          <i class="fa fa-info-circle" aria-hidden="true" matTooltip="Détails {{module.forms.observation.label}}"></i>
+                        </a>
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column *ngFor="let prop of historicListProperties" [width]="prop.width" [name]="historicFieldsDef[prop.field].attribut_label" [prop]="prop.field" [cellClass]="'text-' + (prop['align'] ? prop['align'] : 'left')" >
+                      <ng-template let-row="row" ngx-datatable-cell-template>
+                        <span>{{_dataService.formatProperty(row[prop.field], historicFieldsDef[prop.field])}}</span>
+                      </ng-template>
+                    </ngx-datatable-column>
+                  </ngx-datatable>
+                </div>
+              </div>
+            </div>
           </div>
-      </ng-template>
+        </div>
+      </nav>
+    </div>
+  </div>
+  <ng-template #modalDownload id="modal-download" let-c="close" let-d="dismiss" >
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel"> {{'DownloadData' | translate }}</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalReference.close()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <h5 class="underlined second-color">Télécharger la fiche individu</h5>
+        <div class="alert alert-warning">
+          <i class="fa fa-warning"></i>&nbsp;Assurez-vous d'avoir positionné la carte telle que vous voulez l'afficher dans la fiche avant de générer!
+        </div>
+        <button mat-raised-button (click)="getFicheIndividual()" type="button" class="button-success mr-1" ><i class="fa fa-file-pdf-o"></i>&nbsp;Fiche individu</button>
+        <br>
+        <br>
+        <h5 class="underlined second-color">Télécharger tous les médias</h5>
+        <div class="alert alert-info">
+          <i class="fa fa-info-circle"></i>&nbsp;Le zip contient tous les médias de l'individu ainsi que les médias de ses observations
+        </div>
+        <button mat-raised-button *ngIf="nbMedias" (click)="getMediaZip()" type="button" class="button-success mr-1" ><i class="fa fa-file-archive-o"></i>&nbsp;Médias</button>
+        <p class="font-italic" *ngIf="!nbMedias">Aucun media disponible pour cet individu.</p>
+      </div>
+    </ng-template>
+    <ng-template #modalDelete id="modal-delete" let-c="close" let-d="dismiss">
+      <div class="modal-header">
+      <h5 class="modal-title">Attention</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalReference.close()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p *ngIf="individual.nb_observations">Impossible de supprimer! Cet élément contient {{individual.nb_observations}} {{module.forms.observation.label_plural}}</p>
+      <div class="alert alert-danger" *ngIf="!individual.nb_observations">
+        <i class="fa fa-warning fa-lg"></i>&nbsp;Êtes-vous sur de supprimer l'élément {{module.forms.individual.label}} {{individual.identifier}}?
+      </div>
+    </div>
+    <div class="modal-footer button-container">
+      <button class="btn btn-primary" (click)="modalReference.close()">Annuler</button>
+      <button class="btn btn-danger ml-5" [disabled]="individual.nb_observations" (click)="deleteIndividual()">Confirmer la suppression</button>
+    </div>
+  </ng-template>
 </div>

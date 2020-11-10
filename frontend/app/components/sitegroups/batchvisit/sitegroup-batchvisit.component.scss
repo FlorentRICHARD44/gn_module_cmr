@@ -1,15 +1,15 @@
 .button-container {
-    justify-content: center;
+  justify-content: center;
 }
 
 :host /deep/ table {
-    min-width: 900px;
-    display: block;
-    max-height: 50vh;
-    overflow-y: auto;
-    overflow-x: hidden;
+  min-width: 900px;
+  display: block;
+  max-height: 50vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 th, td {
-    padding: 3px 10px;
+  padding: 3px 10px;
 }

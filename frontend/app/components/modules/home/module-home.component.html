@@ -1,208 +1,206 @@
 <div class="main">
-    <gn-cmr-mask *ngIf="waitControl" text="Recherche en cours..."></gn-cmr-mask>
-    <div class="flex-container">
-        <div class="cadre" [style.min-height]="cardContentHeight + 'px'" [style.max-height]="cardContentHeight + 'px'">
-            <pnx-map height="100%" class="map-card">
-                <pnx-geojson
-                    *ngIf="mapFeatures && mapFeatures['features']"
-                    [geojson]="mapFeatures"
-                    [zoomOnLayer]="true"
-                    [zoomOnFirstTime]="true"
-                ></pnx-geojson>
-                <pnx-geojson
-                    *ngIf="mapFeaturesIndividuals && mapFeaturesIndividuals['features']"
-                    [geojson]="mapFeaturesIndividuals"
-                    [style]="obsStyle"
-                    [zoomOnLayer]="false"
-                    [zoomOnFirstTime]="false"
-                ></pnx-geojson>
-            </pnx-map>
+  <gn-cmr-mask *ngIf="waitControl" text="Recherche en cours..."></gn-cmr-mask>
+  <div class="flex-container">
+    <div class="cadre" [style.min-height]="cardContentHeight + 'px'" [style.max-height]="cardContentHeight + 'px'">
+      <pnx-map height="100%" class="map-card">
+        <!-- First geosjon to show sitegroup or site -->
+        <pnx-geojson
+          *ngIf="mapFeatures && mapFeatures['features']"
+          [geojson]="mapFeatures"
+          [zoomOnLayer]="true"
+          [zoomOnFirstTime]="true"
+        ></pnx-geojson>
+        <!-- Second geosjon to show individuals -->
+        <pnx-geojson
+          *ngIf="mapFeaturesIndividuals && mapFeaturesIndividuals['features']"
+          [geojson]="mapFeaturesIndividuals"
+          [style]="obsStyle"
+          [zoomOnLayer]="false"
+          [zoomOnFirstTime]="false"
+        ></pnx-geojson>
+    </pnx-map>
+  </div>
+  <div class="cadre scroll" [style.max-height]="cardContentHeight + 'px'" style="overflow-y:auto">
+    <gn-cmr-breadcrumb [currentPage]="'Module: ' + module.module_label"></gn-cmr-breadcrumb>
+    <h3>Module: {{ module.module_label }}</h3>
+    <nav>
+      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" data-toggle="tab" role="tab" aria-selected="true" id="nav-module-tab" href="#module-tab">Module</a>
+        <a *ngIf="module.config.use_sitegroup" class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-sitegroups-tab" href="#sitegroups-tab">{{module.forms.sitegroup.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ sitegroups.length }}</span></a>
+        <a *ngIf="!module.config.use_sitegroup" class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-sites-tab" href="#sites-tab">{{module.forms.site.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ sites.length }}</span></a>
+        <a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-individuals-tab" href="#individuals-tab">{{module.forms.individual.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ individuals.length }}</span></a>
+      </div>
+      <div class="tab-content" id="nav-tabContent">
+        <!-- TAB "Module" -->
+        <div class="tab-pane fade active show"
+          id="module-tab"
+          role="tabpanel"
+          attr.aria-labelledby="nav-module-tab">
+          <div class="clearfix">
+            <!-- Allow edition of module only to user with Update right on ADMIN module -->
+            <button *ngIf="_cruvedStore.cruved?.ADMIN?.cruved.U !== '0'" class="btn btn-primary float-right" [routerLink]="['module', {edit: module.module_code}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button><!-- TODO add cruved -->
+          </div>
+          <p *ngIf="module.config.welcome" id="welcome-msg">{{ module.config.welcome }}</p>
+          <div class="">
+            <table class="table table-striped table-sm scrollable">
+              <tr><th>Module</th><td>{{module.module_label}}</td></tr>
+              <tr><th>Description</th><td class="text-in-area">{{module.module_desc}}</td></tr>
+              <tr *ngFor="let fieldName of properties">
+                <th>{{ fields[fieldName].attribut_label }}</th>
+                <td class="text-in-area">{{ _dataService.formatProperty(module[fieldName], fields[fieldName])}}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="">
+            <h5>Médias</h5>
+            <gn-cmr-media-list [medias]="module.medias"></gn-cmr-media-list>
+          </div>
         </div>
-        <div class="cadre scroll" [style.max-height]="cardContentHeight + 'px'" style="overflow-y:auto">
-            <gn-cmr-breadcrumb [currentPage]="'Module: ' + module.module_label"></gn-cmr-breadcrumb>
-            <h3>Module: {{ module.module_label }}</h3>
-            <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a class="nav-item nav-link active" data-toggle="tab" role="tab" aria-selected="true" id="nav-module-tab" href="#module-tab">Module</a>
-                    <a *ngIf="module.config.use_sitegroup" class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-sitegroups-tab" href="#sitegroups-tab">{{module.forms.sitegroup.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ sitegroups.length }}</span></a>
-                    <a *ngIf="!module.config.use_sitegroup" class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-sites-tab" href="#sites-tab">{{module.forms.site.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ sites.length }}</span></a>
-                    <a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-individuals-tab" href="#individuals-tab">{{module.forms.individual.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ individuals.length }}</span></a>
-                    <!--<a class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false" id="nav-stats-tab" href="#stats-tab">Statistiques</a>-->
-                </div>
-                <div class="tab-content" id="nav-tabContent">
-                    <!-- TAB "Module" -->
-                    <div
-                        class="tab-pane fade active show"
-                        id="module-tab"
-                        role="tabpanel"
-                        attr.aria-labelledby="nav-module-tab">
-                            <div class="clearfix">
-                                <!-- Allow edition of module only to user with Update right on ADMIN module -->
-                                <button *ngIf="_cruvedStore.cruved?.ADMIN?.cruved.U !== '0'" class="btn btn-primary float-right" [routerLink]="['module', {edit: module.module_code}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button><!-- TODO add cruved -->
-                            </div>
-                            <p *ngIf="module.config.welcome" id="welcome-msg">{{ module.config.welcome }}</p>
-                            <div class="">
-                                <table class="table table-striped table-sm scrollable">
-                                    <tr><th>Module</th><td>{{module.module_label}}</td></tr>
-                                    <tr><th>Description</th><td class="text-in-area">{{module.module_desc}}</td></tr>
-                                    <tr *ngFor="let fieldName of properties">
-                                        <th>{{ fields[fieldName].attribut_label }}</th>
-                                        <td class="text-in-area">{{ _dataService.formatProperty(module[fieldName], fields[fieldName])}}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="">
-                                <h5>Médias</h5>
-                                <gn-cmr-media-list [medias]="module.medias"></gn-cmr-media-list>
-                            </div>
-                    </div>
 
-                    <!-- TAB "Site Group" -->
-                    <div class="tab-pane fade" id="sitegroups-tab" role="tabpanel" attr.aria-labelledby="nav-sitegroups-tab" *ngIf="module.config.use_sitegroup">
-                        <div class="toolbar clearfix">
-                            <button *ngIf="module?.cruved?.C !== '0'" class="btn btn-success float-left" [routerLink]="['sitegroup']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.sitegroup.label}}</button>
-                            <button class="btn btn-primary float-right" (click)="filterDisplay = !filterDisplay" matTooltip="Afficher les critères de recherche"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
-                        </div>
-                        <gn-cmr-filter *ngIf="module.forms.sitegroup.search_filters.length > 0"
-                            [class]="filterDisplay == true? 'd-block' : 'd-none'"
-                            [filters]="module.forms.sitegroup.search_filters" 
-                            [fieldsDef]="sitegroupFieldsDef" 
-                            (onSearch)="applySitegroupSearch($event)"
-                        ></gn-cmr-filter>
-                        <ngx-datatable #tableSitegroup
-                            class="material striped margin-top-xs"
-                            [rows]="sitegroups"
-                            [rowHeight]="40"
-                            [draggable]="false"
-                            [count]="sitegroups.length"
-                            [limit]="15"
-                            [headerHeight]="50"
-                            [footerHeight]="50"
-                            [selectionType]="'single'"
-                            [selected]="selected"
-                            [messages]="{emptyMessage: 'Aucune donnée disponible', totalMessage: 'Total', selectedMessage: 'sélectionné'}"
-                            (activate)="onSitegroupRowClick($event)">
+        <!-- TAB "Site Group" -->
+        <div class="tab-pane fade" id="sitegroups-tab" role="tabpanel" attr.aria-labelledby="nav-sitegroups-tab" *ngIf="module.config.use_sitegroup">
+          <div class="toolbar clearfix">
+            <button *ngIf="module?.cruved?.C !== '0'" class="btn btn-success float-left" [routerLink]="['sitegroup']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.sitegroup.label}}</button>
+            <button class="btn btn-primary float-right" (click)="filterDisplay = !filterDisplay" matTooltip="Afficher les critères de recherche"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
+          </div>
+          <gn-cmr-filter *ngIf="module.forms.sitegroup.search_filters.length > 0"
+            [class]="filterDisplay == true? 'd-block' : 'd-none'"
+            [filters]="module.forms.sitegroup.search_filters" 
+            [fieldsDef]="sitegroupFieldsDef" 
+            (onSearch)="applySitegroupSearch($event)"
+          ></gn-cmr-filter>
+          <ngx-datatable #tableSitegroup
+            class="material striped margin-top-xs"
+            [rows]="sitegroups"
+            [rowHeight]="40"
+            [draggable]="false"
+            [count]="sitegroups.length"
+            [limit]="15"
+            [headerHeight]="50"
+            [footerHeight]="50"
+            [selectionType]="'single'"
+            [selected]="selected"
+            [messages]="{emptyMessage: 'Aucune donnée disponible', totalMessage: 'Total', selectedMessage: 'sélectionné'}"
+            (activate)="onSitegroupRowClick($event)">
 
-                            <ngx-datatable-column width="60">
-                                <ng-template let-row="row" ngx-datatable-cell-template>
-                                    <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['sitegroup', row.id_sitegroup]">
-                                        <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations ' + module.forms.sitegroup.label + ' ' + row.name"></i>
-                                    </a>
-                                    <a *ngIf="module?.cruved?.U !== '0'"class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['sitegroup', {edit: row.id_sitegroup}]">
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true" [matTooltip]="'Editer ' + module.forms.sitegroup.label + ' ' + row.name"></i>
-                                    </a>
-                                </ng-template>
-                            </ngx-datatable-column>
-                            <ngx-datatable-column *ngFor="let prop of sitegroupListProperties"  [width]="prop.width" [name]="sitegroupFieldsDef[prop.field].attribut_label" [prop]="prop.field" [cellClass]="'text-' + (prop['align'] ? prop['align'] : 'left')" >
-                                <ng-template let-row="row" ngx-datatable-cell-template >
-                                    <span >{{_dataService.formatProperty(row[prop.field], sitegroupFieldsDef[prop.field])}}</span>
-                                </ng-template>
-                            </ngx-datatable-column>
-                        </ngx-datatable>
-                    </div>
-
-                    <!-- TAB "Site" -->
-                    <div
-                        class="tab-pane fade"
-                        id="sites-tab"
-                        role="tabpanel"
-                        attr.aria-labelledby="nav-sites-tab" *ngIf="!module.config.use_sitegroup">
-                        <div class="toolbar clearfix">
-                            <button *ngIf="module?.cruved?.C !== '0'" class="btn btn-success float-left" [routerLink]="['site']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.site.label}}</button>
-                            <button class="btn btn-primary float-right" (click)="filterSiteDisplay = !filterSiteDisplay"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
-                        </div>
-                        <gn-cmr-filter *ngIf="module.forms.site.search_filters.length > 0"
-                            [class]="filterSiteDisplay == true? 'd-block' : 'd-none'"
-                            [filters]="module.forms.site.search_filters" 
-                            [fieldsDef]="siteFieldsDef" 
-                            (onSearch)="applySiteSearch($event)"
-                        ></gn-cmr-filter>
-                        <ngx-datatable #tableSitegroup
-                            class="material striped margin-top-xs"
-                            [rows]="sites"
-                            [rowHeight]="40"
-                            [draggable]="false"
-                            [count]="sites.length"
-                            [limit]="15"
-                            [headerHeight]="50"
-                            [footerHeight]="50"
-                            [selectionType]="'single'"
-                            [selected]="selected"
-                            [messages]="{emptyMessage: 'Aucune donnée disponible', totalMessage: 'Total', selectedMessage: 'sélectionné'}"
-                            (activate)="onSiteRowClick($event)">
-
-                            <ngx-datatable-column width="20" headerClass="col-warning" cellClass="col-warning">
-                                <ng-template let-row="row" ngx-datatable-cell-template>
-                                    <i class="fa fa-warning text-warning" aria-hidden="true" [matTooltip]="'Cette visite devrait avoir au moins 1 observation'" *ngIf="row.observation === true && row.nb_observations == 0"></i>
-                                </ng-template>
-                            </ngx-datatable-column>
-                            <ngx-datatable-column width="45" headerClass="col-action" cellClass="col-action">
-                                <ng-template let-row="row" ngx-datatable-cell-template>
-                                    <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['site', row.id_site]">
-                                        <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations ' + module.forms.site.label + ' ' + row.name"></i>
-                                    </a>
-                                    <a *ngIf="module?.cruved?.U !== '0'" class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['site', {edit: row.id_site}]">
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true" [matTooltip]="'Editer ' + module.forms.site.label + ' ' + row.name"></i>
-                                    </a>
-                                </ng-template>
-                            </ngx-datatable-column>
-                            <ngx-datatable-column *ngFor="let prop of siteListProperties" [width]="prop.width" [name]="siteFieldsDef[prop.field].attribut_label" [prop]="prop.field" [cellClass]="'text-' + (prop['align'] ? prop['align'] : 'left')" >
-                                <ng-template let-row="row" ngx-datatable-cell-template>
-                                    <span>{{_dataService.formatProperty(row[prop.field], siteFieldsDef[prop.field])}}</span>
-                                </ng-template>
-                            </ngx-datatable-column>
-                        </ngx-datatable>
-                    </div>
-
-                    <!-- TAB "Individuals -->
-                    <div
-                        class="tab-pane fade"
-                        id="individuals-tab"
-                        role="tabpanel"
-                        attr.aria-labelledby="nav-individuals-tab">
-                        <div class="toolbar clearfix">
-                            <button *ngIf="module?.cruved?.C !== '0'" class="btn btn-success float-left" [routerLink]="['individual']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.individual.label}}</button>
-                            <button class="btn btn-primary float-right" (click)="filterIndividualDisplay = !filterIndividualDisplay"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
-                        </div>
-                        <gn-cmr-filter *ngIf="module.forms.individual.search_filters.length > 0"
-                            [class]="filterIndividualDisplay == true? 'd-block' : 'd-none'"
-                            [filters]="module.forms.individual.search_filters" 
-                            [fieldsDef]="individualFieldsDef" 
-                            (onSearch)="applyIndividualSearch($event)"
-                        ></gn-cmr-filter>
-                        <ngx-datatable #tableIndividual
-                            class="material striped margin-top-xs"
-                            [rows]="individuals"
-                            [rowHeight]="40"
-                            [draggable]="false"
-                            [count]="individuals.length"
-                            [limit]="15"
-                            [headerHeight]="50"
-                            [footerHeight]="50"
-                            [selectionType]="'single'"
-                            [selected]="selectedIndividual"
-                            (activate)="onIndividualRowClick($event)"
-                            [messages]="{emptyMessage: 'Aucune donnée disponible', totalMessage: 'Total', selectedMessage: 'sélectionné'}">
-
-                            <ngx-datatable-column width="60">
-                                <ng-template let-row="row" ngx-datatable-cell-template>
-                                    <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['individual', row.id_individual]">
-                                        <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations ' + module.forms.individual.label + ' ' + row.identifier"></i>
-                                    </a>
-                                    <a *ngIf="module?.cruved?.U !== '0'" class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['individual', {edit: row.id_individual}]">
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true" [matTooltip]="'Editer ' + module.forms.individual.label + ' ' + row.identifier"></i>
-                                    </a>
-                                </ng-template>
-                            </ngx-datatable-column>
-                            <ngx-datatable-column *ngFor="let prop of individualListProperties" [width]="prop.width" [name]="individualFieldsDef[prop.field].attribut_label" [prop]="prop.field" [cellClass]="'text-' + (prop['align'] ? prop['align'] : 'left')" >
-                                <ng-template let-row="row" ngx-datatable-cell-template>
-                                    <span>{{_dataService.formatProperty(row[prop.field], individualFieldsDef[prop.field])}}</span>
-                                </ng-template>
-                            </ngx-datatable-column>
-                        </ngx-datatable>
-                    </div>
-                </div>
-            </nav>
+            <ngx-datatable-column width="60">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['sitegroup', row.id_sitegroup]">
+                  <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations ' + module.forms.sitegroup.label + ' ' + row.name"></i>
+                </a>
+                <a *ngIf="module?.cruved?.U !== '0'"class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['sitegroup', {edit: row.id_sitegroup}]">
+                  <i class="fa fa-pencil-square-o" aria-hidden="true" [matTooltip]="'Editer ' + module.forms.sitegroup.label + ' ' + row.name"></i>
+                </a>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column *ngFor="let prop of sitegroupListProperties"  [width]="prop.width" [name]="sitegroupFieldsDef[prop.field].attribut_label" [prop]="prop.field" [cellClass]="'text-' + (prop['align'] ? prop['align'] : 'left')" >
+              <ng-template let-row="row" ngx-datatable-cell-template >
+                <span >{{_dataService.formatProperty(row[prop.field], sitegroupFieldsDef[prop.field])}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
         </div>
-    </div>
+
+        <!-- TAB "Site" -->
+        <div class="tab-pane fade"
+          id="sites-tab"
+          role="tabpanel"
+          attr.aria-labelledby="nav-sites-tab" *ngIf="!module.config.use_sitegroup">
+          <div class="toolbar clearfix">
+            <button *ngIf="module?.cruved?.C !== '0'" class="btn btn-success float-left" [routerLink]="['site']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.site.label}}</button>
+            <button class="btn btn-primary float-right" (click)="filterSiteDisplay = !filterSiteDisplay"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
+          </div>
+          <gn-cmr-filter *ngIf="module.forms.site.search_filters.length > 0"
+            [class]="filterSiteDisplay == true? 'd-block' : 'd-none'"
+            [filters]="module.forms.site.search_filters" 
+            [fieldsDef]="siteFieldsDef" 
+            (onSearch)="applySiteSearch($event)"
+          ></gn-cmr-filter>
+          <ngx-datatable #tableSitegroup
+            class="material striped margin-top-xs"
+            [rows]="sites"
+            [rowHeight]="40"
+            [draggable]="false"
+            [count]="sites.length"
+            [limit]="15"
+            [headerHeight]="50"
+            [footerHeight]="50"
+            [selectionType]="'single'"
+            [selected]="selected"
+            [messages]="{emptyMessage: 'Aucune donnée disponible', totalMessage: 'Total', selectedMessage: 'sélectionné'}"
+            (activate)="onSiteRowClick($event)">
+
+            <ngx-datatable-column width="20" headerClass="col-warning" cellClass="col-warning">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <i class="fa fa-warning text-warning" aria-hidden="true" [matTooltip]="'Cette visite devrait avoir au moins 1 observation'" *ngIf="row.observation === true && row.nb_observations == 0"></i>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column width="45" headerClass="col-action" cellClass="col-action">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['site', row.id_site]">
+                  <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations ' + module.forms.site.label + ' ' + row.name"></i>
+                </a>
+                <a *ngIf="module?.cruved?.U !== '0'" class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['site', {edit: row.id_site}]">
+                  <i class="fa fa-pencil-square-o" aria-hidden="true" [matTooltip]="'Editer ' + module.forms.site.label + ' ' + row.name"></i>
+                </a>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column *ngFor="let prop of siteListProperties" [width]="prop.width" [name]="siteFieldsDef[prop.field].attribut_label" [prop]="prop.field" [cellClass]="'text-' + (prop['align'] ? prop['align'] : 'left')" >
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <span>{{_dataService.formatProperty(row[prop.field], siteFieldsDef[prop.field])}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+
+        <!-- TAB "Individuals -->
+        <div class="tab-pane fade"
+          id="individuals-tab"
+          role="tabpanel"
+          attr.aria-labelledby="nav-individuals-tab">
+          <div class="toolbar clearfix">
+            <button *ngIf="module?.cruved?.C !== '0'" class="btn btn-success float-left" [routerLink]="['individual']"><i class="fa fa-plus-circle"></i>&nbsp;Ajouter {{module.forms.individual.label}}</button>
+            <button class="btn btn-primary float-right" (click)="filterIndividualDisplay = !filterIndividualDisplay"><i class="fa fa-sliders"></i>&nbsp;Filtrer</button>
+          </div>
+          <gn-cmr-filter *ngIf="module.forms.individual.search_filters.length > 0"
+            [class]="filterIndividualDisplay == true? 'd-block' : 'd-none'"
+            [filters]="module.forms.individual.search_filters" 
+            [fieldsDef]="individualFieldsDef" 
+            (onSearch)="applyIndividualSearch($event)"
+          ></gn-cmr-filter>
+          <ngx-datatable #tableIndividual
+            class="material striped margin-top-xs"
+            [rows]="individuals"
+            [rowHeight]="40"
+            [draggable]="false"
+            [count]="individuals.length"
+            [limit]="15"
+            [headerHeight]="50"
+            [footerHeight]="50"
+            [selectionType]="'single'"
+            [selected]="selectedIndividual"
+            (activate)="onIndividualRowClick($event)"
+            [messages]="{emptyMessage: 'Aucune donnée disponible', totalMessage: 'Total', selectedMessage: 'sélectionné'}">
+
+            <ngx-datatable-column width="60">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <a class="clickable btn btn-no-padding bt-ghost" [routerLink]="['individual', row.id_individual]">
+                  <i class="fa fa-info-circle" aria-hidden="true" [matTooltip]="'Informations ' + module.forms.individual.label + ' ' + row.identifier"></i>
+                </a>
+                <a *ngIf="module?.cruved?.U !== '0'" class="clickable btn btn-no-padding bt-ghost ml-1" [routerLink]="['individual', {edit: row.id_individual}]">
+                  <i class="fa fa-pencil-square-o" aria-hidden="true" [matTooltip]="'Editer ' + module.forms.individual.label + ' ' + row.identifier"></i>
+                </a>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column *ngFor="let prop of individualListProperties" [width]="prop.width" [name]="individualFieldsDef[prop.field].attribut_label" [prop]="prop.field" [cellClass]="'text-' + (prop['align'] ? prop['align'] : 'left')" >
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <span>{{_dataService.formatProperty(row[prop.field], individualFieldsDef[prop.field])}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+      </div>
+    </nav>
+  </div>
+  </div>
 </div>

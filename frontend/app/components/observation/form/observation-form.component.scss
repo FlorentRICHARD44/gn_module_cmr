@@ -1,19 +1,19 @@
 #details {
-    height: calc(100% - 40vh);
+  height: calc(100% - 40vh);
 }
 #detail-form {
-    overflow-y: auto;
+  overflow-y: auto;
 }
 
 :host ::ng-deep .card-header {
-    padding: 6px 12px;
-    
-    h5 {
-        font-weight: normal;
-    }
-    
-    [aria-expanded=false] .fa-chevron-up,
-    [aria-expanded=true] .fa-chevron-down {
-        display: none;
-    }
+  padding: 6px 12px;
+  
+  h5 {
+    font-weight: normal;
+  }
+  
+  [aria-expanded=false] .fa-chevron-up,
+  [aria-expanded=true] .fa-chevron-down {
+    display: none;
+  }
 }
