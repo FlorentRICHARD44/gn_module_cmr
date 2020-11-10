@@ -75,9 +75,9 @@
                 {% if obs.typage_gen_ouinon == 'Oui' %}
                     {% set ns.profil_genetique = true %}
                     <div><strong>Prélèvement effectué le: </strong>{{obs.typage_gen_date_prelevement.split('-') | reverse | join('/')}}</div>
-                    <div><strong>Type de prélèvement: </strong>{{obs.typage_gen_type_prelevement | join(', ')}}</div>
+                    <div><strong>Type de prélèvement: </strong>{{obs.typage_gen_type_prelevement }}</div>
                     <div><strong>Analyse effectuée par: </strong>{{obs.typage_gen_analyse_par}}</div>
-                    <div><strong>Type d'analyse: </strong>{{obs.typage_gen_type_analyse | join (', ')}}</div>
+                    <div><strong>Type d'analyse: </strong>{{obs.typage_gen_type_analyse }}</div>
                     <div><strong>Résultat: </strong><br>{{(obs.typage_gen_resultat or '') | replace('\n', '<br>') | safe }}</div>
                 {% endif %}
             {% endfor %}
