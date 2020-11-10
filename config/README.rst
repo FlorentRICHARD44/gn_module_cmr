@@ -256,6 +256,15 @@ Il doit être présent même si le sous-module n'utilise pas les groupes de site
 - ``"generic"/"specific"``: définition des champs du formulaire groupe de site
 - ``"geometry_types"``: types de géométries à utiliser pour dessiner le groupe de site. Valeurs possible: "Point", "LineString", "Polygon". Seul le polygon est recommandé car il permet de contrôler que tous les sites créés sont inclus dans le polygone.
 - ``"use_batch_visit_creation"``: si ``true`` affiche un bouton permettant de créer une visite pour tous les sites sélectionnés.
+- ``"compute_date_from_municipality_area"``: indique la liste des champs à calculer en fonction de la géométrie. Indiquer pour chaque champ le nom de l'attribut à écrire et le nom de la colonne de la table ``ref_geo.li_municipalities" à utiliser.
+
+  Dans l'exemple suivant, on enregistre la liste des communes et la liste des départements sur lesquels se trouve le sitegroup::
+
+  "compute_date_from_municipality_area": {
+    "communes": "nom_com",
+    "departement": "insee_dep"
+  }
+
 
 **Champs calculés:**
 
