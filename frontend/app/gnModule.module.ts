@@ -1,8 +1,8 @@
 import { NgModule, Injector } from "@angular/core";
 import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from "@angular/router";
 import { MatSlideToggleModule } from "@angular/material";
 import { MatDialogModule } from '@angular/material/dialog';
+import { Routes, RouterModule } from "@angular/router";
 import { ChartsModule } from "ng2-charts";
 import { GN2CommonModule } from "@geonature_common/GN2Common.module";
 import { ModuleListComponent } from "./components/modules/list/module-list.component";
@@ -29,7 +29,7 @@ import { CmrInjector } from "./services/injector.service";
 import { SitegroupBatchVisitComponent } from "./components/sitegroups/batchvisit/sitegroup-batchvisit.component";
 import { MediaListComponent } from "./components/common/media-list/media-list.component";
 
-// my module routing
+// CMR module routing
 const routes: Routes = [
   { path: "", component: ModuleListComponent },
   { path: "module/:module/module", component: ModuleFormComponent },

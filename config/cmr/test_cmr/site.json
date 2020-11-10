@@ -4,7 +4,8 @@
     "geometry_types": ["Point"],
     "check_site_within_sitegroup": true,
     "search_filters": [{
-        "field":"name"
+        "field":"name",
+        "placeholder": "Nom du point de capture"
     },{
         "field": "piege_type",
         "type": "select"

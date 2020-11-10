@@ -7,16 +7,22 @@
           <small *ngIf="filter?.type != 'date'">{{fieldsDef[filter.field].attribut_label}}</small>
 
           <!-- type text, by default -->
-          <input *ngIf="filter && (!filter.hasOwnProperty('type') || filter.type =='text')" type="text" class="form-control form-control-sm" [formControl]="filterForm.get(filter.field)">
+          <input *ngIf="filter && (!filter.hasOwnProperty('type') || filter.type =='text')" 
+              type="text" 
+              class="form-control form-control-sm" 
+              [placeholder]="filter.placeholder ? filter.placeholder : ''" 
+              [formControl]="filterForm.get(filter.field)">
 
           <!-- type select -->
-          <select *ngIf="filter?.type == 'select'" class="form-control" [formControl]="filterForm.get(filter.field)">
+          <select *ngIf="filter?.type == 'select'" class="form-control" 
+            [formControl]="filterForm.get(filter.field)">
             <option [value]="null"> - </option>
             <option  *ngFor="let val of fieldsDef[filter.field].values" [value]="val">{{val}}</option>
           </select>
 
           <!-- type boolean -->
-          <select *ngIf="filter?.type == 'boolean'" class="form-control" [formControl]="filterForm.get(filter.field)">
+          <select *ngIf="filter?.type == 'boolean'" class="form-control" 
+            [formControl]="filterForm.get(filter.field)">
             <option [value]="null"> - </option>
             <option [value]="true">Oui</option>
             <option [value]="false">Non</option>

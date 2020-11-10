@@ -75,6 +75,7 @@ Les autres fichiers de configuration json permettent de définir:
 - les champs affichés dans une liste de propriété
 - diverses configurations spécifiques.
 - les noms utilisés pour nommer chaque objet (individu, sitegroup, site, visit, observation). Tout le monde n'utilisant pas toujours les mêmes termes, chaque sous-module peut ainsi avoir son propre vocabulaire avec une valeur au singulier ``"label"`` et une valeur au pluriel ``"label_plural"``.
+- des filtres de recherche pour certains tableaux
 
 Ils fonctionnent sur le même principe:
 
@@ -83,7 +84,8 @@ Ils fonctionnent sur le même principe:
 - dans le dossier du sous-module, si le paramètre "generic" est défini, alors il écrase la définition des champs du dossier "generic". Attention à ne pas supprimer un champ obligatoire.
 - dans le dossier du sous-module, le paramètre "specific" permet de lister les champs additionnels qui seront ajoutés au formulaire.
 
-**Définition des champs:**
+Définition des champs de formulaire
+'''''''''''''''''''''''''''''''''''
 
 Voir la définition des champs de formulaire dynamique dans la `documentation de GeoNature <http://pnx-si.github.io/GeoNature/frontend/modules/GN2CommonModule.html>`_.
 On définit pour chaque champ: son type (type_widget), son label (attribut_label), si il est requis (required) et différents autres paramètres selon le type de widget.
@@ -177,6 +179,23 @@ On définit pour chaque champ: son type (type_widget), son label (attribut_label
 
   Dans cet exemple, il y aura 3 champs dans le formulaire: un champ "Entité" (obligatoire), un champ "Commentaires" (qui devient obligatoire) et un champ "Champ perso". Le champ "Administré par" ne sera pas utilisé pour ce sous-module.
 
+Définition des filtres de recherche
+'''''''''''''''''''''''''''''''''''
+
+Les paramètres ``"search_filters"`` permettent de définir les critères de recherche pour certaines listes.
+Ils se configurent avec les paramètres suivants:
+
+- ``"field"``: nom du champ sur lequel filtrer.
+- ``"type"``: type de widget associé. les valeurs suivantes sont disponibles:
+  
+  - ``"text"``: champ text, valeur par défaut si non renseigné.
+  - ``"select"``: liste déroulante. Une option ``-`` est ajoutée (et sélectionnée par défaut) pour afficher tout
+  - ``"dataset"``: liste de jeux de données. 1 seule sélection possible.
+  - ``"observers"``: liste d'utilisateurs.
+  - ``"boolean"``: valeur Oui/Non. Une option ``-`` est ajoutée (et sélectionnée par défaut) pour afficher tout
+  - ``"date"``: ajoute 2 champs: 1 pour la date minimale (incluse) et 1 pour la date maximale (incluse)
+
+- ``"placeholder"``: pour le type "text" seulement. Permet d'ajouter une indication dans le champ lorsque celui-ci est vide.
 
 module.json
 """""""""""

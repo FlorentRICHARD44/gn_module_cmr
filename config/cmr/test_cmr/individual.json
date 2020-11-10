@@ -1,13 +1,17 @@
 {
     "search_filters": [{
-        "field": "identifier"
+        "field": "identifier",
+        "placeholder": "N° Identifiant"
     },{
-        "field": "rfid"
+        "field": "rfid",
+        "placeholder": "N° Puce RFID"
     },{
         "field": "sexe",
-        "type": "select"
+        "type": "select",
+        "placeholder": "Sexe de l'invididu"
     },{
-        "field": "marker"
+        "field": "marker",
+        "placeholder": "Marquage de l'individu"
     }],
     "display_properties": ["identifier","rfid","sexe","marker","last_visit_date","comments"],
     "display_list": [{

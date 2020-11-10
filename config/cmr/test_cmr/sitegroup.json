@@ -7,11 +7,14 @@
         "departement": "insee_dep"
     },
     "search_filters": [{
-        "field": "name"
+        "field": "name",
+        "placeholder": "Nom de l'aire d'étude"
     },{
-        "field": "communes"
+        "field": "communes",
+        "placeholder": "Nom de la commune"
     },{
-        "field": "departement"
+        "field": "departement",
+        "placeholder": "N° du département"
     }],
     "display_properties": ["name","communes","departement","comments"],
     "display_list": [{
