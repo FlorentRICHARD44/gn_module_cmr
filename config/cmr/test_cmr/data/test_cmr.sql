@@ -1,3 +1,8 @@
+-- Add Nomemclature type for Visit Session
+INSERT INTO ref_nomenclatures.bib_nomenclatures_types (mnemonique, label_default, definition_default, label_fr, source, statut, meta_create_date) VALUES
+('CMR_CISTUDE_SESSION','Session','Session pour les CMR Cistude', 'Session','CMR','Validé', now());
+
+
 -- View: gn_cmr.v_cmr_sitegroup_observations_test_cmr
 
 -- DROP VIEW gn_cmr.v_cmr_sitegroup_observations_test_cmr;
@@ -21,7 +26,7 @@ CREATE OR REPLACE VIEW gn_cmr.v_cmr_sitegroup_observations_test_cmr
     s.data #>> '{piege_type}'::text[] AS "type_de_piege",
     NULLIF(s.data #>> '{habitat}'::text[], 'null'::text) AS "habitat",
     NULLIF(s.data #>> '{conductivité}'::text[], 'null'::text) AS "conductivite",
-    ((s.data -> 'date_pose'::text)::text)::date AS "date_de_pose",
+    NULLIF((s.data -> 'date_pose'::text)::text, 'null'::text)::date AS "date_de_pose",
     NULLIF((s.data -> 'date_retrait'::text)::text, 'null'::text)::date AS "date_de_retrait",
 	v.id_visit as "id_visit",
     v.data #>> '{session}'::text[] AS "session",

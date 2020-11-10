@@ -87,7 +87,7 @@ Ils fonctionnent sur le même principe:
 Définition des champs de formulaire
 '''''''''''''''''''''''''''''''''''
 
-Voir la définition des champs de formulaire dynamique dans la `documentation de GeoNature <http://pnx-si.github.io/GeoNature/frontend/modules/GN2CommonModule.html>`_.
+Voir la définition des champs de formulaire dynamique dans la `documentation de GeoNature <https://geonature.readthedocs.io/fr/latest/development.html?highlight=nomenclature#les-composants-generiques>`_.
 On définit pour chaque champ: son type (type_widget), son label (attribut_label), si il est requis (required) et différents autres paramètres selon le type de widget.
 
 - **Exemple 1:**
@@ -189,11 +189,12 @@ Ils se configurent avec les paramètres suivants:
 - ``"type"``: type de widget associé. les valeurs suivantes sont disponibles:
   
   - ``"text"``: champ text, valeur par défaut si non renseigné.
-  - ``"select"``: liste déroulante. Une option ``-`` est ajoutée (et sélectionnée par défaut) pour afficher tout
-  - ``"dataset"``: liste de jeux de données. 1 seule sélection possible.
-  - ``"observers"``: liste d'utilisateurs.
+  - ``"select"``: liste déroulante. Une option ``-`` est ajoutée (et sélectionnée par défaut) pour afficher tout. Les paramètres sont ceux définis dans la configuration du champ.
+  - ``"dataset"``: liste de jeux de données. 1 seule sélection possible. Les paramètres sont ceux définis dans la configuration du champ.
+  - ``"observers"``: liste d'utilisateurs. Les paramètres sont ceux définis dans la configuration du champ.
   - ``"boolean"``: valeur Oui/Non. Une option ``-`` est ajoutée (et sélectionnée par défaut) pour afficher tout
   - ``"date"``: ajoute 2 champs: 1 pour la date minimale (incluse) et 1 pour la date maximale (incluse)
+  - ``"nomenclature"``: ajoute un champ de type nomenclature. Les paramètres sont ceux définis dans la configuration du champ.
 
 - ``"placeholder"``: pour le type "text" seulement. Permet d'ajouter une indication dans le champ lorsque celui-ci est vide.
 

@@ -4,7 +4,7 @@
         "type": "date"
     },{
         "field": "session",
-        "type": "select"
+        "type": "nomenclature"
     },{
         "field": "observers",
         "type": "observers"
@@ -40,10 +40,13 @@
     "mapping_visit_individual_additional_field": "session",
     "specific": {
         "session": {
-            "type_widget": "select",
+            "type_widget": "nomenclature",
             "attribut_label": "Session",
-            "values": ["2020-01","2020-02"],
-            "required": true
+            "required": true,
+            "code_nomenclature_type": "CMR_CISTUDE_SESSION",
+            "multi_select": false,
+            "key_value": "label_fr",
+            "help": "Vous pouvez ajouter une session via l'administration des nomenclatures (type \"Session\"), ou bien demander à un administrateur si vous n'avez pas les droits"
         }
     }
 }

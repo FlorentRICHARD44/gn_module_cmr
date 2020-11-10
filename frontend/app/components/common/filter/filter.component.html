@@ -52,6 +52,17 @@
             [moduleCode]="fieldsDef[filter.field].module_code"
           >
           </pnx-datasets>
+
+          <!-- type nomenclature -->
+          <pnx-nomenclature
+            *ngIf="filter?.type == 'nomenclature'"
+            [label]=""
+            [parentFormControl]="filterForm.get(filter.field)"
+            [codeNomenclatureType]="fieldsDef[filter.field].code_nomenclature_type"
+            [multiSelect]="false"
+            [keyValue]="fieldsDef[filter.field].key_value"
+          >
+          </pnx-nomenclature>
         </div>
       </div>
     </div>
