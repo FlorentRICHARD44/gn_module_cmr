@@ -361,6 +361,7 @@ specific.service.js
 """""""""""""""""""
 
 Ce fichier permet de définir des comportements spécifiques pour chaque formulaire (initialisation du formulaire et/ou inter-dépendence de champs).
+Des exemples de code sont inclus dans le fichier specific.service.js de la configuration générique.
 
 Les fonctions suivantes doivent être impérativement présentes:
 

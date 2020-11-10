@@ -51,6 +51,7 @@
         },
         "piege_type": {
             "type_widget": "select",
+            "noNullOption": true,
             "attribut_label": "Type de Piège",
             "required": true,
             "values": ["Verveux simple","Verveux double","Nasse","Cage-piège","Épuisette","Capture manuelle"]
@@ -58,7 +59,7 @@
         "date_pose": {
             "type_widget": "date",
             "attribut_label": "Date de Pose",
-            "required": false
+            "required": true
         },
         "date_retrait": {
             "type_widget": "date",

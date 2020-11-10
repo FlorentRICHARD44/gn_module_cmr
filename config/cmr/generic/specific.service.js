@@ -14,6 +14,22 @@ export function initSitegroup(form) {
 export function initSite(form, sitegroup) {
     return {};
 }
+/*
+ * Exemple d'utilisation pour activer/desactiver un champ en fonction de la valeur d'un autre.
+ export function initSite(form, sitegroup) {
+  let piege = form.get('piege_type');
+  let date_pose = form.get('date_pose');
+  piege.valueChanges.subscribe( value => {
+    if (["Verveux simple","Verveux double","Nasse","Cage-piège"].indexOf(value) > -1) {
+      date_pose.enable();
+    } else {
+      date_pose.disable();
+      date_pose.setValue(undefined);
+    }
+  });
+  return {};
+}
+ */
 
 /**
  * Fonction d'initialisation du formulaire de visite.
