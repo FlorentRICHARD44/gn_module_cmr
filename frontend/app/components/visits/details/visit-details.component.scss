@@ -1,3 +1,14 @@
 #details {
   height: calc(100% - 40vh);
 }
+
+.no-observation {
+  background-color: #F1F1F1;
+  text-align: center;
+
+  h4 {
+    color: #606060;
+    font-size: 18px;
+    margin-top: 20px;
+  }
+}

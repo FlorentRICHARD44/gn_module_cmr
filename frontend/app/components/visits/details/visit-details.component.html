@@ -28,7 +28,10 @@
         ></pnx-geojson>
       </pnx-map>
     </div>
-    <div class="cadre scroll">
+    <div [class]="'cadre scroll' + (visit.observation ? '' : ' no-observation')">
+      <div *ngIf="!visit.observation">
+        <h4 class="font-italic">Visite sans observation</h4>
+      </div>
       <div class="" *ngIf="visit.observation">
         <h3>{{module.forms.observation.label_plural}}</h3>
         <div class="toolbar clearfix">
