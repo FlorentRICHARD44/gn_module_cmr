@@ -20,9 +20,10 @@ from werkzeug.exceptions import NotFound
 from .repositories import ModulesRepository, SiteGroupsRepository, SitesRepository, VisitsRepository, IndividualsRepository, ObservationsRepository, ConfigRepository
 from .models import TModuleComplement, TSiteGroup, TSite, TVisit, TIndividual, TObservation
 from .utils.transform import json_to_data
+from .command.cmd_install import cmr_cli
 
 blueprint = Blueprint('cmr', __name__)
-
+current_app.cli.add_command(cmr_cli)  # Register command to install sub-modules
 
 #############################
 # TEST ROUTES

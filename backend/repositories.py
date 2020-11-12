@@ -2,7 +2,7 @@ import json
 import os
 from flask import current_app
 from geonature.utils.env import DB
-from geonature.core.gn_commons.models import TMedias
+from geonature.core.gn_commons.models import TMedias, TModules
 from geonature.core.gn_meta.models import TDatasets
 from pypnusershub.db.models import User
 from geonature.core.ref_geo.models import LAreas, LiMunicipalities
@@ -160,6 +160,14 @@ class ModulesRepository(BaseRepository):
     """
     def __init__(self):
         super().__init__(TModuleComplement)
+
+    def create_one(self, module):
+        """
+        Override creation for module installation.
+        """
+        DB.session.add(module)
+        DB.session.commit()
+        return module
 
     def update_one(self, module_code, data):
         """
@@ -411,3 +419,17 @@ class ConfigRepository:
         for item in ['module','sitegroup','site','visit','individual','observation']:
             form_config[item] = self._build_form_from_its_json(module_name, item)
         return form_config
+
+
+class GnModuleRepository(BaseRepository):
+    def __init__(self):
+        super().__init__(TModules)
+    
+    def check_exists(self, module_code):
+        """
+        Checks if a module exists.
+        Return True if exists else False
+        """
+        q = DB.session.query(self.model).filter(TModules.module_code == module_code)
+        d = q.one_or_none()
+        return d is not None

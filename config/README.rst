@@ -13,16 +13,6 @@ Organisation des fichiers de configuration
 
 dans chaque partie, on retrouve les dossiers et fichiers suivants:
 
-- ``backend`` Dossier contenant des fichiers pour la génération d'une fiche individu en PDF.
-
-  - ``static`` 
-  
-    - ``css`` Dossier contenant le style CSS à appliquer à la fiche individu
-    - ``images`` Dossier contenant les images à insérer dans le template de la fiche individu
-    
-  - ``templates`` Dossier contenant le template HTML de la fiche individu
-  
-- ``data`` Dossier contenant les fichiers SQL de vue à exécuter pour créer certaines vues
 - ``images`` Dossier contenant toutes les images pouvant être utilisées dans le sous-module. Il doit au moins contenir l'image du sous-module sous le nom "cmr.jpg"
 - ``config.json`` Fichier de configuration générale du sous-module
 - ``individual.json`` Fichier de configuration des éléments relatifs à un individu (formulaire, listes, ...)
@@ -32,6 +22,9 @@ dans chaque partie, on retrouve les dossiers et fichiers suivants:
 - ``sitegroup.json`` Fichier de configuration des éléments relatifs à un groupe de site (formulaire, liste, ...)
 - ``visit.json`` Fichier de configuration des éléments relatifs à une visite (formulaire, liste, ...)
 - ``specific.service.js`` Fichier JavaScript permettant une gestion spécifique des différents formulaires (initialisation des champs, interactions entre champs)
+- ``cmr.jpg`` Fichier image JPEG, utilisé dans la liste des sous-module de la CMR.
+- ``cmr.sql`` Fichier SQL permettant d'initialiser le sous-module. Il sera automatiquement exécuté à l'installation du sous-module.
+- ``templates`` Dossier contenant le template pour la fiche individu et tous les fichier nécessaires à ce template.
 
 
 Détails de chaque fichier de configuration
@@ -43,7 +36,8 @@ config.json
 """""""""""
 
 **Paramètres:**
-
+- ``"module_label"``: nom du module
+- ``"module_desc"``: description du module
 - ``"disclaimer"``: si ``true`` affiche un message d'avertissement à l'utilisateur lorsqu'il rentre dans le sous-module. si ``"false"`` n'affiche rien
 - ``"disclaimer_text"``: le texte d'avertissement affiché à l'utilisateur si "disclaimer"="true". Ce paramètre est une liste dont chaque élément est une nouvelle ligne.
 - ``"welcome"``: Message de bienvenue dans la page d'accueil du sous-module
@@ -54,6 +48,8 @@ config.json
 ::
 
     {
+      "module_label": "CMR Cistude",
+      "module_desc": "Description du module CMR appliqué à la Cistude d'Europe",
       "disclaimer" : true,
       "disclaimer_text": [
         "La Cistude d'Europe est une espèce protégée,",
@@ -435,10 +431,15 @@ Cette fonction initialise le formulaire de l'individu. L'objet retourné sera ut
 L'objet "form" définit le FormGroup. Pour récupérer un champ, vous pouvez faire un ``form.get('nomduchamp')``
 
 
-Vues SQL
---------
+Initialisation SQL
+------------------
 
-Mettre un fichier "cmr.sql" dans data/ et qui contient les requêtes pour créer des vues spécifiques.
+Mettre un fichier "cmr.sql" dans le dossier et qui contient les requêtes pour initialiser le sous-module:
+
+- Création de vues SQL
+- Ajout de type/items dans la nomenclature
+- ...
+
 Le dossier "generic" contient la vue minimale ainsi qu'un exemple avec une vue plus complexe pour afficher les champs additionnels.
 
 Vue "Observations par groupe de site"
@@ -459,16 +460,11 @@ Le template se compose:
 - d'un fichier CSS (qui définit le style du rapport)
 - éventuellement d'images qui seront insérées dans le rapport
 
-Ces fichiers sont répartis dans plusieurs sous-dossiers
+Ces fichiers sont répartis dans le sous-dossier ``templates``
 
-- backend: le dossier principal
-
-  - templates: le dossier contenant le fichier HTML
-  - static:
-   
-    - css: le dossier contenant le fichier css
-    - images: le dossier contenant la/les image(s)
-
+- ``fiche_individu.html``: le template HTML de la fiche individu (qui sera transformé en PDF par le système).
+- ``fiche_individu_template_pdf.css``: le fichier de style CSS correspondant à la fiche individu.
+- ``images/``: un dossie contenant toutes les images utilisées dans les templates.
 
 Notions génériques
 """"""""""""""""""
@@ -510,3 +506,4 @@ Ce rapport peut contenir:
 - L'historique des observations de l'individu
 - Une carte affichant tous les géométries des captures de l'individu (zone de la carte selon le placement fait par l'utilisateur dans l'application)
 - Les médias photos de l'individu et de ses observations
+- Toutes les images que l'on veut ajouter dans le template et qui sont stockées dans le dossier image.
