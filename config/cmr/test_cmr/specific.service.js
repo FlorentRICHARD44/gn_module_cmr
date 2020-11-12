@@ -68,7 +68,9 @@ export function initObservation(form, formGroups, visit, individual) {
   }
   return {
     date_capture: visit.date,
-    date_relache: visit.date
+    date_relache: visit.date,
+    typage_gen_ouinon: 'Non',
+    analyse_comp_ouinon: 'Non'
   };
 }
 
