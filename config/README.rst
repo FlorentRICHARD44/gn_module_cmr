@@ -203,6 +203,10 @@ Ce fichier permet de configurer les champs additionnels utilisé dans l'onglet "
 
 - ``"display_properties"``: liste des champs qui seront affiché à l'utilisateur.
 - ``"generic"/"specific"``: définition des champs du formulaire module (accessible uniquement à un administrateur).
+- ``"date_validators"``: Possibilité d'ajouter des vérifications entre 2 dates dans le même formulaires. 
+
+  Renseigner le nom des 2 champs séparés par le signe inférieur: en 2nd le champ devant être postérieur ou égal au 1er champs. 
+  Exemple: ``"date_capture<date_relache"``: le champ "Date Relache" devra être postérieur ou égal au champ "Date de Capture".
 
 
 individual.json
@@ -222,7 +226,11 @@ Ce fichier permet de configurer tout ce qui concerne un individu (formulaire, ta
   - il est aussi possible de renseigner l'alignement avec ``"align"`` ("left", "center" ou "right", aligné à gauche par défaut).
   
 - ``"properties_to_keep_when_chaining"``: dans le formulaire, si l'utilisateur enchaîne les créations, les champs listés dans ce paramètre seront pré-rempli avec les valeurs précédentes à chaque réinitialisation de formulaire.
-- ``"generic"/"specific"``: définition des champs du formulaire individu   
+- ``"generic"/"specific"``: définition des champs du formulaire individu
+- ``"date_validators"``: Possibilité d'ajouter des vérifications entre 2 dates dans le même formulaires. 
+
+  Renseigner le nom des 2 champs séparés par le signe inférieur: en 2nd le champ devant être postérieur ou égal au 1er champs. 
+  Exemple: ``"date_capture<date_relache"``: le champ "Date Relache" devra être postérieur ou égal au champ "Date de Capture".
 
 **Champs calculés:**
 
@@ -261,6 +269,11 @@ Il doit être présent même si le sous-module n'utilise pas les groupes de site
     "departement": "insee_dep"
   }
 
+- ``"date_validators"``: Possibilité d'ajouter des vérifications entre 2 dates dans le même formulaires. 
+
+  Renseigner le nom des 2 champs séparés par le signe inférieur: en 2nd le champ devant être postérieur ou égal au 1er champs. 
+  Exemple: ``"date_capture<date_relache"``: le champ "Date Relache" devra être postérieur ou égal au champ "Date de Capture".
+
 
 **Champs calculés:**
 
@@ -291,6 +304,10 @@ Ce fichier permet de configurer tout ce qui concerne un site (formulaire, tablea
 - ``"geometry_types"``: types de géométries à utiliser pour dessiner le site. Valeurs possible: "Point", "LineString", "Polygon"
 - ``"check_site_within_sitegroup"``: si le module utilise des groupes de sites et si ce paramètre est à ``true`` le système vérifie que la géométrie du site créé est bien dans la géométrie du groupe de site. Si ce paramètre est à ``false`` il n'y a pas de vérification.
 - ``"batch_visit_display_list"``: Liste des colonnes de site à afficher dans la popup de création de visite pour tous les sites.
+- ``"date_validators"``: Possibilité d'ajouter des vérifications entre 2 dates dans le même formulaires. 
+
+  Renseigner le nom des 2 champs séparés par le signe inférieur: en 2nd le champ devant être postérieur ou égal au 1er champs. 
+  Exemple: ``"date_capture<date_relache"``: le champ "Date Relache" devra être postérieur ou égal au champ "Date de Capture".
 
 **Champs calculés:**
 
@@ -319,6 +336,10 @@ Ce fichier permet de configurer tout ce qui concerne une visite (formulaire, tab
    
 - ``"properties_to_keep_when_chaining"``: dans le formulaire, si l'utilisateur enchaîne les créations, les champs listés dans ce paramètre seront pré-rempli avec les valeurs précédentes à chaque réinitialisation de formulaire.
 - ``"generic"/"specific"``: définition des champs du formulaire visite
+- ``"date_validators"``: Possibilité d'ajouter des vérifications entre 2 dates dans le même formulaires. 
+
+  Renseigner le nom des 2 champs séparés par le signe inférieur: en 2nd le champ devant être postérieur ou égal au 1er champs. 
+  Exemple: ``"date_capture<date_relache"``: le champ "Date Relache" devra être postérieur ou égal au champ "Date de Capture".
 
 **Champs calculés:**
 
@@ -358,6 +379,12 @@ Ce fichier permet de configurer tout ce qui concerne une observation (formulaire
 
   - ``"field"`` : le nom du champ à utiliser
   - ``"color"`` : la couleur à utiliser pour la courbe. Utiliser une valeur HTML/CSS (https://www.w3schools.com/cssref/css_colors_legal.asp) 
+
+- ``"date_validators"``: Possibilité d'ajouter des vérifications entre 2 dates dans le même formulaires. 
+
+  Renseigner le nom des 2 champs séparés par le signe inférieur: en 2nd le champ devant être postérieur ou égal au 1er champs. 
+  Exemple: ``"date_capture<date_relache"``: le champ "Date Relache" devra être postérieur ou égal au champ "Date de Capture".
+  Attention, pour l'observation, cette vérification n'est possible qu'à l'intérieur d'un même sous-formulaire
 
 **Champs calculés:**
 
