@@ -124,13 +124,13 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
     this._cmrService.saveSiteGroup(formData).subscribe(result => {
       this.bSaving = false;
       if (this.bChainInput) { // update form resetting all fields not configured to be kept.
-        this.sitegroupForm.reset();
         var patch = {};
         for (var k of Object.keys(formData)) {
           if ( this.module.forms.site.properties_to_keep_when_chaining.indexOf(k) > -1) {
-            patch[k] = formData[k]
+            patch[k] = this.sitegroup.value[k]
           }
         }
+        this.sitegroupForm.reset();
         this.sitegroupForm.patchValue(this._dataService.formatDataForBeforeEdition(this.initData, this.module.forms.sitegroup.fields));
         this.sitegroupForm.patchValue(patch);
         this._commonService.regularToaster(

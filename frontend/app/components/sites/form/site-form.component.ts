@@ -119,8 +119,9 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
    * @param geojson 
    */
   onGeomChangeGPSFile(geojson) {
+    console.log('point from geom')
     if (geojson.geometry.coordinates.length > 2) {
-      geojson.geometry.coordinates = [geojson.geometry.coordinates[0], geojson.geometry.coordinates[1]]
+      geojson.geometry.coordinates = [geojson.geometry.coordinates[0], geojson.geometry.coordinates[1]];
     }
     this.addNewGeometry(geojson, true);
   }
@@ -177,15 +178,21 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
     this._cmrService.saveSite(formData).subscribe(result => {
       this.bSaving = false;
       if (this.bChainInput) { // update form resetting all fields not configured to be kept.
-        this.siteForm.reset();
         var patch = {};
         for (var k of Object.keys(formData)) {
           if( this.module.forms.site.properties_to_keep_when_chaining.indexOf(k) > -1) {
-            patch[k] = formData[k]
+            patch[k] = this.siteForm.value[k]
           }
         }
+        this.siteForm.reset();
         this.siteForm.patchValue(this._dataService.formatDataForBeforeEdition(this.initData, this.module.forms.site.fields));
-        this.siteForm.patchValue(patch);
+        this.siteForm.patchValue(this._dataService.formatDataForBeforeEdition(patch, this.module.forms.site.fields));
+        
+        // Clear selection on GPS layers if any
+        let layers = this._mapService.fileLayerFeatureGroup.getLayers();
+        for (let lyr of layers) {
+          lyr.setStyle(this._mapService.searchStyle);
+        }
         this._commonService.regularToaster(
           "info",
           "Formulaire enregistré!"

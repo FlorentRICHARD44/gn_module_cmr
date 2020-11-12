@@ -12,7 +12,6 @@ export function initSitegroup(form) {
  * @param SiteGroup sitegroup le sitegroup pour lequel est créé le site.
  */
 export function initSite(form, sitegroup) {
-  console.log('init site')
   let piege = form.get('piege_type');
   let date_pose = form.get('date_pose');
   let date_retrait = form.get('date_retrait');
