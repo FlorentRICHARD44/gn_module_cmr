@@ -1,5 +1,6 @@
 <div class="main">
   <gn-cmr-mask *ngIf="waitControl" text="Recherche en cours..."></gn-cmr-mask>
+  <gn-cmr-header [currentPage]="'Module: ' + module.module_label"></gn-cmr-header>
   <div class="flex-container">
     <div class="cadre" [style.min-height]="cardContentHeight + 'px'" [style.max-height]="cardContentHeight + 'px'">
       <pnx-map height="100%" class="map-card">
@@ -21,8 +22,6 @@
     </pnx-map>
   </div>
   <div class="cadre scroll" [style.max-height]="cardContentHeight + 'px'" style="overflow-y:auto">
-    <gn-cmr-breadcrumb [currentPage]="'Module: ' + module.module_label"></gn-cmr-breadcrumb>
-    <h3>Module: {{ module.module_label }}</h3>
     <nav>
       <div class="nav nav-tabs" id="nav-tab" role="tablist">
         <a class="nav-item nav-link active" data-toggle="tab" role="tab" aria-selected="true" id="nav-module-tab" href="#module-tab">Module</a>
@@ -36,7 +35,7 @@
           id="module-tab"
           role="tabpanel"
           attr.aria-labelledby="nav-module-tab">
-          <div class="clearfix">
+          <div class="clearfix toolbar">
             <!-- Allow edition of module only to user with Update right on ADMIN module -->
             <button *ngIf="_cruvedStore.cruved?.ADMIN?.cruved.U !== '0'" class="btn btn-primary float-right" [routerLink]="['module', {edit: module.module_code}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button><!-- TODO add cruved -->
           </div>

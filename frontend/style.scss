@@ -1,5 +1,5 @@
 .main {
-    padding: 5px 10px;
+    padding: 5px 5px;
     position: absolute;
     top: 64px;
     bottom: 0px;
@@ -9,12 +9,20 @@
 .text-in-area {
     white-space: pre-wrap;
 }
-
+.cadre-header {
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 0px 5px 5px 5px;
+}
 .cadre {
     background-color: white;
     border-radius: 5px;
     padding: 5px;
     margin: 5px 0px;
+}
+.cadre-empty {
+  background-color: #F1F1F1;
 }
 
 .flex-container {
@@ -35,6 +43,10 @@
 
 .toolbar {
     padding: 5px 0px 10px 0px;
+
+    button {
+        font-size: 15px;
+    }
 }
 
 /** forms **/

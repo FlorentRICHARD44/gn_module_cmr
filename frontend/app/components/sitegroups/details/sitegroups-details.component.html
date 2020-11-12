@@ -1,15 +1,9 @@
 <div class="main">
   <gn-cmr-mask *ngIf="waitControl" text="Recherche en cours..."></gn-cmr-mask>
+  <gn-cmr-header [path]="path" [currentPage]="module.forms.sitegroup.label + ': ' + sitegroup.name"></gn-cmr-header>
   <div class="flex-container">
     <div class="cadre" [style.min-height]="cardContentHeight + 'px'">
       <div id="details">
-        <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.sitegroup.label + ': ' + sitegroup.name"></gn-cmr-breadcrumb>
-        <div class="toolbar clearfix">
-          <h3 class="float-left">{{ module.forms.sitegroup.label + ': ' + sitegroup.name}}</h3>
-          <button *ngIf="module?.cruved?.D !== '0'" class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
-          <button *ngIf="module?.cruved?.E !== '0'" class="btn btn-primary float-right mat-primary ml-2" color="primary" (click)="openModalDownload($event, modalDownload)"><i class="fa fa-arrow-down"></i>&nbsp;Téléchargements</button>
-          <button *ngIf="module?.cruved?.U !== '0'" class="btn btn-primary float-right" [routerLink]="['..', {edit: sitegroup.id_sitegroup}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
-        </div>
         <div class="">
         <nav>
           <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -21,6 +15,11 @@
               id="sitegroup-tab"
               role="tabpanel"
               attr.aria-labelledby="nav-sitegroup-tab">
+              <div class="toolbar clearfix">
+                <button *ngIf="module?.cruved?.D !== '0'" class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
+                <button *ngIf="module?.cruved?.E !== '0'" class="btn btn-primary float-right mat-primary ml-2" color="primary" (click)="openModalDownload($event, modalDownload)"><i class="fa fa-arrow-down"></i>&nbsp;Téléchargements</button>
+                <button *ngIf="module?.cruved?.U !== '0'" class="btn btn-primary float-right" [routerLink]="['..', {edit: sitegroup.id_sitegroup}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
+              </div>
               <table class="table table-striped table-sm scrollable">
                 <tr *ngFor="let fieldName of properties">
                   <th>{{ fields[fieldName].attribut_label }}</th>

@@ -77,10 +77,13 @@ export class BaseMapViewComponent {
 
   calcCardContentHeightParent(minusHeight?) {
     const windowHeight = window.innerHeight;
-    const tbH = document.getElementById("app-toolbar")
+    const tbH1 = document.getElementById("app-toolbar")
       ? document.getElementById("app-toolbar").offsetHeight
       : 0;
-    const height = windowHeight - tbH - (minusHeight || 0);
+    const tbH2 = document.getElementById("cmr-header")
+      ? document.getElementById("cmr-header").offsetHeight
+      : 0;
+    const height = windowHeight - tbH1 - tbH2 - (minusHeight || 0);
     return height;
   }
 

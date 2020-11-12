@@ -1,4 +1,5 @@
 <div class="main">
+  <gn-cmr-header [path]="path" [currentPage]="'Création ' + module.forms.visit.label + ' pour un individu'"></gn-cmr-header>
   <div class="flex-container">
     <gn-cmr-mask *ngIf="waitControl" text="Contrôles en cours..."></gn-cmr-mask>
     <div class="cadre" [style.min-height]="cardContentHeight + 'px'" [style.max-height]="cardContentHeight + 'px'">
@@ -20,8 +21,6 @@
       </pnx-map>
     </div>
     <div id="details-left" class="cadre scroll" [style.max-height]="cardContentHeight + 'px'">
-      <gn-cmr-breadcrumb [path]="path" [currentPage]="'Création ' + module.forms.visit.label + ' pour un individu'"></gn-cmr-breadcrumb>
-      <h3>Module: {{ module.module_label }}</h3>
       <h4>Création {{module.forms.site.label}}</h4>
       <div class="dynamic-form-wrapper mt-2 mb-2" *ngIf="module.config.use_sitegroup">
         <small>{{module.forms.sitegroup.label}}</small>

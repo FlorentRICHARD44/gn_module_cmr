@@ -1,11 +1,10 @@
 <div class="main">
   <gn-cmr-mask *ngIf="waitControl" text="Recherche en cours..."></gn-cmr-mask>
+  <gn-cmr-header [path]="path" [currentPage]="module.forms.site.label + ': ' + site.name"></gn-cmr-header>
   <div class="flex-container">
     <div class="cadre" [style.min-height]="cardContentHeight + 'px'">
       <div id="details">
-        <gn-cmr-breadcrumb [path]="path" [currentPage]="module.forms.site.label + ': ' + site.name"></gn-cmr-breadcrumb>
         <div class="toolbar clearfix">
-          <h3 class="float-left">{{module.forms.site.label}}: {{ site.name }}</h3>
           <button *ngIf="module?.cruved?.D !== '0'"class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
           <button *ngIf="module?.cruved?.U !== '0'"class="btn btn-primary float-right" [routerLink]="['..', {edit: site.id_site}]"><i class="fa fa-pencil"></i>&nbsp;Editer</button>
         </div>

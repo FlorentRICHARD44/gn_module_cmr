@@ -1,10 +1,10 @@
 <div class="main">
+  <gn-cmr-header [currentPage]="'Edition Module: ' + module.module_label"></gn-cmr-header>
   <div class="flex-container">
     <div class="cadre" [style.min-height]="cardContentHeight + 'px'" [style.max-height]="cardContentHeight + 'px'">
       <pnx-map height="100%" class="map-card"></pnx-map>
     </div>
     <div class="cadre scroll" [style.max-height]="cardContentHeight + 'px'" style="overflow-y:auto">
-      <gn-cmr-breadcrumb [currentPage]="'Edition Module: ' + module.module_label"></gn-cmr-breadcrumb>
       <h3>Edition Module: {{ module.module_label }}</h3>
       <div class="">
         <table class="table table-striped table-sm scrollable">
@@ -23,7 +23,7 @@
             [formsDefinition]="moduleFormDefinitions"
           ></pnx-dynamic-form-generator>
 
-          <div class="clearfix">
+          <div class="clearfix toolbar">
             <button class="btn btn-primary float-left" [routerLink]="['..']">Annuler</button>
             <button class="btn btn-success float-right" [disabled]="!moduleForm.valid" (click)="onSubmit()"><i class="fa fa-check"></i>&nbsp;Valider</button>
           </div>

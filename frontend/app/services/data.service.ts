@@ -117,16 +117,12 @@ export class DataService {
    * @param formDef the definition of the form (example: module.forms.site)
    */
   addFormValidatorsToForm(form, formDef) {
-    console.log("add form validator")
-    console.log(form);
     if (formDef.date_validators) {
       let validators = [];
       for (let validator of formDef.date_validators) {
-        console.log(validator)
         let field1 = form.get(validator.split('<')[0]);
         let field2 = form.get(validator.split('<')[1]);
         if (field1 && field2) {
-          console.log("add it");
           validators.push(this._formService.dateValidator(field1, field2));
         }
       }

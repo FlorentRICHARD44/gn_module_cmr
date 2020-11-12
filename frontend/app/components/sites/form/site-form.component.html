@@ -1,6 +1,7 @@
 <div class="main">
+  <gn-cmr-mask *ngIf="waitControl" text="Contrôles en cours..."></gn-cmr-mask>
+  <gn-cmr-header [path]="path" [currentPage]="(bEdit ? 'Edition ' : 'Création ')+ module.forms.site.label + (bEdit ? ': ' + site.name : '')"></gn-cmr-header>
   <div class="flex-container">
-    <gn-cmr-mask *ngIf="waitControl" text="Contrôles en cours..."></gn-cmr-mask>
       <div class="cadre" [style.min-height]="cardContentHeight + 'px'">
         <pnx-map height="100%" class="map-card">
           <pnx-gps (markerChanged)="setNewGeometry($event)"></pnx-gps>
@@ -20,8 +21,6 @@
         </pnx-map>
       </div>
       <div class="cadre scroll">
-        <gn-cmr-breadcrumb [path]="path" [currentPage]="(bEdit ? 'Edition ' : 'Création ')+ module.forms.site.label + (bEdit ? ' ' + site.name : '')"></gn-cmr-breadcrumb>
-        <h3>Module: {{ module.module_label }}</h3>
         <div class="clearfix">
           <h4 class="float-left">{{ bEdit ? 'Edition' : 'Création'}} {{module.forms.site.label}} {{bEdit ? ': ' + site.name : ''}}</h4>
           <span class="float-right" *ngIf="!bEdit">
@@ -42,7 +41,7 @@
         ></pnx-dynamic-form-generator>
 
         <gn-cmr-form-error [form]="siteForm"></gn-cmr-form-error>
-        <div class="clearfix mt-3">
+        <div class="clearfix toolbar mt-3">
           <button class="btn btn-primary float-left" [routerLink]="['..']" *ngIf="!bEdit">Annuler</button>
           <button class="btn btn-primary float-left" [routerLink]="['..', 'site', site.id_site]" *ngIf="bEdit">Annuler</button>
           <button *ngIf="!bChainInput  && !bEdit" class="btn btn-success float-right" [disabled]="!siteForm.valid || bSaving" (click)="onSubmit(true)">

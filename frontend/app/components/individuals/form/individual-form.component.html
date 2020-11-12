@@ -1,9 +1,10 @@
 <div class="main">
-  <div class="cadre">
-    <gn-cmr-breadcrumb [path]="path" [currentPage]="(bEdit ? 'Edition' : 'Création') + ' ' + module.forms.individual.label + (bEdit ? ': ' + individual.identifier : '')"></gn-cmr-breadcrumb>
-    <h3 class="">{{ (bEdit ? 'Edition ' : 'Création ') + module.forms.individual.label + ( bEdit ? ': ' + individual.identifier : '')}}</h3>
+  <gn-cmr-header [path]="path" [currentPage]="(bEdit ? 'Edition' : 'Création') + ' ' + module.forms.individual.label + (bEdit ? ': ' + individual.identifier : '')"></gn-cmr-header>
     <div class="flex-container">
-      <div class="">
+      <div class="cadre cadre-empty"> <!-- empty div to have first one at 50% width, all forms are on right side-->
+      </div>
+      <div class="cadre">
+        <h3 class="">{{ (bEdit ? 'Edition ' : 'Création ') + module.forms.individual.label + ( bEdit ? ': ' + individual.identifier : '')}}</h3>
         <form [formGroup]="individualForm">
           <pnx-dynamic-form-generator
             class="obj-form"
@@ -14,7 +15,7 @@
           ></pnx-dynamic-form-generator>
 
           <gn-cmr-form-error [form]="individualForm"></gn-cmr-form-error>
-          <div class="clearfix mt-3">
+          <div class="clearfix toolbar mt-3">
             <button class="btn btn-primary float-left" [routerLink]="['..']" *ngIf="!bEdit">Annuler</button>
             <button class="btn btn-primary float-left" [routerLink]="['..', 'individual', individual.id_individual]" *ngIf="bEdit">Annuler</button>
             <button *ngIf="!bChainInput" class="btn btn-success float-right" [disabled]="!individualForm.valid || bSaving" (click)="onSubmit()">
@@ -23,8 +24,5 @@
           </div>
         </form>
       </div>
-      <div class=""> <!-- empty div to have first one at 50% width-->
-      </div>
-    </div>
   </div>
 </div>
