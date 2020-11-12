@@ -77,6 +77,18 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
                   lyr.bringToBack(); // force the sitegroup in back, to not be in front of imported points from GPS.
                 }
               }
+
+              // Clear drawn geom or selection on GPS layers if any
+              let layers = this._mapService.fileLayerFeatureGroup.getLayers();
+              for (let lyr of layers) {
+                lyr.setStyle(this._mapService.searchStyle);
+              }
+              // remove the current draw
+              this._mapService.removeAllLayers(this._mapService.map, this._mapService.leafletDrawFeatureGroup);
+              // remove the current marker
+              if (this._mapService.marker) {
+                this._mapService.map.removeLayer(this._mapService.marker);
+              }
             }.bind(this), 300);
           }
         );
@@ -119,7 +131,6 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
    * @param geojson 
    */
   onGeomChangeGPSFile(geojson) {
-    console.log('point from geom')
     if (geojson.geometry.coordinates.length > 2) {
       geojson.geometry.coordinates = [geojson.geometry.coordinates[0], geojson.geometry.coordinates[1]];
     }
@@ -188,11 +199,19 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
         this.siteForm.patchValue(this._dataService.formatDataForBeforeEdition(this.initData, this.module.forms.site.fields));
         this.siteForm.patchValue(this._dataService.formatDataForBeforeEdition(patch, this.module.forms.site.fields));
         
-        // Clear selection on GPS layers if any
+        // Clear drawn geom or selection on GPS layers if any
         let layers = this._mapService.fileLayerFeatureGroup.getLayers();
         for (let lyr of layers) {
           lyr.setStyle(this._mapService.searchStyle);
         }
+        // remove the current draw
+        this._mapService.removeAllLayers(this._mapService.map, this._mapService.leafletDrawFeatureGroup);
+        // remove the current marker
+        if (this._mapService.marker) {
+          this._mapService.map.removeLayer(this._mapService.marker);
+        }
+
+        // Inform user the creation is done
         this._commonService.regularToaster(
           "info",
           "Formulaire enregistré!"
