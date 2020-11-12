@@ -31,7 +31,7 @@
           [myFormGroup]="sitegroupForm"
           [formsDefinition]="sitegroupFormDefinitions"
         ></pnx-dynamic-form-generator>
-
+        <gn-cmr-form-error [form]="sitegroupForm"></gn-cmr-form-error>
         <div class="clearfix mt-3">
           <button class="btn btn-primary float-left" [routerLink]="['..']" *ngIf="!bEdit">Annuler</button>
           <button class="btn btn-primary float-left" [routerLink]="['..' , 'sitegroup', sitegroup.id_sitegroup]" *ngIf="bEdit">Annuler</button>

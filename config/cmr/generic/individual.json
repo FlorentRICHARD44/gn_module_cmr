@@ -65,5 +65,6 @@
             "attribut_label": "Dernière observation",
             "type_column": "date"
         }
-    }
+    },
+    "date_validators": []
 }

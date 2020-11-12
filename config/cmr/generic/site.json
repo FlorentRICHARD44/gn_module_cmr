@@ -55,5 +55,6 @@
         "nb_individuals": {
             "attribut_label": "Nb Individus"
         }
-    }
+    },
+    "date_validators": []
 }

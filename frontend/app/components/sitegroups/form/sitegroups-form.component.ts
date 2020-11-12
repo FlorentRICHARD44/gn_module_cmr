@@ -104,6 +104,7 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
       "geom",
       this._formBuilder.control("", Validators.required)
     );
+    this._dataService.addFormValidatorsToForm(this.sitegroupForm, this.module.forms.sitegroup);
   }
 
   /**

@@ -87,6 +87,10 @@ export class VisitFormComponent extends BaseMapViewComponent implements OnInit {
       }
     }
   }
+  ngAfterViewInit() {
+    super.ngAfterViewInit();
+    this._dataService.addFormValidatorsToForm(this.genericVisitForm, this.module.forms.visit);
+  }
 
   onSubmit(addObservation) {
     this.bSaving = true;

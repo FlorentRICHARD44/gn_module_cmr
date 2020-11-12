@@ -64,7 +64,9 @@
         "date_retrait": {
             "type_widget": "date",
             "attribut_label": "Date de Retrait",
-            "required": false
+            "required": false,
+            "help": "La date de retrait doit être égale ou postérieure à la date de pose"
         }
-    }
+    },
+    "date_validators": ["date_pose<date_retrait"]
 }

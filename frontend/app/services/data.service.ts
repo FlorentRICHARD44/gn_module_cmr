@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { FormService } from "@geonature_common/form/form.service";
 import { Media } from "@geonature_common/form/media/media";
 import { CmrService } from "./cmr.service";
 
@@ -9,7 +10,9 @@ import { CmrService } from "./cmr.service";
   providedIn: "root"
 })
 export class DataService {
-  constructor(private _cmrService: CmrService){}
+  constructor(
+    private _formService: FormService,
+    private _cmrService: CmrService){}
 
   /**
    * Format the value as text according its definition.
@@ -106,5 +109,28 @@ export class DataService {
         elem["attribut_name"] = attribut_name;
         return elem;
       });
+  }
+
+  /**
+   * This methods adds some validators to a form if defined in form configuration.
+   * @param form the FormGroup
+   * @param formDef the definition of the form (example: module.forms.site)
+   */
+  addFormValidatorsToForm(form, formDef) {
+    console.log("add form validator")
+    console.log(form);
+    if (formDef.date_validators) {
+      let validators = [];
+      for (let validator of formDef.date_validators) {
+        console.log(validator)
+        let field1 = form.get(validator.split('<')[0]);
+        let field2 = form.get(validator.split('<')[1]);
+        if (field1 && field2) {
+          console.log("add it");
+          validators.push(this._formService.dateValidator(field1, field2));
+        }
+      }
+      form.setValidators(validators);
+    }
   }
 }

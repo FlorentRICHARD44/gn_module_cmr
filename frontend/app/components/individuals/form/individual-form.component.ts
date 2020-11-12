@@ -58,6 +58,10 @@ export class IndividualFormComponent implements OnInit {
       }
     }
   }
+  
+  ngAfterViewInit() {
+    this._dataService.addFormValidatorsToForm(this.individualForm, this.module.forms.individual);
+  }
 
   onSubmit() {
     this.bSaving = true;

@@ -51,5 +51,6 @@
         "nb_sites": {
             "attribut_label": "Nb Points"
         }
-    }
+    },
+    "date_validators": []
 }

@@ -16,7 +16,8 @@ export class Module {
         module: {
             fields: [],
             display_properties: [],
-            display_list: []
+            display_list: [],
+            date_validators: []
         },
         site: {
             medias: [],
@@ -28,7 +29,8 @@ export class Module {
             geometry_types: [],
             check_site_within_sitegroup: false,
             properties_to_keep_when_chaining: [],
-            search_filters: []
+            search_filters: [],
+            date_validators: []
         },
         sitegroup : {
             medias: [],
@@ -38,7 +40,8 @@ export class Module {
             display_properties:[],
             display_list: [],
             geometry_types: [],
-            search_filters: []
+            search_filters: [],
+            date_validators: []
         },
         individual : {
             medias: [],
@@ -47,7 +50,8 @@ export class Module {
             fields: [],
             display_properties:[],
             display_list: [],
-            search_filters: []
+            search_filters: [],
+            date_validators: []
         },
         visit : {
             label:"", 
@@ -57,7 +61,8 @@ export class Module {
             display_list: [],
             properties_to_keep_when_chaining: [],
             search_filters: [],
-            mapping_visit_individual_additional_field: false
+            mapping_visit_individual_additional_field: false,
+            date_validators: []
         },
         observation : {
             medias: [],
@@ -68,7 +73,8 @@ export class Module {
             display_properties:[],
             display_list: [],
             individual_historic_display_list:[],
-            individual_histogram_items: []
+            individual_histogram_items: [],
+            date_validators: []
         },
     }
     public constructor() {}

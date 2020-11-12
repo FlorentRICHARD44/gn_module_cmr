@@ -123,7 +123,9 @@ export class ObservationFormComponent extends BaseMapViewComponent implements On
 
   ngAfterViewInit() {
     super.ngAfterViewInit();
+    this._dataService.addFormValidatorsToForm(this.observationForm, this.module.forms.observation);
     for (let grp of this.formGroups) {
+      this._dataService.addFormValidatorsToForm(grp['form'], this.module.forms.observation);
       if (grp['yesno_field']) {
         let yesno_field = grp['form'].get(grp['yesno_field']);
         if (yesno_field) {

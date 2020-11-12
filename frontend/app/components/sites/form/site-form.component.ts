@@ -1,6 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FormService } from "@geonature_common/form/form.service";
 import { CommonService } from "@geonature_common/service/common.service";
 import { CmrService } from './../../../services/cmr.service';
 import { CmrMapService } from './../../../services/cmr-map.service';
@@ -39,7 +40,8 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
     private _cmrMapService: CmrMapService,
     private _formBuilder: FormBuilder,
     private _commonService: CommonService,
-    private _dataService: DataService
+    private _dataService: DataService,
+    private _formService: FormService
   ) {
     super();
   }
@@ -101,6 +103,7 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
       "geom",
       this._formBuilder.control("", Validators.required)
     );
+    this._dataService.addFormValidatorsToForm(this.siteForm, this.module.forms.site);
   }
 
   /**

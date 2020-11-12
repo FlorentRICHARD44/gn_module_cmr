@@ -54,5 +54,6 @@
             "attribut_label": "Individu"
         }
     },
-    "groups":[]
+    "groups":[],
+    "date_validators": []
 }

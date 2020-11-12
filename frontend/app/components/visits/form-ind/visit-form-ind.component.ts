@@ -99,6 +99,8 @@ export class VisitFormIndComponent extends BaseMapViewComponent implements OnIni
       "geom",
       this._formBuilder.control("", Validators.required)
     );
+    this._dataService.addFormValidatorsToForm(this.siteForm, this.module.forms.site);
+    this._dataService.addFormValidatorsToForm(this.genericVisitForm, this.module.forms.visit);
   }
 
   onSubmit(addObservation) {

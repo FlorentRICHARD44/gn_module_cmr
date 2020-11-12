@@ -11,5 +11,6 @@
           "attribut_label": "Médias",
           "schema_dot_table": "gn_cmr.t_module_complements"
         }
-    }
+    },
+    "date_validators": []
 }

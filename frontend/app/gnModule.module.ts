@@ -25,6 +25,7 @@ import { BreadcrumbComponent } from './components/common/breadcrumb/breadcrumb.c
 import { GraphComponent } from './components/common/graph/graph.component';
 import { FilterComponent } from './components/common/filter/filter.component';
 import { MaskComponent } from './components/common/mask/mask.component';
+import { FormErrorComponent } from './components/common/form-error/form-error.component';
 import { CmrInjector } from "./services/injector.service";
 import { SitegroupBatchVisitComponent } from "./components/sitegroups/batchvisit/sitegroup-batchvisit.component";
 import { MediaListComponent } from "./components/common/media-list/media-list.component";
@@ -64,7 +65,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [BreadcrumbComponent, GraphComponent, MediaListComponent, FilterComponent, MaskComponent,
+  declarations: [BreadcrumbComponent, GraphComponent, MediaListComponent, FilterComponent, MaskComponent, FormErrorComponent,
     ModuleListComponent, ModuleHomeComponent, ModuleDisclaimerComponent, ModuleFormComponent,
     SiteGroupFormComponent, SiteGroupDetailsComponent, SitegroupBatchVisitComponent,
     SiteFormComponent, SiteDetailsComponent,

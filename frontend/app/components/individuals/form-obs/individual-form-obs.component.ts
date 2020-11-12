@@ -48,6 +48,7 @@ export class IndividualFormObsComponent implements OnInit {
 
   ngAfterViewInit() {
     this.individualForm.disable();
+    this._dataService.addFormValidatorsToForm(this.individualForm, this.module.forms.individual);
   }
 
   onSelectionChange() {

@@ -42,5 +42,6 @@
             "values": ["Mâle","Femelle","Indéterminé"],
             "required": true
         }
-    }
+    },
+    "date_validators": []
 }

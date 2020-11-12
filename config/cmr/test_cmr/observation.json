@@ -289,5 +289,6 @@
                 "required": true
             }
         }
-    }]
+    }],
+    "date_validators": ["date_capture<date_relache"]
 }
