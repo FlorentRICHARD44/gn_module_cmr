@@ -1,5 +1,6 @@
 #details {
-  height: calc(100% - 40vh);
+  max-height: calc(100% - 40vh);
+  overflow-y: auto;
 }
 
 .cadre-empty {
