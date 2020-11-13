@@ -1,57 +1,57 @@
 .main {
-    padding: 5px 2px 0px 2px;
-    position: absolute;
-    top: 64px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
+  padding: 5px 2px 0px 2px;
+  position: absolute;
+  top: 64px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
 }
 .text-in-area {
-    white-space: pre-wrap;
+  white-space: pre-wrap;
 }
 .cadre-header {
-    background-color: white;
-    padding: 5px;
-    margin: 0px 5px 5px 5px;
+  background-color: white;
+  padding: 5px;
+  margin: 0px 5px 5px 5px;
 }
 .cadre {
-    background-color: white;
-    padding: 5px;
-    margin: 5px 0px;
+  background-color: white;
+  padding: 5px;
+  margin: 5px 0px;
 }
 .cadre-empty {
   background-color: #F1F1F1;
 }
 .cadre-left {
-    border-right: solid 5px #dee2e6;
+  border-right: solid 5px #dee2e6;
 }
 .row {
-    margin-right: 5px;
-    margin-left: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
 }
 
 .flex-container {
-    display: flex;
+  display: flex;
 }
 
 .flex-container > div {
-    width: 50%;
-    padding: 5px;
-    margin: 5px;
+  width: 50%;
+  padding: 5px;
+  margin: 5px;
 }
 
 .tab-content {
-    border: 1px solid #dee2e6;
-    border-top: unset;
-    padding: 5px;
+  border: 1px solid #dee2e6;
+  border-top: unset;
+  padding: 5px;
 }
 
 .toolbar {
-    padding: 5px 0px 10px 0px;
+  padding: 5px 0px 10px 0px;
 
-    button {
-        font-size: 15px;
-    }
+  button {
+    font-size: 15px;
+  }
 }
 
 /** forms **/
@@ -68,26 +68,27 @@
 }
 /** tables **/
 :host /deep/ .datatable-body-row.active .datatable-row-group {
-    background-color: rgb(117, 227, 118) !important;
+  background-color: rgb(117, 227, 118) !important;
 }
 
 :host ::ng-deep .map-popup p {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 :host /deep/ .col-warning {
-    padding-left: 5px !important;
-    padding-right: 5px !important;
+  padding-left: 5px !important;
+  padding-right: 5px !important;
 }
 
 :host /deep/ .col-action {
-    padding-left: 8px !important;
-    padding-right: 8px !important;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
 }
 
 .button-container {
-    justify-content: center;
+  justify-content: center;
 }
+
 #details-left {
-    overflow-y: auto;
+  overflow-y: auto;
 }
