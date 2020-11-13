@@ -1,9 +1,11 @@
 import click
 import os
 import shutil
+import subprocess
 from flask import Flask
 from flask.cli import AppGroup, with_appcontext
 from sqlalchemy import text
+from sqlalchemy.exc import IntegrityError
 from geonature.utils.env import DB, ROOT_DIR
 from ..models import TModuleComplement
 from ..repositories import GnModuleRepository, ModulesRepository
@@ -108,6 +110,14 @@ def install_cmr_module(module_config_dir_path, module_code):
       os.mkdir(os.path.join(ROOT_DIR,'backend','templates','cmr'))
     symlink(os.path.join(module_config_dir_path, 'templates'),
         os.path.join(ROOT_DIR,'backend', 'templates','cmr',module_code))
+    
+    # Step 4. Update frontend
+    subprocess.call(
+            [
+                "geonature frontend_build"
+            ],
+            shell=True)
+    print("Installation terminée!")
 
 
 def symlink(path_source, path_dest):
@@ -118,3 +128,53 @@ def symlink(path_source, path_dest):
         print('Suppression du symlink ' + path_dest)
         os.remove(path_dest)
     os.symlink(path_source, path_dest)
+
+def removesymlink(path):
+    if(os.path.islink(path)):
+        print('remove link ' + path)
+        os.remove(path)
+
+@cmr_cli.command('remove')
+@click.argument('module_code')
+@with_appcontext
+def remove_cmr_module( module_code):
+    """
+    Module de CMR: script de suppression d'un sous-module.
+    Commande de suppression:
+    flask cmr remove <module_code>
+    params:
+        - module_code: code du sous-module
+    """
+    print('Suppression module {}'.format(module_code))
+
+    # Step 0: vérification
+    gn_module_repo = GnModuleRepository()
+    if not gn_module_repo.check_exists(module_code):
+        print("Le module {} n'existe pas".format(module_code))
+        return
+
+    # Step 1: Suppression en base de données (si aucune donnée associée).
+    mod_repo = ModulesRepository()
+    module = mod_repo.get_one(TModuleComplement.module_code, module_code)
+    try:
+        txt = "DELETE FROM gn_cmr.t_module_complements WHERE id_module = {}".format(module['id_module'])
+        DB.session.execute(txt)
+        txt2 = "DELETE FROM gn_commons.t_modules WHERE id_module = {}".format(module['id_module'])
+        DB.session.execute(txt2)
+        DB.session.commit()
+    except IntegrityError:
+        print("Impossible de supprimer le module car il y a des données associées")
+        return
+    except Exception as e:
+        print("Impossible de supprimer le module")
+        raise(e)
+    
+    # Step 2: Suppression des fichiers et liens.
+    # Step 3. Copie / Lien symbolique des fichiers/dossiers
+    removesymlink(get_config_path() + '/' + module_code)
+    # Step 3.1. Image sous-module et assets
+    removesymlink(os.path.join(get_config_path(), '..','..', 'frontend', 'assets', module_code + '.jpg'))
+     # Step 3.2. Template
+    removesymlink(os.path.join(ROOT_DIR,'backend', 'templates','cmr',module_code))
+
+    print('Supression terminée!')
