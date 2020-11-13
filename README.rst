@@ -35,6 +35,58 @@ Lancer la commande d'installation
 ``geonature install_gn_module /home/<MON_CHEMIN_ABSOLUE_VERS_LE_MODULE/ /cmr``
 
 
-Configuration
--------------
+Configuration et sous-modules
+-----------------------------
 Voir le fichier dans config/README.rst
+
+Gestion des sous-modules
+------------------------
+
+Un sous-module de test est disponible dans contrib/cmr_test.
+Exemples de sous-modules: https://github.com/FlorentRICHARD44/gn_protocoles_cmr
+
+Installation
+""""""""""""
+
+Pour installer un sous-module:
+
+1. Télécharger le sous-module et le copier sur le répertoire (peut-être fait via un ``git clone``).
+
+2. Se placer dans le répertoire backend de GeoNature et activer le virtualenv
+
+``source venv/bin/activate``
+
+3. Se placer dans le répertoire racine de GeoNature
+
+``cd ..``
+
+4. Installer le sous-module. Utiliser la commande suivante en utilisant un chemin absolu vers le module, et remplacer ``module_code" par un code unique pour le module.
+
+``flask cmr install </chemin/absolu/vers/le/sous-module> module_code``
+
+Exemple avec le sous-module de test
+
+  ::
+
+  cd /home/geonature/geonature
+  source venv/bin/activate
+  cd ..
+  flask cmr install /home/geonature/gn_module/cmr/contrib/cmr_test cmr_test
+
+
+Suppression
+"""""""""""
+
+**Attention**, il n'est pas possible de supprimer un module contenant des données.
+
+1. Se placer dans le répertoire backend de GeoNature et activer le virtualenv
+
+``source venv/bin/activate``
+
+2. Se placer dans le répertoire racine de GeoNature
+
+``cd ..``
+
+3. Supprimer le sous-module. Utiliser la commande suivante en remplaçant ``module_code`` par le code unique du module.
+
+``flask cmr remove module_code``

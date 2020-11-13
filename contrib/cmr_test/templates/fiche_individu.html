@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Fiche individu {{data.individual.identifier}}</title>
+    <link rel="stylesheet" type="text/css" href="../../templates/cmr/{{data.module_code}}/fiche_individu_template_pdf.css">
+</head>
+
+<body>
+<div class="header">
+    <table><tr>
+       <td><img class="bandeau" src="../../templates/cmr/{{data.module_code}}/images/LOGO_test.png" alt="Bandeau"></td>
+        <td><p class="italic">Outil de saisie CMR Test - Fiche Individu</p></td>
+    </tr></table>
+</div>
+<div class="content">
+    <div class="flex">
+        <div>
+            <h1>Fiche Individu: {{data.individual.identifier}}</h1>
+            <div><strong>RFID: </strong>{{data.individual.rfid or ''}}</div>
+            <div><strong>Marquage: </strong>{{data.individual.marker}}</div>
+            <div><strong>Nombre de captures: </strong>{{data.individual.nb_observations}}</div>
+            {% set first_observ = data.observations | sort(attribute='visit.date') | first %}
+            {% set observers = [] %}
+            {% for observer in first_observ.visit.observers %}
+                {{ observers.append(observer.nom_complet) or ''}}
+            {% endfor %}
+            <div><strong>Première capture: </strong>{{first_observ.visit.date.split(' ')[0].split('-') | reverse | join('/')}} par {{ observers | join(', ') }}</div>
+            <div><strong>Commentaires: </strong><br>{{(data.individual.comments or '') | replace('\n','<br>') | safe }}</div>
+        </div>
+        <div class="map">
+            <img src="{{data.map_image}}"/>
+        </div>
+    </div>
+    <br>
+    <h2>Observations</h2>
+    <table class="bordered">
+    <tr>
+        <th>Date</th>
+        <th>Aire d'étude</th>
+        <th>Point de capture</th>
+        <th>Observateur(s)</th>
+        <th>Commentaires</th>
+    </tr>
+    {% for obs in data.observations | sort(attribute='visit.date') %}
+        <tr>
+            <td>{{obs.visit.date.split(' ')[0].split('-') | reverse | join('/')}}</td>
+            <td>{{obs.visit.site.sitegroup.name}}</td>
+            <td>{{obs.visit.site.name}}</td>
+            <td>{% for observer in obs.visit.observers %}
+                {{observer.nom_complet}}<br>
+                {% endfor %}
+            </td>
+            <td>{{(obs.comments or '') | replace('\n', '<br>') | safe }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    <br>
+    <div>
+        <h3>Photos</h3>
+        <div class="row">
+            {% for media in data.medias %}
+                <div class="column">
+                    <strong>{{media.title_fr}}</strong>{% if media.obs_visit_date %} (observation du {{media.obs_visit_date.split(' ')[0].split('-') | reverse | join('/')}}){% endif %}<br>
+                    <img class="media-img" src="{{media.media_path}}"/>
+                </div>
+            {% else %}
+                <p class="italic">Aucune photo de cet individu</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+    <div class="footer">
+        <a target="_blank" href="{{data.footer['url']}}">{{data.footer['url']}}</a>
+        <span class="italic">Fiche générée le {{data.footer['date']}}</span>
+    </div>
+</body>

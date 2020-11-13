@@ -1,0 +1,52 @@
+{
+  "label": "Observation",
+  "label_plural": "Observations",
+  "display_properties": ["type","visit_date","comments"],
+  "display_list": [{
+      "field":"individual_identifier",
+      "width": 150
+  },{
+      "field": "type",
+      "width": 250
+  }],
+  "properties_to_keep_when_chaining": [],
+  "individual_historic_display_list": [{
+      "field":"type",
+      "width": 250
+  },{
+      "field":"visit_date",
+      "width": 120
+  },{
+      "field":"site_name",
+      "width": 150
+  }],
+  "individual_histogram_items": [],
+  "specific": {
+      "test": {
+          "type_widget": "select",
+          "attribut_label": "Test Type",
+          "required": true,
+          "values": ["Test A","Test B"]
+      }
+  },
+  "groups":[{
+    "label": "Test Groupe",
+    "defaults": {
+      "opened": true
+    },
+    "fields": {
+      "test_gp_a": {
+        "type_widget": "text",
+        "attribut_label": "Test Text",
+        "required": false
+      },
+      "test_gp_b": {
+        "type_widget": "select",
+        "attribut_label": "Test Select",
+        "values": ["Select 1", "Select 2"],
+        "required": false
+      }
+    }
+  }],
+  "date_validators": []
+}

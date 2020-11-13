@@ -1,0 +1,38 @@
+{
+  "label": "Individu",
+  "label_plural": "Individus",
+  "search_filters": [{
+      "field": "identifier"
+  },{
+      "field": "rfid"
+  },{
+      "field": "marker"
+  }],
+  "display_properties": ["identifier","rfid","marker","last_visit_date","comments"],
+  "display_list": [{
+      "field":"identifier",
+      "width": 150
+  },{
+      "field": "rfid",
+      "width": 150
+  },{
+      "field": "marker",
+      "width": 150
+  },{
+      "field": "nb_observations",
+      "width": 120,
+      "align": "right"
+  }, {
+      "field": "last_visit_date",
+      "width": 140
+  }],
+  "properties_to_keep_when_chaining": [],
+  "specific": {
+      "test": {
+          "type_widget": "text",
+          "attribut_label": "Test Champ",
+          "required": false
+      }
+  },
+  "date_validators": []
+}

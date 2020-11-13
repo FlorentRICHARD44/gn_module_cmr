@@ -36,6 +36,7 @@ config.json
 """""""""""
 
 **Paramètres:**
+
 - ``"module_label"``: nom du module
 - ``"module_desc"``: description du module
 - ``"disclaimer"``: si ``true`` affiche un message d'avertissement à l'utilisateur lorsqu'il rentre dans le sous-module. si ``"false"`` n'affiche rien
@@ -262,12 +263,16 @@ Il doit être présent même si le sous-module n'utilise pas les groupes de site
 - ``"use_batch_visit_creation"``: si ``true`` affiche un bouton permettant de créer une visite pour tous les sites sélectionnés.
 - ``"compute_date_from_municipality_area"``: indique la liste des champs à calculer en fonction de la géométrie. Indiquer pour chaque champ le nom de l'attribut à écrire et le nom de la colonne de la table ``ref_geo.li_municipalities" à utiliser.
 
-  Dans l'exemple suivant, on enregistre la liste des communes et la liste des départements sur lesquels se trouve le sitegroup::
+  Dans l'exemple suivant, on enregistre la liste des communes et la liste des départements sur lesquels se trouve le sitegroup
 
-  "compute_date_from_municipality_area": {
-    "communes": "nom_com",
-    "departement": "insee_dep"
-  }
+  ::
+
+    {
+      "compute_date_from_municipality_area": {
+        "communes": "nom_com",
+        "departement": "insee_dep"
+      }
+    }
 
 - ``"date_validators"``: Possibilité d'ajouter des vérifications entre 2 dates dans le même formulaires. 
 
@@ -475,6 +480,8 @@ Vue "Observations par groupe de site"
 Nommer la vue "gn_cmr.v_cmr_sitegroup_observations_nomdusousmodule" en remplaçant "nomdusousmodule" par le nom de votre sous-module.
 Cette vue est utilisée pour l'export de toutes les observations d'un groupe de site.
 Elle contient des informations sur le groupe de site, les sites, toutes les visites (y compris dans observations), les observations et les individus observés.
+
+**Attention:** ne pas mettre d'accents dans les noms de colonnes de la vue. (seuls les caractères ASCII passent correctement).
 
 Assets
 ------

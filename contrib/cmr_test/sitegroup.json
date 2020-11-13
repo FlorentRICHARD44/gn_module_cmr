@@ -1,0 +1,37 @@
+{
+  "label": "Groupe de Sites",
+  "label_plural": "Groupes de Sites",
+  "geometry_types": ["Polygon"],
+  "compute_data_from_municipality_area": {},
+  "search_filters": [{
+      "field":"name"
+  }],
+  "display_properties": ["name","comments"],
+  "display_list": [{
+      "field":"name",
+      "width": 250
+  },{
+      "field":"nb_sites",
+      "width": 80,
+      "align": "right"
+  },{
+      "field": "nb_observations",
+      "width": 120,
+      "align": "right"
+  },{
+      "field": "nb_individuals",
+      "width": 100,
+      "align": "right"
+  }],
+  "use_batch_visit_creation": false,
+  "properties_to_keep_when_chaining": [],
+  "specific": {
+      "zoneprotegee": {
+          "type_widget": "select",
+          "attribut_label": "Zone Protégée",
+          "values": ["Oui", "Non"],
+          "required": true
+      }
+  },
+  "date_validators": []
+}

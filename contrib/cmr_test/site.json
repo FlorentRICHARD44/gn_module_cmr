@@ -1,0 +1,37 @@
+{
+  "label": "Site",
+  "label_plural": "Sites",
+  "geometry_types": ["Point"],
+  "check_site_within_sitegroup": false,
+  "search_filters": [{
+      "field":"name"
+  }],
+  "display_properties": ["name","comments","nb_visits"],
+  "display_list": [{
+      "field":"name",
+      "width": 250
+  },{
+      "field":"nb_visits",
+      "width": 100,
+      "align": "right"
+  },{
+      "field":"nb_observations",
+      "width": 100,
+      "align": "right"
+  },{
+      "field":"nb_individuals",
+      "width": 100,
+      "align": "right"
+  }],
+  "properties_to_keep_when_chaining": [],
+  "batch_visit_display_list": ["name"],
+  "specific": {
+      "landuse": {
+          "type_widget": "select",
+          "attribut_label": "Type de terrain",
+          "values": ["Etang", "Marais", "Prairie", "Culture", "Autre"],
+          "required": true
+      }
+  },
+  "date_validators": []
+}

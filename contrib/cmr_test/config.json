@@ -1,0 +1,8 @@
+{
+  "module_label": "CMR Test",
+  "module_desc": "Module de Test de la CMR",
+  "disclaimer" : false,
+  "disclaimer_text": [],
+  "welcome": "Bienvenue sur le module de test",
+  "use_sitegroup": true
+}
