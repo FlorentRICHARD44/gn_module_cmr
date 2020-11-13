@@ -43,6 +43,7 @@ Gestion des sous-modules
 ------------------------
 
 Un sous-module de test est disponible dans contrib/cmr_test.
+
 Exemples de sous-modules: https://github.com/FlorentRICHARD44/gn_protocoles_cmr
 
 Installation
@@ -68,10 +69,10 @@ Exemple avec le sous-module de test
 
   ::
 
-  cd /home/geonature/geonature
-  source venv/bin/activate
-  cd ..
-  flask cmr install /home/geonature/gn_module/cmr/contrib/cmr_test cmr_test
+    cd /home/geonature/geonature
+    source venv/bin/activate
+    cd ..
+    flask cmr install /home/geonature/gn_module/cmr/contrib/cmr_test cmr_test
 
 
 Suppression
