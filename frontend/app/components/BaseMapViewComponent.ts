@@ -90,7 +90,7 @@ export class BaseMapViewComponent {
   calcCardContentHeight() {
     let minusHeight = 10;
 
-    this.cardContentHeight = this.calcCardContentHeightParent(minusHeight + 20)
+    this.cardContentHeight = this.calcCardContentHeightParent(minusHeight + 10)
 
     // resize map after resize container
     if (this._mapService.map) {
