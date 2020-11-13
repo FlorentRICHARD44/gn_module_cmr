@@ -1,5 +1,6 @@
 import click
 import os
+import shutil
 from flask import Flask
 from flask.cli import AppGroup, with_appcontext
 from sqlalchemy import text
@@ -96,9 +97,12 @@ def install_cmr_module(module_config_dir_path, module_code):
 
     # Step 3. Copie / Lien symbolique des fichiers/dossiers
     symlink(module_config_dir_path, get_config_path() + '/' + module_code)
-    # Step 3.1. Image sous-module
+    # Step 3.1. Image sous-module et assets
     symlink(os.path.join(module_config_dir_path, 'cmr.jpg'), 
         os.path.join(get_config_path(), '..','..', 'frontend', 'assets', module_code + '.jpg')) 
+    if os.path.exists(os.path.join(module_config_dir_path, 'assets')):
+        for f in os.listdir(os.path.join(module_config_dir_path, 'assets')):
+            shutil.copyfile(os.path.join(module_config_dir_path, 'assets', f), os.path.join(get_config_path(), '..','..', 'frontend', 'assets', f))
     # Step 3.2. Template
     if not os.path.exists(os.path.join(ROOT_DIR,'backend','templates','cmr')):
       os.mkdir(os.path.join(ROOT_DIR,'backend','templates','cmr'))

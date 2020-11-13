@@ -13,7 +13,6 @@ Organisation des fichiers de configuration
 
 dans chaque partie, on retrouve les dossiers et fichiers suivants:
 
-- ``images`` Dossier contenant toutes les images pouvant être utilisées dans le sous-module. Il doit au moins contenir l'image du sous-module sous le nom "cmr.jpg"
 - ``config.json`` Fichier de configuration générale du sous-module
 - ``individual.json`` Fichier de configuration des éléments relatifs à un individu (formulaire, listes, ...)
 - ``module.json`` Fichier de configuration des éléments relatifs au sous-module (formulaire)
@@ -24,6 +23,7 @@ dans chaque partie, on retrouve les dossiers et fichiers suivants:
 - ``specific.service.js`` Fichier JavaScript permettant une gestion spécifique des différents formulaires (initialisation des champs, interactions entre champs)
 - ``cmr.jpg`` Fichier image JPEG, utilisé dans la liste des sous-module de la CMR.
 - ``cmr.sql`` Fichier SQL permettant d'initialiser le sous-module. Il sera automatiquement exécuté à l'installation du sous-module.
+- ``assets`` Dossier contenant toutes les images pouvant être utilisées dans le sous-module. Toutes les images doivent être incluses dans ce dossier, mais pas de sous-dossier. Veuillez utiliser un nom d'image qui sera unique, car potentiellement situé dans un dossier avec des images des autres sous-modules.
 - ``templates`` Dossier contenant le template pour la fiche individu et tous les fichier nécessaires à ce template.
 
 
@@ -476,6 +476,13 @@ Nommer la vue "gn_cmr.v_cmr_sitegroup_observations_nomdusousmodule" en remplaça
 Cette vue est utilisée pour l'export de toutes les observations d'un groupe de site.
 Elle contient des informations sur le groupe de site, les sites, toutes les visites (y compris dans observations), les observations et les individus observés.
 
+Assets
+------
+
+Ce dossier permet d'ajouter des fichiers (principalement des images) dans le sous-module.
+Il peut être utilisé notamment pour des images d'aide dans les formulaires (champ "html").
+Tous les fichiers doivent être dans ce dossier assets, sans utiliser de sous-dossier.
+Attention au nommage des fichiers. A l'installation du sous-module, tous ces fichiers seront copiés dans un répertoire commun à tous les sous-module de CMR. Leur nom doit donc être unique. Utilisez par exemple le nom du sous-module en préfixe.
 
 Templates de Rapport
 --------------------

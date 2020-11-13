@@ -202,7 +202,9 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
         // Clear drawn geom or selection on GPS layers if any
         let layers = this._mapService.fileLayerFeatureGroup.getLayers();
         for (let lyr of layers) {
-          lyr.setStyle(this._mapService.searchStyle);
+          if (lyr.setStyle) {
+            lyr.setStyle(this._mapService.searchStyle);
+          }
         }
         // remove the current draw
         this._mapService.removeAllLayers(this._mapService.map, this._mapService.leafletDrawFeatureGroup);
