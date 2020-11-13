@@ -1,8 +1,8 @@
 <div class="main">
   <gn-cmr-header [path]="path" [currentPage]="'Création ' + module.forms.visit.label + ' pour un individu'"></gn-cmr-header>
-  <div class="flex-container">
+  <div class="row">
     <gn-cmr-mask *ngIf="waitControl" text="Contrôles en cours..."></gn-cmr-mask>
-    <div class="cadre" [style.min-height]="cardContentHeight + 'px'" [style.max-height]="cardContentHeight + 'px'">
+    <div class="cadre cadre-left col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" [style.min-height]="cardContentHeight + 'px'" [style.max-height]="cardContentHeight + 'px'">
       <pnx-map height="100%" class="map-card">
         <pnx-gps (markerChanged)="setNewGeometry($event)"></pnx-gps>
         <pnx-leaflet-filelayer (onGeomChange)="onGeomChangeGPSFile($event)" [editMode]="true"></pnx-leaflet-filelayer>
@@ -20,7 +20,7 @@
         ></pnx-geojson>
       </pnx-map>
     </div>
-    <div id="details-left" class="cadre scroll" [style.max-height]="cardContentHeight + 'px'">
+    <div id="details-left" class="cadre col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 scroll" [style.max-height]="cardContentHeight + 'px'">
       <h4>Création {{module.forms.site.label}}</h4>
       <div class="dynamic-form-wrapper mt-2 mb-2" *ngIf="module.config.use_sitegroup">
         <small>{{module.forms.sitegroup.label}}</small>

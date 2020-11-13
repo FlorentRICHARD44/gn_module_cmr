@@ -1,5 +1,5 @@
 .main {
-    padding: 5px 5px;
+    padding: 5px 2px 0px 2px;
     position: absolute;
     top: 64px;
     bottom: 0px;
@@ -11,18 +11,23 @@
 }
 .cadre-header {
     background-color: white;
-    border-radius: 5px;
     padding: 5px;
     margin: 0px 5px 5px 5px;
 }
 .cadre {
     background-color: white;
-    border-radius: 5px;
     padding: 5px;
     margin: 5px 0px;
 }
 .cadre-empty {
   background-color: #F1F1F1;
+}
+.cadre-left {
+    border-right: solid 5px #dee2e6;
+}
+.row {
+    margin-right: 5px;
+    margin-left: 5px;
 }
 
 .flex-container {

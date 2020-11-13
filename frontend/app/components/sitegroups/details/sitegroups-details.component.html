@@ -1,8 +1,8 @@
 <div class="main">
   <gn-cmr-mask *ngIf="waitControl" text="Recherche en cours..."></gn-cmr-mask>
   <gn-cmr-header [path]="path" [currentPage]="module.forms.sitegroup.label + ': ' + sitegroup.name"></gn-cmr-header>
-  <div class="flex-container">
-    <div class="cadre" [style.min-height]="cardContentHeight + 'px'">
+  <div class="row">
+    <div class="cadre cadre-left col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" [style.min-height]="cardContentHeight + 'px'">
       <div id="details">
         <div class="">
         <nav>
@@ -46,7 +46,7 @@
       </div>
     </div>
   </div>
-  <div class="cadre scroll" [style.max-height]="cardContentHeight + 'px'" style="overflow-y:auto">
+  <div class="cadre col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 scroll" [style.max-height]="cardContentHeight + 'px'" style="overflow-y:auto">
     <nav>
       <div class="nav nav-tabs" id="nav-tab" role="tablist">
         <a (click)="showSites()" class="nav-item nav-link active" data-toggle="tab" role="tab" aria-selected="false" id="nav-sites-tab" href="#sites-tab">{{module.forms.site.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{ sites.length }}</span></a>

@@ -1,7 +1,7 @@
 <div class="main">
   <gn-cmr-header [path]="path" [currentPage]="module.forms.observation.label"></gn-cmr-header>
-  <div class="flex-container">
-    <div class="cadre" [style.min-height]="cardContentHeight + 'px'" [style.max-height]="cardContentHeight + 'px'">
+  <div class="row">
+    <div class="cadre cadre-left col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" [style.min-height]="cardContentHeight + 'px'" [style.max-height]="cardContentHeight + 'px'">
       <div id="details">
       <div class="toolbar clearfix">
         <button *ngIf="module?.cruved?.D !== '0'" class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
@@ -34,7 +34,7 @@
       ></pnx-geojson>
     </pnx-map>
   </div>
-  <div id="details-left" class="cadre scroll" [style.max-height]="cardContentHeight + 'px'">
+  <div id="details-left" class="cadre col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 scroll" [style.max-height]="cardContentHeight + 'px'">
     <div class="">
       <h3>Détails</h3>
         <table class="table table-striped table-sm scrollable">

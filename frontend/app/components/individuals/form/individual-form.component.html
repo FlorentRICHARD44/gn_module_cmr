@@ -1,9 +1,9 @@
 <div class="main">
   <gn-cmr-header [path]="path" [currentPage]="(bEdit ? 'Edition' : 'Création') + ' ' + module.forms.individual.label + (bEdit ? ': ' + individual.identifier : '')"></gn-cmr-header>
-    <div class="flex-container">
-      <div class="cadre cadre-empty"> <!-- empty div to have first one at 50% width, all forms are on right side-->
+    <div class="row">
+      <div class="cadre cadre-empty cadre-left col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6"> <!-- empty div to have first one at 50% width, all forms are on right side-->
       </div>
-      <div class="cadre">
+      <div class="cadre col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
         <h3 class="">{{ (bEdit ? 'Edition ' : 'Création ') + module.forms.individual.label + ( bEdit ? ': ' + individual.identifier : '')}}</h3>
         <form [formGroup]="individualForm">
           <pnx-dynamic-form-generator

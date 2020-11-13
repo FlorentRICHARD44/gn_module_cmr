@@ -1,8 +1,8 @@
 <div class="main">
   <gn-cmr-mask *ngIf="waitControl" text="Recherche en cours..."></gn-cmr-mask>
   <gn-cmr-header [path]="path" [currentPage]="module.forms.site.label + ': ' + site.name"></gn-cmr-header>
-  <div class="flex-container">
-    <div class="cadre" [style.min-height]="cardContentHeight + 'px'">
+  <div class="row">
+    <div class="cadre cadre-left col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" [style.min-height]="cardContentHeight + 'px'">
       <div id="details">
         <div class="toolbar clearfix">
           <button *ngIf="module?.cruved?.D !== '0'"class="btn btn-danger float-right ml-2" (click)="openModalDownload($event, modalDelete)"><i class="fa fa-trash"></i>&nbsp;Supprimer</button>
@@ -44,7 +44,7 @@
         </div>
       </div>
     </div>
-    <div class="cadre scroll">
+    <div class="cadre col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 scroll">
       <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
           <a class="nav-item nav-link active" data-toggle="tab" aria-selected="true" id="nav-visit-tab" href="#visit-tab">{{module.forms.visit.label_plural}}<span class="badge badge-pill badge-primary ml-2">{{visits.length}}</span></a>

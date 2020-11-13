@@ -1,8 +1,8 @@
 <div class="main">
   <gn-cmr-mask *ngIf="waitControl" text="Recherche en cours..."></gn-cmr-mask>
   <gn-cmr-header [currentPage]="'Module: ' + module.module_label"></gn-cmr-header>
-  <div class="flex-container">
-    <div class="cadre" [style.min-height]="cardContentHeight + 'px'" [style.max-height]="cardContentHeight + 'px'">
+  <div class="row">
+    <div class="cadre cadre-left col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" [style.min-height]="cardContentHeight + 'px'" [style.max-height]="cardContentHeight + 'px'">
       <pnx-map height="100%" class="map-card">
         <!-- First geosjon to show sitegroup or site -->
         <pnx-geojson
@@ -21,7 +21,7 @@
         ></pnx-geojson>
     </pnx-map>
   </div>
-  <div class="cadre scroll" [style.max-height]="cardContentHeight + 'px'" style="overflow-y:auto">
+  <div class="cadre col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 scroll" [style.max-height]="cardContentHeight + 'px'" style="overflow-y:auto">
     <nav>
       <div class="nav nav-tabs" id="nav-tab" role="tablist">
         <a class="nav-item nav-link active" data-toggle="tab" role="tab" aria-selected="true" id="nav-module-tab" href="#module-tab">Module</a>
