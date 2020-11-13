@@ -33,6 +33,9 @@
       </div>
       <div class="" *ngIf="visit.observation">
         <h3>{{module.forms.observation.label_plural}}</h3>
+        <div *ngIf="visit.observation === true && visit.nb_observations == 0" class="alert alert-warning">
+          <i class="fa fa-warning"></i>&nbsp;Cette visite devrait avoir au moins 1 observation!
+        </div>
         <div class="toolbar clearfix">
           <button *ngIf="module?.cruved?.C !== '0'"class="btn btn-success float-left" (click)="onClickAddObservation()"><i class="fa fa-plus-circle"></i>&nbsp;Ajout Observation</button>
         </div>
@@ -45,7 +48,8 @@
           [limit]="15"
           [headerHeight]="50"
           [footerHeight]="50"
-          [scrollbarH]="true">
+          [scrollbarH]="true"
+          [messages]="{emptyMessage: 'Aucune donnée disponible', totalMessage: 'Total', selectedMessage: 'sélectionné'}">
 
           <ngx-datatable-column width="60">
             <ng-template let-row="row" ngx-datatable-cell-template>
