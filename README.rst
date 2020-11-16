@@ -65,6 +65,8 @@ Pour installer un sous-module:
 
 ``flask cmr install </chemin/absolu/vers/le/sous-module> module_code``
 
+5. Penser ensuite à aller dans l'administration de GeoNature pour gérer les permissions CRUVED pour les utilisateurs sur le sous-module.
+
 Exemple avec le sous-module de test
 
   ::
