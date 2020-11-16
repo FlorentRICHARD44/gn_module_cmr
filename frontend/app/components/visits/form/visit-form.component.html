@@ -1,5 +1,5 @@
 <div class="main">
-  <gn-cmr-header [path]="path" [currentPage]="(bEdit ? 'Edition ' : 'Création ') + module.forms.visit.label"></gn-cmr-header>
+  <gn-cmr-header [path]="path" [currentPage]="(bEdit ? 'Edition ' : 'Création ') + module.forms.visit.label + (bEdit ? (': ' + _dataService.formatProperty(visit?.date, module.forms.visit.fields['date'])) : '')"></gn-cmr-header>
   <div class="row">
     <div class="cadre cadre-left col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" [style.min-height]="cardContentHeight + 'px'">
       <pnx-map height="100%" class="map-card">

@@ -55,7 +55,7 @@ export class VisitDetailsComponent extends BaseMapViewComponent implements OnIni
 
         this._cmrService.getOneVisit(params.id_visit).subscribe((data) => {
           this.visit = data;
-          this.path = BreadcrumbComponent.buildPath("visit", this.module, data);
+          this.path = this._dataService.buildBreadcrumbPath("visit", this.module, data);
           this.path = [...this.path];
           this._cmrService.getAllObservationsByVisit(this.visit.id_visit).subscribe((data) => this.observations = data);
           this._cmrService.getOneSiteGeometry(params.id_site).subscribe((data) => {

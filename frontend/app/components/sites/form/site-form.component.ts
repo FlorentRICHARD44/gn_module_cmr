@@ -59,13 +59,13 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
     } else {
       this.module = data;
       this.path =
-      this.path = BreadcrumbComponent.buildPath("site", this.module, {});
+      this.path = this._dataService.buildBreadcrumbPath("site", this.module, {});
       if (this._route.snapshot.paramMap.get('id_sitegroup')) {
         this._cmrService.getOneSiteGroupGeometry(this._route.snapshot.paramMap.get('id_sitegroup')).subscribe(
           (data) => {
             let sitegroup = data[0].properties;
             this.mapFeatures = {'features': data };
-            this.path = BreadcrumbComponent.buildPath("site", this.module, {id_sitegroup: sitegroup.id_sitegroup, sitegroup:sitegroup});
+            this.path = this._dataService.buildBreadcrumbPath("site", this.module, {id_sitegroup: sitegroup.id_sitegroup, sitegroup:sitegroup});
             this.path = [...this.path];
             this.initData = this._cmrService.getSpecificService(this.module.module_code).initSite(this.siteForm, sitegroup);
             this.siteForm.patchValue(this._dataService.formatDataForBeforeEdition(this.initData, this.module.forms.site.fields));

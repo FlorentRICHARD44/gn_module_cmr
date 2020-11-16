@@ -36,7 +36,7 @@
   </div>
   <div id="details-left" class="cadre col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 scroll" [style.max-height]="cardContentHeight + 'px'">
     <div class="">
-      <h3>Détails</h3>
+      <h4>Détails {{module.forms.observation.label}}</h4>
         <table class="table table-striped table-sm scrollable">
           <tr *ngFor="let fieldName of properties">
             <th>{{ fields[fieldName].attribut_label }}</th>

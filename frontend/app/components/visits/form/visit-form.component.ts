@@ -62,7 +62,7 @@ export class VisitFormComponent extends BaseMapViewComponent implements OnInit {
         this.site = data[0].properties;
         this.initData = this._cmrService.getSpecificService(this.module.module_code).initVisit(this.genericVisitForm, this.site);
         this.genericVisitForm.patchValue(this._dataService.formatDataForBeforeEdition(this.initData, this.module.forms.visit.fields));
-        this.path = BreadcrumbComponent.buildPath('visit', this.module, {site: data[0].properties});
+        this.path = this._dataService.buildBreadcrumbPath('visit', this.module, {site: data[0].properties});
         this.path = [...this.path];
         if (this._route.snapshot.paramMap.get('id_sitegroup')) {
           this._cmrService.getOneSiteGroupGeometry(this._route.snapshot.paramMap.get('id_sitegroup')).subscribe((dataSitegroup) => {

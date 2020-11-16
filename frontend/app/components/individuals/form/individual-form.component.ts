@@ -41,7 +41,7 @@ export class IndividualFormComponent implements OnInit {
       });
     } else {
       this.module = data;
-      this.path = BreadcrumbComponent.buildPath("individual", this.module);
+      this.path = this._dataService.buildBreadcrumbPath("individual", this.module);
       var schema = this.module.forms.individual.fields;
       this.individualFormDefinitions = this._dataService.buildFormDefinitions(schema);
       setTimeout(function() {

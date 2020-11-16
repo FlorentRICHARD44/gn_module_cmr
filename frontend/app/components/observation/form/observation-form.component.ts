@@ -77,7 +77,7 @@ export class ObservationFormComponent extends BaseMapViewComponent implements On
       }
       this._cmrService.getOneVisit(this._route.snapshot.paramMap.get('id_visit')).subscribe((data) => {
         this.visit = data;
-        this.path = BreadcrumbComponent.buildPath('observation', this.module, {visit: this.visit});
+        this.path = this._dataService.buildBreadcrumbPath('observation', this.module, {visit: this.visit});
         this.path = [...this.path];
       });
       this._cmrService.getOneIndividual(this._route.snapshot.paramMap.get('id_individual')).subscribe((data) => {

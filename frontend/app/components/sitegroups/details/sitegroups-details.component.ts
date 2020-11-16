@@ -67,7 +67,7 @@ export class SiteGroupDetailsComponent extends BaseMapViewComponent implements O
     this._route.params.subscribe(params => {
       this._cmrService.loadOneModule(params.module).subscribe(() => {
         this.module = this._cmrService.getModule(params.module);
-        this.path = BreadcrumbComponent.buildPath('sitegroup',this.module);
+        this.path = this._dataService.buildBreadcrumbPath('sitegroup',this.module);
         this.path = [...this.path];
 
         this.properties = this.module.forms.sitegroup.display_properties;

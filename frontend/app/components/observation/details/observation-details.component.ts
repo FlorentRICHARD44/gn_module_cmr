@@ -61,7 +61,7 @@ export class ObservationDetailsComponent extends BaseMapViewComponent implements
             i++;
             grp['formDef'] = this._dataService.buildFormDefinitions(grp['fields']);
           }
-          this.path = BreadcrumbComponent.buildPath('observation', this.module, this.observation);
+          this.path = this._dataService.buildBreadcrumbPath('observation', this.module, this.observation);
           this.path = [...this.path];
           this._cmrService.getOneSiteGeometry(params.id_site).subscribe((data) => {
             if (params.id_sitegroup) {

@@ -59,7 +59,7 @@ export class IndividualDetailsComponent extends BaseMapViewComponent implements 
         this.module = this._cmrService.getModule(params.module);
         this.properties = this.module.forms.individual.display_properties;
         this.fields = this.module.forms.individual.fields;
-        this.path = BreadcrumbComponent.buildPath('individual', this.module);
+        this.path = this._dataService.buildBreadcrumbPath('individual', this.module);
         this.path = [...this.path];
         this._cmrService.getOneIndividual(params.id_individual).subscribe((data) => {
           this.individual = data;

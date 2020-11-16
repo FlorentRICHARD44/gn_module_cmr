@@ -59,7 +59,7 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
         this._cmrService.getOneSiteGeometry(params.id_site).subscribe((data) => {
           this.site = data[0].properties;
           this.medias = this.site.medias;
-          this.path = BreadcrumbComponent.buildPath("site", this.module, this.site);
+          this.path = this._dataService.buildBreadcrumbPath("site", this.module, this.site);
           this.path = [...this.path];
           if (params.id_sitegroup) {
             this._cmrService.getOneSiteGroupGeometry(params.id_sitegroup).subscribe((dataSitegroup) => {

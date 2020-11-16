@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from '@angular/router';
-import { ModuleConfig } from "../../../module.config";
 import { CmrService } from './../../../services/cmr.service';
+import { DataService } from './../../../services/data.service';
 
 /**
  * This component set breadcrumbs in the view. The breadcrumbs are composed of:
@@ -28,77 +28,10 @@ export class BreadcrumbComponent implements OnInit{
   constructor(
     private _router: Router,
     private _route: ActivatedRoute,
+    private _dataService: DataService,
     private _cmrService: CmrService) {}
 
   ngOnInit() {
     this.homePath = this._cmrService.getModuleUrl();
-  }
-
-  static buildPath(objectType, module, object = undefined): Array<any> {
-    var basePath = ['/', ModuleConfig.MODULE_URL, 'module', module.module_code]
-    var path = [];
-    path.push({
-      "text": "Module: " + module.module_label, 
-      "link": basePath
-    });
-
-    // Sitegroup => home / module: module name / sitegroup
-    // Individual => home / module: module name / individual
-
-    if (objectType == "site") {
-      // Site => home / module: module name / site
-      // Site => home / module: module name / sitegroup: sitegroup name / site
-      if (object.id_sitegroup) {
-        path.push({
-          "text": module.forms.sitegroup.label + ": " + object.sitegroup.name,
-          "link": basePath.concat(['sitegroup', object.id_sitegroup])
-        });
-      }
-    } else if (objectType == "visit") {
-      // home / module: module name / sitegroup: sitegroup name / site: site name / visit
-      // home / module: module name / sitegroup: sitegroup name / visit
-      let basePathLvl2 = [];
-      if (object.site && object.site.sitegroup) {
-        basePathLvl2 = ['sitegroup', object.site.sitegroup.id_sitegroup];
-        path.push({
-          "text": module.forms.sitegroup.label + ": " + object.site.sitegroup.name,
-          "link": basePath.concat(basePathLvl2)
-        });
-      }
-      path.push({
-        "text": module.forms.site.label + ": " + object.site.name,
-        "link": basePath.concat(basePathLvl2.concat(['site', object.site.id_site]))
-      });
-    } else if (objectType == "visit-individual") {
-      // home / module: module name / individual: identifier / visit
-      if (object.individual) {
-        path.push({
-          "text": module.forms.individual.label + ": " + object.individual.identifier,
-          "link": basePath.concat(['individual', object.individual.id_individual])
-        });
-      }
-    } else if (objectType == "observation") {
-      // home / module: module name / sitegroup: sitegroup name / site: site name / visit / observation
-      // home / module: module name / sitegroup: sitegroup name / visit / observation
-      let basePathLvl2 = [];
-        if (object.visit && object.visit.site) {
-          if (object.visit.site.sitegroup) {
-            basePathLvl2 = ['sitegroup', object.visit.site.sitegroup.id_sitegroup];
-            path.push({
-              "text": module.forms.sitegroup.label + ": " + object.visit.site.sitegroup.name,
-              "link": basePath.concat(basePathLvl2)
-            });
-          }
-          path.push({
-            "text": module.forms.site.label + ": " + object.visit.site.name,
-            "link": basePath.concat(basePathLvl2.concat(['site', object.visit.site.id_site]))
-          });
-          path.push({
-            "text": module.forms.visit.label,
-            "link":  basePath.concat(basePathLvl2.concat(['site', object.visit.site.id_site, 'visit', object.visit.id_visit]))
-          });
-        }
-    }
-    return path;
   }
 }

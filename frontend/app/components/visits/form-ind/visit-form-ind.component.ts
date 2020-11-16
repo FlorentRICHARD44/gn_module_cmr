@@ -85,7 +85,7 @@ export class VisitFormIndComponent extends BaseMapViewComponent implements OnIni
       this.siteFormDefinitions = this._dataService.buildFormDefinitions(this.module.forms.site.fields);
       this._cmrService.getOneIndividual(this._route.snapshot.paramMap.get('id_individual')).subscribe((data) => {
         this.individual = data;
-        this.path = BreadcrumbComponent.buildPath('visit-individual', this.module, {individual: data});
+        this.path = this._dataService.buildBreadcrumbPath('visit-individual', this.module, {individual: data});
         this.path = [...this.path];
         this.initData = this._cmrService.getSpecificService(this.module.module_code).initVisit(this.genericVisitForm, {});
         this.genericVisitForm.patchValue(this._dataService.formatDataForBeforeEdition(this.initData, this.module.forms.visit.fields));

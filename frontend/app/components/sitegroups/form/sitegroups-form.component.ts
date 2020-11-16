@@ -55,7 +55,7 @@ export class SiteGroupFormComponent extends BaseMapViewComponent implements OnIn
       });
     } else {
       this.module = data;
-      this.path = BreadcrumbComponent.buildPath("sitegroup", this.module);
+      this.path = this._dataService.buildBreadcrumbPath("sitegroup", this.module);
       this.leafletDrawOptions = this._cmrMapService.getLeafletDrawOptionDrawAll(this.module.forms.sitegroup.geometry_types);
 
       setTimeout(function() {
