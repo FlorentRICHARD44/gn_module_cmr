@@ -25,8 +25,8 @@
           </div>
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade active show" id="info-tab" role="tabpanel" attr.aria-labelledby="nav-info-tab">
-              <div class="flex-container">
-                <div class="">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                   <h5>Détails</h5>
                   <table class="table table-striped table-sm scrollable">
                     <tr *ngFor="let fieldName of properties">
@@ -45,15 +45,15 @@
                     </div>
                   </div>
                 </div>
-                <div id="graph-list" class="">
+                <div id="graph-list" class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                   <h5>Courbes d'évolutions</h5>
                   <gn-cmr-graph *ngFor="let graph of graphs" [options]="graph"></gn-cmr-graph>
                 </div>
               </div>
             </div>
             <div class="tab-pane fade" id="historic-tab" role="tabpanel" attr.aria-labelledby="nav-historic-tab">
-              <div class="flex-container">
-                <div class="">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                   <pnx-map height="60vh" class="map-card">
                     <pnx-geojson
                       *ngIf="mapFeatures && mapFeatures['features']"
@@ -63,7 +63,7 @@
                     ></pnx-geojson>
                   </pnx-map>
                 </div>
-                <div class="">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                   <div class="details">
                     <ngx-datatable #tableHistoric
                       class="material striped margin-top-xs"
