@@ -54,6 +54,14 @@ export class VisitFormIndComponent extends BaseMapViewComponent implements OnIni
   }
 
   ngOnInit() {
+    // remove the current draw
+    this._mapService.removeAllLayers(this._mapService.map, this._mapService.leafletDrawFeatureGroup);
+    // Remove previously imported GPS File
+    this._mapService.removeAllLayers(this._mapService.map, this._mapService.fileLayerFeatureGroup);
+    // remove the current marker
+    if (this._mapService.marker) {
+      this._mapService.map.removeLayer(this._mapService.marker);
+    }
     this.leafletDrawOptions = this._cmrMapService.getLeafletDrawOptionReadOnly();
     this.siteForm = this._formBuilder.group({});
     this.genericVisitForm =  this._formBuilder.group({});

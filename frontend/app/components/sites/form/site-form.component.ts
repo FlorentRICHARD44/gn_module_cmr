@@ -8,7 +8,6 @@ import { CmrMapService } from './../../../services/cmr-map.service';
 import { DataService } from '../../../services/data.service';
 import { Module } from '../../../class/module';
 import { BaseMapViewComponent } from '../../BaseMapViewComponent';
-import { BreadcrumbComponent } from '../../common/breadcrumb/breadcrumb.component';
 
 /**
  * Component for the site form.
@@ -48,6 +47,14 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
 
   ngOnInit() {
     this.siteForm = this._formBuilder.group({});
+    // remove the current draw
+    this._mapService.removeAllLayers(this._mapService.map, this._mapService.leafletDrawFeatureGroup);
+    // Remove previously imported GPS File
+    this._mapService.removeAllLayers(this._mapService.map, this._mapService.fileLayerFeatureGroup);
+    // remove the current marker
+    if (this._mapService.marker) {
+      this._mapService.map.removeLayer(this._mapService.marker);
+    }
     this.leafletDrawOptions = this._cmrMapService.getLeafletDrawOptionReadOnly();
     var data = this._cmrService.getModule(this._route.snapshot.paramMap.get('module'));
     if (!data) { // if module not yet defined, reload the page to ensure module data is loaded
@@ -76,18 +83,6 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
                 if (lyr) {
                   lyr.bringToBack(); // force the sitegroup in back, to not be in front of imported points from GPS.
                 }
-              }
-
-              // Clear drawn geom or selection on GPS layers if any
-              let layers = this._mapService.fileLayerFeatureGroup.getLayers();
-              for (let lyr of layers) {
-                lyr.setStyle(this._mapService.searchStyle);
-              }
-              // remove the current draw
-              this._mapService.removeAllLayers(this._mapService.map, this._mapService.leafletDrawFeatureGroup);
-              // remove the current marker
-              if (this._mapService.marker) {
-                this._mapService.map.removeLayer(this._mapService.marker);
               }
             }.bind(this), 300);
           }
