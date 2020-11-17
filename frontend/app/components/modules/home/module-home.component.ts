@@ -166,9 +166,11 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
     if (this.module.config.use_sitegroup) {
       // this.table._internalRows permet d'avoir les ligne triées et d'avoir les bons index
       index_row_selected = this.tableSitegroup._internalRows.findIndex(row => row.id_sitegroup === id);
+      document.getElementById('nav-sitegroups-tab').click(); // Force the tab "Sitegroups" to be displayed when click on a sitegroup on map.
     } else {
       // this.table._internalRows permet d'avoir les ligne triées et d'avoir les bons index
       index_row_selected = this.tableSitegroup._internalRows.findIndex(row => row.id_site === id);
+      document.getElementById('nav-sites-tab').click(); // Force the tab "Sites" to be displayed when click on a site on map.
     }
     if (index_row_selected === -1) {
       return;
