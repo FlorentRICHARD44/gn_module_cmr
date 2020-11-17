@@ -329,6 +329,17 @@ class IndividualsRepository(BaseRepository):
     def __init__(self):
         super().__init__(TIndividual)
 
+    def get_all_filter_by(self, filter, params):
+        """
+        Get the individuals, with optional filter
+        """
+        result = []
+        q = DB.session.query(self.model).filter(filter)
+        q = self._compute_additional_filter_params(q, params)
+        for individual in q.all():
+            result.append(individual.to_dict())
+        return result
+
     def get_all_geometries_filter_by(self, filter, params):
         """
         Get the observation and position of all observations made on a sitegroup.

@@ -236,26 +236,28 @@ export class ModuleHomeComponent extends BaseMapViewComponent implements OnInit 
   applyIndividualSearch(event) {
     this.waitControl = true;
     var params = event ? event : {};
-    this._cmrService.getAllIndividualsGeometriesByModule(this.module.id_module, params).subscribe(
-      (data)=> {
-        this.mapFeaturesIndividuals = {'features': data};
-        this.individuals = [];
-        let individualIds = [];
-        for (let item of data) {
-          if (individualIds.indexOf(item.properties.individual.id_individual) == -1) {
-            individualIds.push(item.properties.individual.id_individual);
-            this.individuals.push(item.properties.individual);
-          }
+    this._cmrService.getAllIndividualsWithFilterByModule(this.module.id_module, params).subscribe(
+      (data) => {
+        this.individuals = data;
+        this._cmrService.getAllIndividualsGeometriesByModule(this.module.id_module, params).subscribe(
+          (data)=> {
+            this.mapFeaturesIndividuals = {'features': data};
+            let individualIds = [];
+            for (let item of data) {
+              if (individualIds.indexOf(item.properties.individual.id_individual) == -1) {
+                individualIds.push(item.properties.individual.id_individual);
+              }
+            }
+            this.selectedIndividual = [];
+            this.waitControl = false;
+          })
+        },
+        (error) => {
+          this.mapFeaturesIndividuals = {'features': []};
+          this.selectedIndividual = [];
+          this.individuals = [];
+          this.waitControl = false;
         }
-        this.selectedIndividual = [];
-        this.waitControl = false;
-      },
-      (error) => {
-        this.mapFeaturesIndividuals = {'features': []};
-        this.selectedIndividual = [];
-        this.individuals = [];
-        this.waitControl = false;
-      }
     );
   }
 

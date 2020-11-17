@@ -163,6 +163,10 @@ export class CmrService {
   }
 
   getAllIndividualsGeometriesByModule(id_module, params) {
+    return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/individuals/geometries/filtered`, this._paramsToHttpParams(params));
+  }
+
+  getAllIndividualsWithFilterByModule(id_module, params) {
     return this._api.get<any>(`${AppConfig.API_ENDPOINT}/${ModuleConfig.MODULE_URL}/module/${id_module}/individuals/filtered`, this._paramsToHttpParams(params));
   }
 

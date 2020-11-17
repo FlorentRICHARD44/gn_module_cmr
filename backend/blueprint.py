@@ -432,10 +432,10 @@ def get_all_individuals_by_module(id_module):
     Get the details of all individuals for a submodule.
     """
     ind_repo = IndividualsRepository()
-    return ind_repo.get_all_filter_by(TIndividual.id_module, id_module)
+    return ind_repo.get_all_filter_by(TIndividual.id_module == id_module, {})
 
 # Get position of each individual capture/recapture by module using filters
-@blueprint.route('/module/<int:id_module>/individuals/filtered', methods=['GET'])
+@blueprint.route('/module/<int:id_module>/individuals/geometries/filtered', methods=['GET'])
 @json_resp
 def get_all_individuals_geometries_by_module(id_module):
     """
@@ -444,6 +444,17 @@ def get_all_individuals_geometries_by_module(id_module):
     """
     ind_repo = IndividualsRepository()
     return ind_repo.get_all_geometries_filter_by(TSite.id_module == id_module, request.args.to_dict())
+
+# Get position of each individual capture/recapture by module using filters
+@blueprint.route('/module/<int:id_module>/individuals/filtered', methods=['GET'])
+@json_resp
+def get_all_individuals_filtered_by_module(id_module):
+    """
+    Get details of all individuals for a module and optionally filtered.
+    Return details as JSON.
+    """
+    ind_repo = IndividualsRepository()
+    return ind_repo.get_all_filter_by(TIndividual.id_module == id_module, request.args.to_dict())
 
 # Get list of individuals by site group
 @blueprint.route('/sitegroup/<int:id_sitegroup>/individuals', methods=['GET'])
