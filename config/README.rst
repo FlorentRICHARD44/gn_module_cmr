@@ -469,7 +469,7 @@ Initialisation SQL
 Mettre un fichier "cmr.sql" dans le dossier et qui contient les requêtes pour initialiser le sous-module:
 
 - Création de vues SQL
-- Ajout de type/items dans la nomenclature
+- Ajout de type/items dans la nomenclature (pensez à ajouter 1 ou 2 items de test pour chaque nouvelle nomenclature si vous n'ajouter pas déjà des valeurs pré-définies).
 - ...
 
 Le dossier "generic" contient la vue minimale ainsi qu'un exemple avec une vue plus complexe pour afficher les champs additionnels.
