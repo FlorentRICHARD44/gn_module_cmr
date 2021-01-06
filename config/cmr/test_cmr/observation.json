@@ -95,7 +95,7 @@
             "required": false
         },
         "site_name": {
-            "attribut_label": "Point de Capture"
+            "attribut_label": "Piège"
         },
         "aide_media": {
             "type_widget": "html",

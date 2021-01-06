@@ -1,6 +1,6 @@
 {
-    "label": "Aire d'étude",
-    "label_plural": "Aires d'étude",
+    "label": "Site d'étude",
+    "label_plural": "Sites d'étude",
     "geometry_types": ["Polygon"],
     "compute_data_from_municipality_area": {
         "communes": "nom_com",
@@ -49,7 +49,7 @@
             "attribut_label": "Département"
         },
         "nb_sites": {
-            "attribut_label": "Nb Points"
+            "attribut_label": "Nb Pièges"
         }
     },
     "date_validators": []

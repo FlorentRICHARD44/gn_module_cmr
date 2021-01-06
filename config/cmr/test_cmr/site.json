@@ -1,11 +1,11 @@
 {
-    "label": "Point de Capture",
-    "label_plural": "Points de Capture",
+    "label": "Piège",
+    "label_plural": "Pièges",
     "geometry_types": ["Point"],
     "check_site_within_sitegroup": true,
     "search_filters": [{
         "field":"name",
-        "placeholder": "Nom du point de capture"
+        "placeholder": "Nom du piège"
     },{
         "field": "piege_type",
         "type": "select"
