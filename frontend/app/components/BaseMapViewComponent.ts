@@ -37,6 +37,23 @@ export class BaseMapViewComponent {
       fillOpacity: 0.5,
       color: 'blue'
     },
+    currentsite: {
+      radius: 12,
+      opacity: 0.8,
+      fillOpacity: 0.7,
+      color: 'green'
+    },
+    siteother: {
+      opacity: 0.4,
+      fillOpacity: 0.3,
+      color: 'blue',
+    },
+    sitesearch: {
+      radius: 4,
+      opacity: 0.7,
+      fillOpacity: 0.9,
+      color: 'green'
+    },
     observation: {
       radius: 9,
       opacity: 0.7,
@@ -54,6 +71,12 @@ export class BaseMapViewComponent {
       opacity: 0.7,
       fillOpacity: 0.5,
       color: 'red'
+    },
+    'currentsite-selected': {
+      radius: 10,
+      opacity: 0.8,
+      fillOpacity: 0.6,
+      color: 'green'
     },
     'observation-selected': {
       opacity: 0.7,

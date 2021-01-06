@@ -5,7 +5,7 @@
       <div class="cadre cadre-left col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" [style.min-height]="cardContentHeight + 'px'">
         <pnx-map height="100%" class="map-card">
           <pnx-gps (markerChanged)="setNewGeometry($event)"></pnx-gps>
-          <pnx-leaflet-filelayer (onGeomChange)="onGeomChangeGPSFile($event)" [editMode]="true"></pnx-leaflet-filelayer>
+          <pnx-leaflet-filelayer (onGeomChange)="onGeomChangeGPSFile($event)" [editMode]="true" [style]="this.getMapStyle('sitesearch')"></pnx-leaflet-filelayer>
           <pnx-leaflet-draw 
             [geojson]="geometry" 
             [options]="leafletDrawOptions" 

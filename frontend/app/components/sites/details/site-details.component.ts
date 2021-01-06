@@ -63,8 +63,11 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
           this.path = [...this.path];
           if (params.id_sitegroup) {
             this._cmrService.getOneSiteGroupGeometry(params.id_sitegroup).subscribe((dataSitegroup) => {
-              this.mapFeatures = {'features': dataSitegroup.concat(data)};
-              setTimeout(function() {this.initFeatures(this._route, this.module);}.bind(this), 300);
+              // Get all sites of this sitegroup to display other sites
+              this._cmrService.getAllSitesGeometriesBySiteGroup(params.id_sitegroup, {}).subscribe((dataAllSites) => {
+                this.mapFeatures = {'features': dataSitegroup.concat(dataAllSites)};
+                setTimeout(function() {this.initFeatures(this._route, this.module);}.bind(this), 300);
+              });
             });
           } else {
             this.mapFeatures = {'features': data};
@@ -126,5 +129,29 @@ export class SiteDetailsComponent extends BaseMapViewComponent implements OnInit
         );
       })
     )
+  }
+
+  /**
+   * Initialize the feature with:
+   * * add a popup (with name and hyperlink)
+   */
+  initFeatures(route, module) {
+    for (let ft of this.mapFeatures['features']) {
+      var lyr = this.findFeatureLayer(ft.id, ft['object_type']);
+      this.setPopup(lyr, route, ft, module);
+      lyr.setStyle(this.getMapStyle(ft['object_type']));
+      // Other sites are less semi-transparent
+      if (ft.object_type == 'site' && ft.properties.id_site != this.site.id_site) {
+        ft['hidden'] = true;
+        lyr.setStyle(this.getMapStyle('siteother'));
+      } else if (ft.object_type == 'site' && ft.properties.id_site == this.site.id_site) {
+        lyr.bringToFront();
+        ft['object_type'] = 'currentsite';
+        lyr.setStyle(this.getMapStyle('currentsite'));
+      }
+      let onLyrClickFct = this.onFeatureLayerClick(ft, ft['object_type']);
+      lyr.off('click', onLyrClickFct);
+      lyr.on('click', onLyrClickFct);
+    }
   }
 }

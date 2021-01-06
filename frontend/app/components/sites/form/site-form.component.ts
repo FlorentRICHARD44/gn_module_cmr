@@ -24,6 +24,7 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
   public siteForm: FormGroup;
   public siteFormDefinitions = [];
   public site: any = {};
+  public sitegroup: any = {};
   public geometry;
 
   public waitControl = false;
@@ -71,19 +72,37 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
         this._cmrService.getOneSiteGroupGeometry(this._route.snapshot.paramMap.get('id_sitegroup')).subscribe(
           (data) => {
             let sitegroup = data[0].properties;
+            this.sitegroup = data;
             this.mapFeatures = {'features': data };
             this.path = this._dataService.buildBreadcrumbPath("site", this.module, {id_sitegroup: sitegroup.id_sitegroup, sitegroup:sitegroup});
             this.path = [...this.path];
             this.initData = this._cmrService.getSpecificService(this.module.module_code).initSite(this.siteForm, sitegroup);
             this.siteForm.patchValue(this._dataService.formatDataForBeforeEdition(this.initData, this.module.forms.site.fields));
             setTimeout(function() {
-              this.initFeatures(this._route, this.module);
-              for (let ft of this.mapFeatures['features']) {
-                var lyr = this.findFeatureLayer(sitegroup.id, 'sitegroup');
-                if (lyr) {
-                  lyr.bringToBack(); // force the sitegroup in back, to not be in front of imported points from GPS.
-                }
-              }
+                // Get all sites of this sitegroup to display other sites
+                this._cmrService.getAllSitesGeometriesBySiteGroup(this._route.snapshot.paramMap.get('id_sitegroup'), {}).subscribe(
+                  (dataAllSites) => {
+                    this.mapFeatures = {'features': data.concat(dataAllSites)};
+                    setTimeout(function() {
+                      this.initFeatures(this._route, this.module);
+                      for (let ft of this.mapFeatures['features']) {
+                        var lyr = this.findFeatureLayer(sitegroup.id, 'sitegroup');
+                        if (lyr) {
+                          lyr.bringToBack(); // force the sitegroup in back, to not be in front of imported points from GPS.
+                        }
+                      }
+                      }.bind(this), 300);
+                  },
+                  (error) => {
+                    this.initFeatures(this._route, this.module);
+                    for (let ft of this.mapFeatures['features']) {
+                      var lyr = this.findFeatureLayer(sitegroup.id, 'sitegroup');
+                      if (lyr) {
+                        lyr.bringToBack(); // force the sitegroup in back, to not be in front of imported points from GPS.
+                      }
+                    }
+                  });
+              
             }.bind(this), 300);
           }
         );
@@ -207,6 +226,22 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
         if (this._mapService.marker) {
           this._mapService.map.removeLayer(this._mapService.marker);
         }
+        if (this.sitegroup) {
+          // Refresh the list of all sites created within this sitegroup.
+          this._cmrService.getAllSitesGeometriesBySiteGroup(this._route.snapshot.paramMap.get('id_sitegroup'), {}).subscribe(
+            (dataAllSites) => {
+              this.mapFeatures = {'features': this.sitegroup.concat(dataAllSites)};
+              setTimeout(function() {
+                this.initFeatures(this._route, this.module);
+                for (let ft of this.mapFeatures['features']) {
+                  var lyr = this.findFeatureLayer(this.sitegroup.id, 'sitegroup');
+                  if (lyr) {
+                    lyr.bringToBack(); // force the sitegroup in back, to not be in front of imported points from GPS.
+                  }
+                }
+                }.bind(this), 300);
+            });
+          }
 
         // Inform user the creation is done
         this._commonService.regularToaster(
@@ -234,6 +269,28 @@ export class SiteFormComponent extends BaseMapViewComponent implements OnInit {
           lyr.bringToBack(); // force the sitegroup in back, to not be in front of imported points from GPS.
         }
       }
+    }
+  }/**
+   * Initialize the feature with:
+   * * add a popup (with name and hyperlink)
+   */
+  initFeatures(route, module) {
+    for (let ft of this.mapFeatures['features']) {
+      var lyr = this.findFeatureLayer(ft.id, ft['object_type']);
+      this.setPopup(lyr, route, ft, module);
+      lyr.setStyle(this.getMapStyle(ft['object_type']));
+      // Other sites are less semi-transparent
+      if (ft.object_type == 'site' && ft.properties.id_site != this.site.id_site) {
+        ft['hidden'] = true;
+        lyr.setStyle(this.getMapStyle('siteother'));
+      } else if (ft.object_type == 'site' && ft.properties.id_site == this.site.id_site) {
+        lyr.bringToFront();
+        ft['object_type'] = 'currentsite';
+        lyr.setStyle(this.getMapStyle('currentsite'));
+      }
+      let onLyrClickFct = this.onFeatureLayerClick(ft, ft['object_type']);
+      lyr.off('click', onLyrClickFct);
+      lyr.on('click', onLyrClickFct);
     }
   }
 }
