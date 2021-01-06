@@ -32,6 +32,9 @@
         <div class="alert alert-danger" role="alert" *ngIf="!siteForm.value.geom">
           <i class="fa fa-warning"></i>&nbsp;Veuillez saisir une géométrie sur la carte
         </div>
+        <div class="alert alert-info" role="alert">
+          <i class="fa fa-info-circle"></i>&nbsp;Seul les fichiers de Points aux formats .gpx, .geojson ou .kml peuvent être importés. <br><span class="ml-3"></span>Veuillez utiliser une projection en WGS84.
+        </div>
         <pnx-dynamic-form-generator
           class="obj-form"
           #dynamicForm
