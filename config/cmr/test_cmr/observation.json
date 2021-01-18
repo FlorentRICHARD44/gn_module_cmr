@@ -121,42 +121,42 @@
                 "attribut_label": "Poids (g)",
                 "type_widget": "number",
                 "min": 1,
-                "required": true
+                "required": false
             },
             "longueur_dossiere_mm": {
                 "attribut_label": "Longueur dossière (mm)",
                 "definition": "LOD",
                 "type_widget": "number",
                 "min": 1,
-                "required": true
+                "required": false
             },
             "largeur_dossiere_mm": {
                 "attribut_label": "Largeur dossière (mm)",
                 "definition": "LAD",
                 "type_widget": "number",
                 "min": 1,
-                "required": true
+                "required": false
             },
             "longueur_plastron_mm": {
                 "attribut_label": "Longueur plastron (mm)",
                 "definition": "LOP",
                 "type_widget": "number",
                 "min": 1,
-                "required": true
+                "required": false
             },
             "largeur_avant_plastron_mm": {
                 "attribut_label": "Largeur avant du plastron (mm)",
                 "definition": "LAAVP",
                 "type_widget": "number",
                 "min": 1,
-                "required": true
+                "required": false
             },
             "largeur_arriere_plastron_mm": {
                 "attribut_label": "Largeur arrière du plastron (mm)",
                 "definition": "LAARP",
                 "type_widget": "number",
                 "min": 1,
-                "required": true
+                "required": false
             },
             "mesures_complementaire": {
                 "attribut_label": "Mesures complémentaires",
