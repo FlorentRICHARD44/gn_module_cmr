@@ -110,6 +110,11 @@ def install_cmr_module(module_config_dir_path, module_code):
       os.mkdir(os.path.join(ROOT_DIR,'backend','templates','cmr'))
     symlink(os.path.join(module_config_dir_path, 'templates'),
         os.path.join(ROOT_DIR,'backend', 'templates','cmr',module_code))
+        
+    if not os.path.exists(os.path.join(ROOT_DIR,'backend','static','cmr')):
+      os.mkdir(os.path.join(ROOT_DIR,'backend','static','cmr'))
+    symlink(os.path.join(module_config_dir_path, 'static'),
+        os.path.join(ROOT_DIR,'backend', 'static','cmr',module_code))
     
     # Step 4. Update frontend
     subprocess.call(
