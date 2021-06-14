@@ -26,6 +26,15 @@ Les mots-clés suivants sont utilisés dans ce module. Dans l'application, ils p
 Installer le module 
 ------------------
 
+Télécharger le module CMR depuis GitHub via un clone (change le chemin du clone selon votre projet).
+
+``cd /home/geonatureadmin``
+``git clone https://github.com/FlorentRICHARD44/gn_module_cmr.git``
+
+Si nécessaire, basculer sur la bonne branche, par exemple:
+
+``git checkout geofit/cmr_cistude``
+
 Se placer dans le répertoire backend de GeoNature et activer le virtualenv
 
 ``source venv/bin/activate``
